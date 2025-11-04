@@ -1,0 +1,249 @@
+{
+  "case": {
+    "id": 1,
+    "name": "Caso da Leucemia (Omissão)",
+    "case_text": "\n        Uma criança com leucemia (ChLe) não recebeu quimioterapia (Chem) porque seus pais se recusaram a consentir (¬PaCo).\n        Os médicos recomendaram fortemente a quimioterapia. A criança não foi tratada e morreu (ChDi).\n        Fonte: Baseado em Cassazione penale (2023) \n        ",
+    "expected_knowledge_base": {
+      "premises": [
+        "ChLe",
+        "¬PaCo"
+      ],
+      "potential_causes": [
+        "¬PaCo"
+      ],
+      "target_conclusion": "ChDi",
+      "axioms": []
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: ChLe => ChDi",
+        "r1: PaCo => Chem"
+      ],
+      "undercutter_rules": [
+        "r2: Chem => ¬r0"
+      ]
+    },
+    "expected_causal_result": {
+      "is_cause": true,
+      "explanation": "A omissão do consentimento (¬PaCo) é uma causa da morte (ChDi). Se uma intervenção fosse feita adicionando 'PaCo'[cite: 343], um novo argumento justificado 'Chem' seria criado (via r1), que por sua vez ativaria a regra 'r2' para derrotar 'r0'[cite: 344, 345]. Isso bloquearia a conclusão 'ChDi', provando que '¬PaCo' era causal."
+    }
+  },
+  "analysis": {
+    "case_text": "\n        Uma criança com leucemia (ChLe) não recebeu quimioterapia (Chem) porque seus pais se recusaram a consentir (¬PaCo).\n        Os médicos recomendaram fortemente a quimioterapia. A criança não foi tratada e morreu (ChDi).\n        Fonte: Baseado em Cassazione penale (2023) \n        ",
+    "knowledge_base": {
+      "premises": [
+        "ChLe",
+        "RecChem"
+      ],
+      "potential_causes": [
+        "¬PaCo",
+        "¬Chem"
+      ],
+      "target_conclusion": "ChDi"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: ChLe, ¬Chem => ChDi",
+        "r1: Chem => ¬ChDi"
+      ],
+      "undercutter_rules": [
+        "r2: ¬PaCo => ¬r1"
+      ],
+      "preferences": {
+        "r0": 0.8,
+        "r1": 0.9,
+        "r2": 0.95
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [
+          "¬PaCo",
+          "¬Chem"
+        ],
+        "premises": [
+          "ChLe",
+          "RecChem"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: ChLe, ¬Chem => ChDi",
+            "r1: Chem => ¬ChDi"
+          ],
+          "undercutters": [
+            "r2: ¬PaCo => ¬r1"
+          ]
+        },
+        "preferences": {
+          "r0": 0.8,
+          "r1": 0.9,
+          "r2": 0.95
+        }
+      },
+      "arguments": [
+        {
+          "id": "A0",
+          "premises": [
+            "ChLe"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [],
+          "conclusion": "ChLe",
+          "strength": 1.0
+        },
+        {
+          "id": "A1",
+          "premises": [
+            "RecChem"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [],
+          "conclusion": "RecChem",
+          "strength": 1.0
+        },
+        {
+          "id": "A2",
+          "premises": [
+            "¬PaCo"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [],
+          "conclusion": "¬PaCo",
+          "strength": 1.0
+        },
+        {
+          "id": "A3",
+          "premises": [
+            "¬Chem"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [],
+          "conclusion": "¬Chem",
+          "strength": 1.0
+        },
+        {
+          "id": "A4",
+          "premises": [
+            "ChLe",
+            "¬Chem"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "ChDi",
+          "strength": 0.8
+        },
+        {
+          "id": "A5",
+          "premises": [
+            "¬PaCo"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r2"
+          ],
+          "conclusion": "¬r1",
+          "strength": 0.95
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A1",
+      "A0"
+    ],
+    "base_explanations": {
+      "A1": [
+        "A1"
+      ],
+      "A0": [
+        "A0"
+      ]
+    },
+    "causal_results": {
+      "¬PaCo": {
+        "is_cause": false,
+        "explanation": "Based on the analysis of the argumentation framework, `¬PaCo` (the parents' refusal to consent) is **not** identified as a cause-in-fact of `ChDi` (the child's death). The type of causal relationship is classified as \"none\".\n\nAccording to Definition 4.3, for a fact φ to be a cause-in-fact of an effect ψ, two conditions must be met:\n1.  ψ must be in the grounded extension of the base Argumentation Framework (AF).\n2.  ψ must *not* be in the grounded extension of the modified AF (AF') where ¬φ is added as an axiom.\n\nIn this case:\n*   **Condition 1 is met:** In the base AF, where `¬PaCo` is true, the `base_explanations` indicate that arguments `A1` and `A0` are accepted, leading to the conclusion `ChDi`.\n*   **Condition 2 is NOT met:** When `¬PaCo` is negated (i.e., `PaCo` - parents consented - is assumed as an axiom), the `test_grounded_extension` shows that arguments `A1` and `A0` are *still* in the grounded extension. This means that `ChDi` is *still* concluded even if the parents had consented.\n\nThe persistence of `ChDi` in the grounded extension of the modified AF demonstrates that `¬PaCo` is not a necessary condition for `ChDi` to occur. The arguments `A1` and `A0`, which support `ChDi`, were not defeated by the assumption of `PaCo`. This implies the existence of an alternative, unaffected causal chain leading to the child's death, independent of the parents' consent or refusal. Therefore, from a legal perspective based on Definition 4.3, the refusal of consent (`¬PaCo`) is not a cause-in-fact of the child's death (`ChDi`) because the death would have occurred regardless."
+      },
+      "¬Chem": {
+        "is_cause": true,
+        "explanation": "A ausência de quimioterapia (`¬Chem`) é identificada como uma causa-in-fact da morte da criança (`ChDi`), caracterizando uma relação de **omissão**.\n\nNo cenário original (AF base), a criança com leucemia não recebeu quimioterapia e, consequentemente, morreu (`ChDi` é uma conclusão). A cadeia causal principal é que a leucemia, na ausência de tratamento, leva à morte. Podemos hipoteticamente representar isso por um argumento `A_ChDi` que utiliza a regra `r_Death: ChLe, ¬Chem => ChDi`.\n\nPara testar a causalidade de `¬Chem`, consideramos um cenário contrafactual onde a quimioterapia (`Chem`) teria sido administrada. Ao adicionar `Chem` como um axioma ao AF (o que implica que `¬Chem` é falso), observamos que a conclusão `ChDi` não está presente na extensão fundamentada resultante (`test_grounded_extension`).\n\nIsso significa que, se a quimioterapia tivesse sido realizada, a morte da criança não teria ocorrido. A presença do axioma `Chem` derrota o argumento `A_ChDi` que levava à conclusão `ChDi`. Especificamente, a premissa `¬Chem` da regra `r_Death` é **minada** (defeat_type: `undermine`) pela introdução de `Chem`. Sem a premissa `¬Chem`, o argumento `A_ChDi` não pode ser construído, e, portanto, `ChDi` não é derivado.\n\nEsta análise está em conformidade com a Definição 4.3 de causalidade-in-fact: `ChDi` é uma conclusão no AF base, mas não é uma conclusão no AF modificado onde `¬Chem` é negado (ou seja, `Chem` é afirmado). Em termos jurídicos, aplica-se o teste \"but-for\": \"se não fosse pela ausência de quimioterapia, a criança não teria morrido.\""
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": false,
+      "expected": {
+        "premises": [
+          "ChLe",
+          "¬PaCo"
+        ],
+        "potential_causes": [
+          "¬PaCo"
+        ],
+        "target_conclusion": "ChDi",
+        "axioms": []
+      },
+      "got": {
+        "premises": [
+          "ChLe",
+          "RecChem"
+        ],
+        "potential_causes": [
+          "¬PaCo",
+          "¬Chem"
+        ],
+        "target_conclusion": "ChDi"
+      }
+    },
+    "causal_model": {
+      "matches": false,
+      "expected": {
+        "defeasible_rules": [
+          "r0: ChLe => ChDi",
+          "r1: PaCo => Chem"
+        ],
+        "undercutter_rules": [
+          "r2: Chem => ¬r0"
+        ]
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: ChLe, ¬Chem => ChDi",
+          "r1: Chem => ¬ChDi"
+        ],
+        "undercutter_rules": [
+          "r2: ¬PaCo => ¬r1"
+        ],
+        "preferences": {
+          "r0": 0.8,
+          "r1": 0.9,
+          "r2": 0.95
+        }
+      }
+    },
+    "causal_results": {
+      "matches": false,
+      "expected": {
+        "is_cause": true,
+        "explanation": "A omissão do consentimento (¬PaCo) é uma causa da morte (ChDi). Se uma intervenção fosse feita adicionando 'PaCo'[cite: 343], um novo argumento justificado 'Chem' seria criado (via r1), que por sua vez ativaria a regra 'r2' para derrotar 'r0'[cite: 344, 345]. Isso bloquearia a conclusão 'ChDi', provando que '¬PaCo' era causal."
+      },
+      "got": {
+        "¬PaCo": {
+          "is_cause": false,
+          "explanation": "Based on the analysis of the argumentation framework, `¬PaCo` (the parents' refusal to consent) is **not** identified as a cause-in-fact of `ChDi` (the child's death). The type of causal relationship is classified as \"none\".\n\nAccording to Definition 4.3, for a fact φ to be a cause-in-fact of an effect ψ, two conditions must be met:\n1.  ψ must be in the grounded extension of the base Argumentation Framework (AF).\n2.  ψ must *not* be in the grounded extension of the modified AF (AF') where ¬φ is added as an axiom.\n\nIn this case:\n*   **Condition 1 is met:** In the base AF, where `¬PaCo` is true, the `base_explanations` indicate that arguments `A1` and `A0` are accepted, leading to the conclusion `ChDi`.\n*   **Condition 2 is NOT met:** When `¬PaCo` is negated (i.e., `PaCo` - parents consented - is assumed as an axiom), the `test_grounded_extension` shows that arguments `A1` and `A0` are *still* in the grounded extension. This means that `ChDi` is *still* concluded even if the parents had consented.\n\nThe persistence of `ChDi` in the grounded extension of the modified AF demonstrates that `¬PaCo` is not a necessary condition for `ChDi` to occur. The arguments `A1` and `A0`, which support `ChDi`, were not defeated by the assumption of `PaCo`. This implies the existence of an alternative, unaffected causal chain leading to the child's death, independent of the parents' consent or refusal. Therefore, from a legal perspective based on Definition 4.3, the refusal of consent (`¬PaCo`) is not a cause-in-fact of the child's death (`ChDi`) because the death would have occurred regardless."
+        },
+        "¬Chem": {
+          "is_cause": true,
+          "explanation": "A ausência de quimioterapia (`¬Chem`) é identificada como uma causa-in-fact da morte da criança (`ChDi`), caracterizando uma relação de **omissão**.\n\nNo cenário original (AF base), a criança com leucemia não recebeu quimioterapia e, consequentemente, morreu (`ChDi` é uma conclusão). A cadeia causal principal é que a leucemia, na ausência de tratamento, leva à morte. Podemos hipoteticamente representar isso por um argumento `A_ChDi` que utiliza a regra `r_Death: ChLe, ¬Chem => ChDi`.\n\nPara testar a causalidade de `¬Chem`, consideramos um cenário contrafactual onde a quimioterapia (`Chem`) teria sido administrada. Ao adicionar `Chem` como um axioma ao AF (o que implica que `¬Chem` é falso), observamos que a conclusão `ChDi` não está presente na extensão fundamentada resultante (`test_grounded_extension`).\n\nIsso significa que, se a quimioterapia tivesse sido realizada, a morte da criança não teria ocorrido. A presença do axioma `Chem` derrota o argumento `A_ChDi` que levava à conclusão `ChDi`. Especificamente, a premissa `¬Chem` da regra `r_Death` é **minada** (defeat_type: `undermine`) pela introdução de `Chem`. Sem a premissa `¬Chem`, o argumento `A_ChDi` não pode ser construído, e, portanto, `ChDi` não é derivado.\n\nEsta análise está em conformidade com a Definição 4.3 de causalidade-in-fact: `ChDi` é uma conclusão no AF base, mas não é uma conclusão no AF modificado onde `¬Chem` é negado (ou seja, `Chem` é afirmado). Em termos jurídicos, aplica-se o teste \"but-for\": \"se não fosse pela ausência de quimioterapia, a criança não teria morrido.\""
+        }
+      }
+    }
+  }
+}

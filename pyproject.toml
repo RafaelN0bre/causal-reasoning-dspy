@@ -1,0 +1,17 @@
+[project]
+name = "tcc"
+version = "0.1.0"
+description = "DSPy + Defeasible Argumentation for Cause-in-Fact Legal Reasoning"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "dspy-ai>=2.4.0",
+    "google-generativeai>=0.3.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+]
