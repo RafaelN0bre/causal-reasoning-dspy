@@ -1,128 +1,265 @@
+# Arquitetura: DSPy + Argumentação Defeasible para Causa-em-Fato
 
-## Arquitetura: DSPy + Argumentação Defeasible para Causa-em-Fato
+Este documento descreve a arquitetura de um sistema híbrido que combina módulos DSPy (para estruturar e guiar LLMs) com um solver formal de argumentação defeasible (para calcular extensões justificadas). O objetivo é transformar descrições em prosa de casos de direito do consumidor em conclusões formais sobre causa-em-fato, seguindo o framework ASPIC+ de argumentação estruturada.
 
-Esta arquitetura propõe um pipeline híbrido que combina módulos DSPy (para estruturar e guiar LLMs) com um solver formal de argumentação (para calcular extensões justificadas). O objetivo é transformar descrições em prosa de casos de direito do consumidor em conclusões formais sobre causa-em-fato, seguindo as ideias do artigo "Modelling Cause-in-Fact in Legal Cases through Defeasible Argumentation".
+## Visão Geral
 
-Fluxo geral (resumido):
+O sistema implementa um pipeline que processa casos jurídicos através de múltiplas etapas de transformação, desde texto em prosa até uma conclusão formal sobre relações de causa-em-fato. A arquitetura combina a flexibilidade de LLMs (via DSPy) com a precisão formal de um solver de argumentação.
 
-- Texto do caso -> Extração de fatos atômicos
-- Fatos -> Identificação de regras causais possíveis (regras defeasible)
-- Fatos + Regras -> Geração de argumentos e identificação de ataques (rebutting / undercutting)
-- Exportar a estrutura abstrata de argumentação (AF) para um solver Python
-- Solver calcula argumentos justificados (ex.: grounded extension) e conjuntos de suporte mínimos
-- Resultado -> Módulo DSPy que gera a explicação final: julgamento causal (é causa-em-fato? por quê)
+### Fluxo Principal
 
-## Componentes e responsabilidades
-
-- TextToFacts (DSPy) — converte texto em fatos atômicos e eventos, ordenados cronologicamente.
-- FactsToRules (DSPy) — sugere regras causais defeituais relevantes a partir dos fatos.
-- GenerateArgumentsAndAttacks (DSPy) — constrói argumentos (cadeias de inferência) e identifica ataques entre argumentos.
-- Argumentation Solver (Python) — recebe o AF (lista de argumentos e ataques) e calcula a extensão fundamentada / justificação formal.
-- CausalJudgement (DSPy) — interpreta a saída do solver e produz uma explicação humana-compatível sobre se um fato é causa-em-fato.
-
-## Exemplo conciso de Signatures (pseudo-Python / documentação)
-
-Estas assinaturas servem como contrato entre módulos DSPy e tornam o pipeline modular e testável.
-
-```python
-class TextToFacts(dspy.Signature):
-		"""Converts a case description into structured facts and events."""
-		case_description = dspy.InputField(desc="Texto completo do caso.")
-		structured_facts = dspy.OutputField(desc="Lista de fatos atômicos (strings), ex: ['ProdutoDefeituoso', 'ConsumidorReclamouEmX'].")
-
-class FactsToRules(dspy.Signature):
-		"""Identifies potential defeasible causal rules from facts."""
-		structured_facts = dspy.InputField(desc="Lista de fatos atômicos.")
-		causal_rules = dspy.OutputField(desc="Lista de regras no formato 'r1: [premise1, ...] => conclusion'.")
-
-class GenerateArgumentsAndAttacks(dspy.Signature):
-		"""Generates arguments (chains) and identifies attacks (rebut, undercut)."""
-		structured_facts = dspy.InputField(desc="Lista de fatos atômicos.")
-		causal_rules = dspy.InputField(desc="Lista de regras defeasible.")
-		target_conclusion = dspy.InputField(desc="Conclusão alvo, opcional.")
-		arguments_and_attacks = dspy.OutputField(desc="Estrutura JSON: {arguments: [...], attacks: [...]}")
-
-class CausalJudgement(dspy.Signature):
-		"""Produces a causal judgment given a justified argument and its support set."""
-		justified_argument = dspy.InputField(desc="Um argumento identificado como justificado pelo solver.")
-		support_set = dspy.InputField(desc="Conjunto mínimo de fatos/argumentos que sustentam a justificativa.")
-		potential_cause = dspy.InputField(desc="O fato que estamos avaliando como causa-em-fato.")
-		case_description = dspy.InputField(desc="Texto do caso, opcional (para gerar explicação legível).")
-		causal_explanation = dspy.OutputField(desc="Texto explicando se potential_cause é (ou não) causa-em-fato e por quê.")
+```
+Texto do Caso → Extração de Base de Conhecimento → Modelagem Causal 
+              → Construção de Framework de Argumentação → Cálculo de Extensão Fundamentada 
+              → Análise Causal Contrafactual → Resultado Final
 ```
 
-Observação: para passos complexos de raciocínio (geração de argumentos/ataques) use módulos como `dspy.ChainOfThought` ou `dspy.ProgramOfThought` e prepare prompts few-shot (bootstrap examples) com o Golden Dataset.
+Cada etapa transforma a representação do caso:
+1. **Extração**: Texto em prosa → Base de conhecimento estruturada (premissas, causas potenciais, conclusão alvo)
+2. **Modelagem**: Base de conhecimento → Modelo causal (regras defeasible, preferências)
+3. **Argumentação**: Modelo causal → Framework de argumentação completo (argumentos, ataques, derrotas)
+4. **Solução**: Framework → Extensão fundamentada (argumentos justificados)
+5. **Análise**: Extensão fundamentada → Julgamento causal (é causa-em-fato?)
 
-## Diagrama de arquitetura (Mermaid)
+## Componentes e Responsabilidades
+
+### DSPy Signatures (`src/signatures.py`)
+
+As assinaturas DSPy definem os contratos de entrada/saída entre módulos, garantindo modularidade e testabilidade:
+
+- **`TextToKnowledgeBase`**: Extrai base de conhecimento estruturada do texto do caso
+  - Entrada: texto em prosa do caso
+  - Saída: JSON com premissas, causas potenciais, conclusão alvo e axiomas
+
+- **`ExtractCausalModel`**: Identifica regras causais defeasible e preferências
+  - Entrada: base de conhecimento estruturada
+  - Saída: JSON com regras defeasible, undercutters, regras estritas e preferências
+
+- **`BuildArgumentationFramework`**: Constrói framework completo de argumentação
+  - Entrada: base de conhecimento e modelo causal
+  - Saída: JSON com argumentos, ataques e derrotas
+
+- **`AnalyzeCausalTest`**: Analisa testes contrafactuais para determinar causa-em-fato
+  - Entrada: argumento justificado, conjunto de suporte, causa potencial
+  - Saída: julgamento causal (booleano) e explicação textual
+
+### Solver de Argumentação (`src/solver.py`)
+
+Implementação do framework ASPIC+ que calcula extensões justificadas:
+
+- **`Literal`**: Representa literais (fatos atômicos e suas negações)
+- **`Rule`**: Representa regras defeasible e estritas (premissas → conclusão)
+- **`Argument`**: Representa argumentos como cadeias de inferência
+- **`Attack`**: Representa ataques entre argumentos (undermine, undercut, rebut)
+- **`ArgumentationFramework`**: 
+  - Constrói argumentos a partir de premissas e regras (iteração até ponto fixo)
+  - Identifica ataques entre argumentos
+  - Calcula derrotas com base em preferências/força dos argumentos
+  - Expõe `compute_grounded_extension()` para calcular a extensão fundamentada
+
+### Pipeline (`src/modules.py`)
+
+- **`CausalReasoningPipeline`**: Orquestra todo o processo end-to-end
+  - Integra módulos DSPy em sequência
+  - Coordena extração, modelagem, argumentação e análise causal
+  - Retorna resultados estruturados em JSON
+
+- **`ArgumentationSolver`**: Integra o solver formal como ferramenta DSPy
+  - Wrapper que permite o solver ser usado dentro do pipeline DSPy
+  - Converte entre formatos JSON e estruturas internas do solver
+
+### Runner (`src/pipeline.py`)
+
+Script principal que:
+- Configura ambiente e logging
+- Carrega dataset de casos de exemplo
+- Executa análises e validações
+- Gera relatórios detalhados em JSON
+
+## Diagramas de Arquitetura
+
+### Fluxo do Pipeline
 
 ```mermaid
 flowchart LR
-	A[Case Text]
-	B[TextToFacts]
-	C[FactsToRules]
-	D[GenerateArgumentsAndAttacks]
-	E[Argumentation AF]
-	F[Argumentation Solver]
-	G[CausalJudgement]
-	H[Final Explanation]
-
-	A --> B --> C --> D --> E --> F --> G --> H
+	A[case_text: str] --> B[TextToKnowledgeBase]
+	B --> KB_JSON[knowledge_base JSON]
+	KB_JSON --> C[ExtractCausalModel]
+	C --> MODEL_JSON[causal_model JSON]
+	KB_JSON --> D[BuildArgumentationFramework]
+	MODEL_JSON --> D
+	D --> AF_JSON[argumentation framework JSON]
+	AF_JSON --> E[ArgumentationSolver]
+	E --> BASE_GROUNDED[base_grounded extension]
+	E --> F_test[build test AF]
+	F_test --> E
+	E --> TEST_GROUNDED[test_grounded extension]
+	TEST_GROUNDED --> G[AnalyzeCausalTest]
+	G --> CAUSAL_RESULT[causal_result]
+	BASE_GROUNDED --> H[Final JSON Result]
+	CAUSAL_RESULT --> H
 ```
 
-## Exemplo rápido (caso do celular)
+### Estrutura de Componentes
 
-- Texto: "Comprei um celular online anunciado como à prova d'água. Caiu na piscina e parou de funcionar. A empresa se recusa a consertar alegando mau uso."
+```mermaid
+graph LR
+	subgraph DSPy["Módulos DSPy"]
+		CTOC[TextToKnowledgeBase]
+		ECM[ExtractCausalModel]
+		BAF[BuildArgumentationFramework]
+		ACT[AnalyzeCausalTest]
+		PIPE[CausalReasoningPipeline]
+	end
 
-- Fatos (exemplo):
-	- Produto_Anunciado_AprovaAgua
-	- Produto_Caiu_Piscina
-	- Produto_Parou_Funcionar
-	- Empresa_Alegou_Mau_Uso
-	- Empresa_Recusou_Conserto
+	subgraph Solver["Solver Python"]
+		SOLV[ArgumentationSolver]
+		AF[ArgumentationFramework]
+	end
 
-- Regras (exemplo):
-	- r1: Produto_Anunciado_AprovaAgua => Produto_Defeituoso
-	- r2: Produto_Defeituoso => Dever_Reparo
-	- r3: Empresa_Alegou_Mau_Uso => Nao_Aplica_Garantia  (undercuts r2)
+	CTOC --> ECM --> BAF --> AF
+	AF --> SOLV
+	SOLV --> PIPE
+	PIPE --> ACT
+```
 
-- Argumentos (exemplo):
-	- A1: [Produto_Anunciado_AprovaAgua, r1, r2] => Dever_Reparo
-	- A2: [Empresa_Alegou_Mau_Uso, r3] => Nao_Aplica_Garantia
-	- Ataque: A2 undercuts A1
+## Contratos de Dados
 
-- O solver (Python) calculará quais argumentos ficam justificados; em seguida `CausalJudgement` examina o support_set de A1 para decidir se `Produto_Anunciado_AprovaAgua` é causa-em-fato.
+### TextToKnowledgeBase → knowledge_base (JSON)
 
-## Golden dataset (recomendação)
+```json
+{
+  "premises": ["Produto_Anunciado_AprovaAgua", "Produto_Caiu_Piscina", ...],
+  "potential_causes": ["Produto_Anunciado_AprovaAgua", ...],
+  "target_conclusion": "Dever_Reparo",
+  "axioms": [...]
+}
+```
 
-- Criar 5–10 exemplos sintéticos cobrindo:
-	- casos simples (causa direta)
-	- undercutting (regra não aplicável)
-	- preempção / sobredeterminação
-	- defesas da empresa (mau uso, culpa do consumidor)
-	- contra-argumentos (p.ex. anúncio enganoso vs. mau uso)
+### ExtractCausalModel → causal_model (JSON)
 
-- Para cada exemplo registre:
-	1. Texto do caso
-	2. Lista de fatos estruturados
-	3. Regras causais aplicáveis
-	4. Argumentos e ataques (manual)
-	5. Resultado esperado do solver (argumentos justificados)
-	6. Conclusão sobre causa-em-fato
+```json
+{
+  "defeasible_rules": [
+    {"id": "r1", "premises": [...], "conclusion": "..."},
+    ...
+  ],
+  "undercutter_rules": [...],
+  "strict_rules": [...],
+  "preferences": {"r1": "r2", ...}
+}
+```
 
-## Próximos passos sugeridos (implementação)
+### BuildArgumentationFramework → af_json (JSON)
 
-1. Gerar o Golden Dataset (5 exemplos inicialmente).  
-2. Escrever um esqueleto Python:
-	 - módulos DSPy (assinaturas) — se preferir, somente como documentação inicialmente;
-	 - um solver simples que recebe AF (arguments+attacks) e calcula a grounded extension (algoritmo baseado em grafos);
-	 - uma rotina de integração que: roda módulos DSPy -> converte para AF JSON -> chama solver -> passa o resultado ao CausalJudgement.
-3. Testes automáticos: um teste end-to-end por exemplo do dataset; testes unitários do solver.
+```json
+{
+  "knowledge": [...],
+  "arguments": [
+    {"id": "A1", "premises": [...], "conclusion": "...", "rules": [...]},
+    ...
+  ],
+  "attacks": [
+    {"from": "A2", "to": "A1", "type": "undercut"},
+    ...
+  ],
+  "defeats": [...]
+}
+```
 
-## Notas rápidas sobre avaliação e robustez
+### ArgumentationSolver → (grounded_extension JSON, explanations JSON)
 
-- Edge-cases a testar: fatos faltantes, contradições explícitas, regras com quantificadores temporais (p.ex. prazo de 30 dias), múltiplas regras concorrentes.
-- Fornecer ao LLM prompts few-shot com exemplos do Golden Dataset melhora a estabilidade das saídas (bootstrap few-shot).
+```json
+{
+  "grounded_extension": ["A1", "A3", ...],
+  "explanations": {
+    "A1": {"support_set": [...], "defeated_by": []},
+    ...
+  }
+}
+```
 
----
+### AnalyzeCausalTest → causal_result
 
-Se quiser, crio agora: (A) os 5 exemplos do Golden Dataset, e/ou (B) o esqueleto Python com o solver simples e testes. Diga qual prefere que eu faça em seguida.
+```json
+{
+  "is_cause": true,
+  "causal_explanation": "O fato 'Produto_Anunciado_AprovaAgua' é causa-em-fato porque...",
+  "defeated_chain": [...]
+}
+```
+
+## Exemplo de Execução
+
+### Caso: Celular à Prova d'Água
+
+**Texto do caso:**
+> "Comprei um celular online anunciado como à prova d'água. Caiu na piscina e parou de funcionar. A empresa se recusa a consertar alegando mau uso."
+
+**Base de conhecimento extraída:**
+- Premissas: `Produto_Anunciado_AprovaAgua`, `Produto_Caiu_Piscina`, `Produto_Parou_Funcionar`, `Empresa_Alegou_Mau_Uso`, `Empresa_Recusou_Conserto`
+- Causa potencial: `Produto_Anunciado_AprovaAgua`
+- Conclusão alvo: `Dever_Reparo`
+
+**Regras causais identificadas:**
+- `r1`: `Produto_Anunciado_AprovaAgua` → `Produto_Defeituoso`
+- `r2`: `Produto_Defeituoso` → `Dever_Reparo`
+- `r3`: `Empresa_Alegou_Mau_Uso` → `Nao_Aplica_Garantia` (undercuts r2)
+
+**Argumentos construídos:**
+- `A1`: `[Produto_Anunciado_AprovaAgua, r1, r2]` → `Dever_Reparo`
+- `A2`: `[Empresa_Alegou_Mau_Uso, r3]` → `Nao_Aplica_Garantia`
+- Ataque: `A2` undercuts `A1`
+
+**Extensão fundamentada:**
+O solver calcula quais argumentos são justificados. Se `A2` derrota `A1`, então `A1` não estará na extensão fundamentada, e `Produto_Anunciado_AprovaAgua` não será considerado causa-em-fato para `Dever_Reparo`.
+
+## Dataset de Casos
+
+O projeto inclui um dataset de casos sintéticos (`src/dataset.py`) que cobre diferentes cenários:
+
+1. **Undercutting**: Empresa alega mau uso (caso do celular)
+2. **Causa direta simples**: Entrega atrasada
+3. **Conflito de regras**: Defeito oculto vs. garantia expirada
+4. **Preempção**: Múltiplas causas concorrentes
+5. **Vício de informação**: Publicidade enganosa
+
+Cada caso inclui:
+- Texto do caso
+- Base de conhecimento esperada
+- Modelo causal esperado
+- Resultado causal esperado
+
+## Estrutura de Arquivos
+
+```
+src/
+├── dataset.py          # Dataset de casos de exemplo
+├── signatures.py       # Assinaturas DSPy (contratos entre módulos)
+├── modules.py          # Pipeline e módulos DSPy
+├── solver.py          # Solver de argumentação ASPIC+
+└── pipeline.py         # Script runner principal
+```
+
+## Considerações de Design
+
+### Escolha da Semântica Grounded
+
+A implementação utiliza a semântica grounded por:
+- **Garantia de existência e unicidade**: Sempre existe uma única extensão fundamentada
+- **Natureza cética**: Apropriada para raciocínio judicial onde incerteza é comum
+- **Computação eficiente**: Algoritmo de ponto fixo é computacionalmente tratável
+
+### Integração DSPy + Solver
+
+O solver é integrado como uma ferramenta DSPy (`dspy.Tool`), permitindo:
+- Uso dentro de cadeias de raciocínio DSPy
+- Validação automática de tipos e formatos
+- Composição modular com outros módulos
+
+### Análise Contrafactual
+
+Para determinar causa-em-fato, o sistema:
+1. Calcula extensão fundamentada do caso base
+2. Para cada causa potencial, constrói um teste contrafactual (nega a causa)
+3. Compara extensões fundamentadas para determinar se a causa é necessária

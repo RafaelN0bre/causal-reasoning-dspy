@@ -7,22 +7,12 @@ from typing import Optional, Dict, Any
 import dspy
 from dotenv import load_dotenv
 
-from src3.modules import CausalReasoningPipeline
-from src3.dataset import GOLDEN_DATASET
+from src.modules import CausalReasoningPipeline
+from src.dataset import GOLDEN_DATASET
 
 # Module logger
 logger = logging.getLogger(__name__)
 
-
-domain_context = """
-You are an expert in causal reasoning, argumentation theory (ASPIC+),
-and legal reasoning. 
-- Kp are ordinary premises (known facts).
-- Rd are defeasible causal rules.
-- Rs are strict rules (non-defeasible).
-- Undercutters attack causal rules.
-- Preferences resolve rule conflicts numerically (0-1).
-"""
 
 def analyze_case(pipeline: CausalReasoningPipeline, 
                 case_data: Dict[str, Any],
@@ -119,8 +109,8 @@ def main():
         print("Example .env file:")
         print("GEMINI_API_KEY=your-api-key-here")
         return
-
-    lm = dspy.LM('gemini/gemini-2.5-flash', api_key=api_key, max_tokens=8000, domain_context=domain_context)
+    
+    lm = dspy.LM('gemini/gemini-2.5-flash', api_key=api_key, max_tokens=8000)
     dspy.configure(lm=lm)
     
     # Initialize pipeline
