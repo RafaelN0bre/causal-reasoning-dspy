@@ -1,4 +1,107 @@
 """Dataset com casos que demonstram diferentes padrões de raciocínio causal."""
+import json
+import os
+from typing import Dict, Any, List, Optional, Tuple
+
+
+BOARDGAME_VARIANTS = [
+    "Main-depth1",
+    "Main-depth2", 
+    "Main-depth3",
+    "ZeroConflict-depth2",
+    "LowConflict-depth2",
+    "HighConflict-depth2",
+    "EasyConflict-depth2",
+    "DifficultConflict-depth2",
+    "SomeDistractors-depth2",
+    "ManyDistractors-depth2",
+    "KnowledgeLight-depth2",
+    "KnowledgeHeavy-depth2",
+    "Binary-depth1",
+    "Binary-depth2",
+    "Binary-depth3",
+]
+
+DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "BoardgameQA")
+
+
+def load_boardgame_dataset(variant: str = "Main-depth2", split: str = "test") -> List[Dict[str, Any]]:
+    """
+    Load a BoardgameQA dataset variant.
+    
+    Args:
+        variant: Dataset variant (e.g., "Main-depth2", "ZeroConflict-depth2")
+        split: Data split - one of "train", "test", or "valid"
+    
+    Returns:
+        List of test cases, each containing:
+        - facts: List of factual statements
+        - rules: Game rules as text
+        - preferences: Rule preferences
+        - goal: Target predicate to prove/disprove
+        - label: Expected answer ("proved", "disproved", "unknown")
+        - proof: Ground truth explanation
+    """
+    if variant not in BOARDGAME_VARIANTS:
+        raise ValueError(f"Unknown variant: {variant}. Available: {BOARDGAME_VARIANTS}")
+    
+    if split not in ("train", "test", "valid"):
+        raise ValueError(f"Invalid split: {split}. Must be train, test, or valid")
+    
+    file_path = os.path.join(DATA_DIR, f"BoardgameQA-{variant}", f"{split}.json")
+    
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"Dataset file not found: {file_path}")
+    
+    with open(file_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    
+    return data
+
+
+def parse_boardgame_case(case: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Parse a BoardgameQA case into structured format for the pipeline.
+    
+    Args:
+        case: Raw case from BoardgameQA JSON
+    
+    Returns:
+        Parsed case with:
+        - facts: List of factual statements
+        - rules: List of rule strings
+        - preferences: Rule preference string
+        - goal: Target predicate tuple (subject, predicate, object)
+        - label: Expected result ("proved"/"disproved"/"unknown")
+    """
+    facts = case.get("facts", "")
+    rules = case.get("rules", "")
+    preferences = case.get("preferences", "")
+    goal_str = case.get("goal", "()")
+    
+    goal_tuple = _parse_goal(goal_str)
+    
+    return {
+        "facts": facts,
+        "rules": rules,
+        "preferences": preferences,
+        "goal": goal_tuple,
+        "goal_str": goal_str,
+        "label": case.get("label", "unknown"),
+        "proof": case.get("proof", ""),
+        "example": case.get("example", ""),
+    }
+
+
+def _parse_goal(goal_str: str) -> Tuple[str, ...]:
+    """Parse goal string like '(swan, swear, woodpecker)' into a tuple."""
+    goal_str = goal_str.strip()
+    if goal_str.startswith("(") and goal_str.endswith(")"):
+        inner = goal_str[1:-1]
+        parts = [p.strip() for p in inner.split(",")]
+        return tuple(parts)
+    return (goal_str,)
+
 
 GOLDEN_DATASET = [
     {

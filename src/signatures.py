@@ -3,6 +3,71 @@ import dspy
 from typing import List, Dict, Any
 
 
+class BoardgameKBExtraction(dspy.Signature):
+    """
+    Extracts knowledge base from a BoardgameQA case.
+
+    Only facts explicitly stated (or directly derivable via a single rule application
+    from stated facts) should become premises. Rule antecedents that are NOT mentioned
+    as facts must NOT be added as premises — they are simply not true in this game state.
+    The goal literal is the target conclusion to check for provability.
+    """
+    case_description: str = dspy.InputField(
+        desc="Full boardgame case: facts, rules, and preferences"
+    )
+    goal: str = dspy.InputField(
+        desc="The goal predicate string, e.g. '(swan, swear, woodpecker)'"
+    )
+    knowledge_base: str = dspy.OutputField(
+        desc="""JSON containing:
+        - premises: List of ASPIC+ literals derived ONLY from stated facts
+          (e.g. if 'wolf does not take X' is a fact and Rule1 says 'if not X then Y',
+          include 'Y' as a premise; do NOT include rule antecedents that have no
+          factual basis)
+        - target_conclusion: Single ASPIC+ literal representing the goal
+        Example: {
+            "premises": ["SeahorseSurrenders", "WolfAcquiresPhoto"],
+            "target_conclusion": "SwanSwears"
+        }"""
+    )
+
+
+class BoardgameRuleExtraction(dspy.Signature):
+    """
+    Extracts defeasible rules and preference-based defeat structure from a
+    BoardgameQA case. Preferences map to rule strength: if Rule5 > Rule4 and
+    both conclusions conflict, Rule5's argument defeats Rule4's (rebut), so
+    represent it as a direct negation rebut — NOT an undercutter — unless the
+    rule conclusion is literally '¬rN'.
+    """
+    case_description: str = dspy.InputField(
+        desc="Full boardgame case: facts, rules, and preferences"
+    )
+    knowledge_base: str = dspy.InputField(
+        desc="The extracted knowledge base JSON"
+    )
+    causal_model: str = dspy.OutputField(
+        desc="""JSON with:
+        - defeasible_rules: Rules that CAN be defeated. Format: 'rN: A AND B => C'
+          If a rule concludes the NEGATION of another rule's conclusion (rebut),
+          encode it directly, e.g. 'r5: AnimalInvests => ¬SwanSwears'.
+          Only use '¬rN' form (undercutter) when the rule explicitly invalidates
+          the applicability of rule rN.
+        - undercutter_rules: Rules whose conclusion is '¬rN' (undercut rule rN).
+        - preferences: Map rule IDs to float strengths (0-1). Higher-priority rules
+          get higher values so they win rebut battles.
+        Example: {
+            "defeasible_rules": [
+                "r4: SeahorseSurrenders AND WolfAcquiresPhoto => SwanSwears",
+                "r5: AnimalInvests => ¬SwanSwears"
+            ],
+            "undercutter_rules": [],
+            "preferences": {"r4": 0.5, "r5": 0.9}
+        }"""
+    )
+
+
+
 class TextToKnowledgeBase(dspy.Signature):
     """
     Extrai elementos da base de conhecimento do texto do caso, incluindo premissas ordinárias (Kp),

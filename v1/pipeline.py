@@ -142,7 +142,7 @@ def main():
         print("GEMINI_API_KEY=your-api-key-here")
         return
     
-    lm = dspy.LM('gemini/gemini-2.5-flash', api_key=api_key)
+    lm = dspy.LM('gemini/gemini-2.5-pro', api_key=api_key)
     dspy.configure(lm=lm)
     
     # Let user choose a case from the dataset

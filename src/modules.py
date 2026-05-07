@@ -2,7 +2,7 @@
 import json
 import ast
 import logging
-from typing import Dict, Any, List, Tuple
+from typing import Dict, Any, List, Tuple, Optional
 
 import dspy
 
@@ -10,9 +10,59 @@ import dspy
 logger = logging.getLogger(__name__)
 from .signatures import (
     TextToKnowledgeBase, ExtractCausalModel,
-    BuildArgumentationFramework, AnalyzeCausalTest
+    BuildArgumentationFramework, AnalyzeCausalTest,
+    BoardgameKBExtraction, BoardgameRuleExtraction,
 )
 from .solver import ArgumentationFramework
+
+
+def _try_parse_json(text: str) -> Optional[Dict]:
+    """Try multiple strategies to parse JSON from potentially truncated text."""
+    if isinstance(text, (dict, list)):
+        return text
+    
+    if not isinstance(text, str):
+        return None
+    
+    strategies = [
+        ("strict_json", lambda: json.loads(text)),
+        ("extract_braces", lambda: json.loads(_extract_json_braces(text))),
+        ("ast_literal_eval", lambda: ast.literal_eval(text)),
+        ("fix_truncated", lambda: _fix_and_parse_json(text)),
+    ]
+    
+    for name, parser in strategies:
+        try:
+            result = parser()
+            if result and isinstance(result, dict):
+                return result
+        except Exception:
+            continue
+    
+    return None
+
+
+def _extract_json_braces(text: str) -> str:
+    """Extract JSON object from text by finding first { and last }."""
+    first = text.find('{')
+    last = text.rfind('}')
+    if first != -1 and last != -1 and last > first:
+        return text[first:last+1]
+    return text
+
+
+def _fix_and_parse_json(text: str) -> Optional[Dict]:
+    """Attempt to fix common JSON truncation issues."""
+    text = _extract_json_braces(text)
+    
+    text = text.replace('\n', ' ').replace('\r', '')
+    text = ' '.join(text.split())
+    
+    missing_closes = text.count('{') - text.count('}')
+    for _ in range(missing_closes):
+        text += '}'
+    
+    return json.loads(text)
 
 
 class ArgumentationSolver(dspy.Tool):
@@ -25,7 +75,7 @@ class ArgumentationSolver(dspy.Tool):
     3. Computação eficiente (ponto fixo da função de defesa)
     
     Importante notar que:
-    - A extensão grounded pode ser vazia mesmo com argumentos válidos
+    - A extensão grounded pode ser vazio mesmo com argumentos válidos
     - Ciclos podem impedir a aceitação de argumentos relevantes
     - A ordem de aplicação de regras não afeta o resultado final
     
@@ -37,73 +87,37 @@ class ArgumentationSolver(dspy.Tool):
     
     def __init__(self):
         """Initialize the solver tool."""
-        def solve_af(af_json: str) -> Tuple[str, str]:
+        def solve_af(af_json: str) -> Tuple[str, str, str]:
             """
             Run the solver on a JSON-encoded argumentation framework.
-            
+
             Args:
                 af_json: JSON string containing the complete AF specification
-            
+
             Returns:
                 Tuple containing:
-                - grounded_extension: JSON string with list of argument IDs
-                - explanations: JSON string with map of argument ID to support sets
+                - grounded_ids: JSON list of argument IDs in the grounded extension
+                - explanations: JSON map of argument ID to support sets
+                - grounded_conclusions: JSON map of argument ID -> conclusion literal
+                  (used to check whether the target predicate is grounded)
             """
-            # Parse the AF JSON with robust error handling.
-            # Accept already-parsed objects (defensive) or try JSON parsing.
-            if isinstance(af_json, (dict, list)):
-                af_data = af_json
-            else:
-                # First attempt: strict JSON
-                try:
-                    af_data = json.loads(af_json)
-                except json.JSONDecodeError as json_err:
-                    # Second attempt: try to extract a JSON-like substring
-                    first = af_json.find('{')
-                    last = af_json.rfind('}')
-                    candidate = None
-                    if first != -1 and last != -1 and last > first:
-                        candidate = af_json[first:last+1]
-                        try:
-                            af_data = json.loads(candidate)
-                        except Exception:
-                            af_data = None
-                    else:
-                        af_data = None
+            af_data = _try_parse_json(af_json)
 
-                    # Third attempt: try ast.literal_eval on either full string or candidate
-                    if af_data is None:
-                        tried = []
-                        for text in (candidate, af_json):
-                            if not text:
-                                continue
-                            try:
-                                tried.append(('ast_literal_eval', text[:80]))
-                                obj = ast.literal_eval(text)
-                                if isinstance(obj, (dict, list)):
-                                    af_data = obj
-                                    break
-                            except Exception as e_ast:
-                                # remember last exception for reporting
-                                last_exc = e_ast
+            if af_data is None:
+                logger.warning("⚠️ Failed to parse AF JSON, using minimal fallback")
+                af_data = {
+                    "knowledge": {"premises": [], "axioms": [], "rules": {}},
+                    "arguments": [],
+                    "attacks": [],
+                    "defeats": []
+                }
 
-                    if af_data is None:
-                        # Provide helpful debug context and re-raise the original JSON error
-                        print(f"❌ JSON decode error: {str(json_err)}")
-                        print("--- AF preview (truncated) ---")
-                        preview = af_json[:400] + "..." if len(af_json) > 400 else af_json
-                        print(preview)
-                        if 'last_exc' in locals():
-                            print("--- ast.literal_eval error ---")
-                            print(repr(last_exc))
-                        raise json_err
-            
             # Ensure required structure exists
             if "knowledge" not in af_data:
                 raise ValueError("AF JSON missing 'knowledge' field")
             if "rules" not in af_data["knowledge"]:
                 af_data["knowledge"]["rules"] = {}
-            
+
             # Create AF instance with default empty lists for missing rule types
             af = ArgumentationFramework(
                 knowledge_base=af_data["knowledge"],
@@ -112,32 +126,38 @@ class ArgumentationSolver(dspy.Tool):
                     "undercutter_rules": af_data["knowledge"].get("rules", {}).get("undercutters", [])
                 }
             )
-            
+
             # Compute grounded extension
             grounded, explanations, defeats = af.compute_grounded_extension()
-            
+
+            # Map each grounded argument ID to its conclusion so callers can
+            # check whether a specific predicate is derivable without relying
+            # on string matching against opaque argument IDs.
+            conclusions = {arg_id: af.arguments[arg_id].conclusion for arg_id in grounded}
+
             return (
                 json.dumps(list(grounded)),
-                json.dumps(explanations)
-            )  # We don't need to return defeats for now
-        
+                json.dumps(explanations),
+                json.dumps(conclusions),
+            )
+
         super().__init__(
             func=solve_af,
             desc="Computes grounded extension and explanations for an argumentation framework"
         )
-    
-    def __call__(self, af_json: str) -> Tuple[str, str]:
+
+    def __call__(self, af_json: str) -> Tuple[str, str, str]:
         """
         Run the solver on a JSON-encoded argumentation framework.
-        
+
         Args:
             af_json: JSON string containing the complete AF specification
-        
+
         Returns:
             Tuple containing:
-            - grounded_extension: JSON string with list of argument IDs
-            - explanations: JSON string with map of argument ID to support sets
-            Note: defeats are computed but not returned as they're used internally
+            - grounded_ids: JSON list of argument IDs in the grounded extension
+            - explanations: JSON map of argument ID to support sets
+            - grounded_conclusions: JSON map of argument ID -> conclusion literal
         """
         logger.debug("🔍 Debug: Argumentation Framework JSON (preview): %s",
                      (af_json[:500] + '...') if isinstance(af_json, (str, bytes)) and len(af_json) > 500 else repr(af_json))
@@ -239,6 +259,10 @@ class CausalReasoningPipeline(dspy.Module):
         
         # Ferramenta externa do solver
         self.solver = ArgumentationSolver()
+
+        # Boardgame-specific extraction components
+        self.boardgame_extract_kb = dspy.ChainOfThought(BoardgameKBExtraction)
+        self.boardgame_extract_rules = dspy.ChainOfThought(BoardgameRuleExtraction)
     
     def forward(self, case_text: str) -> Dict[str, Any]:
         """
@@ -279,71 +303,236 @@ class CausalReasoningPipeline(dspy.Module):
             escolha da semântica grounded.
         """
         # Passo 1: Extrair base de conhecimento
+        logger.info("[1/5] Extracting knowledge base via LLM...")
         kb_json = self.extract_kb(
             case_description=case_text
         ).knowledge_base
-        kb = json.loads(kb_json)
+        kb = _try_parse_json(kb_json)
+        if kb is None:
+            logger.warning("⚠️ Failed to parse KB JSON, using fallback")
+            kb = {"premises": [], "potential_causes": [], "target_conclusion": ""}
+        logger.info(
+            "[1/5] Knowledge base extracted: premises=%s | potential_causes=%s | target=%s",
+            kb.get("premises", []),
+            kb.get("potential_causes", []),
+            kb.get("target_conclusion", ""),
+        )
 
         # Passo 2: Extrair modelo causal
+        logger.info("[2/5] Extracting causal model via LLM...")
         model_json = self.extract_model(
             knowledge_base=kb_json,
             case_description=case_text
         ).causal_model
-        model = json.loads(model_json)
+        model = _try_parse_json(model_json)
+        if model is None:
+            logger.warning("⚠️ Failed to parse causal model JSON, using fallback")
+            model = {"defeasible_rules": [], "undercutter_rules": [], "strict_rules": [], "preferences": {}}
+        logger.info(
+            "[2/5] Causal model extracted: %d defeasible rules, %d undercutter rules | rules: %s",
+            len(model.get("defeasible_rules", [])),
+            len(model.get("undercutter_rules", [])),
+            model.get("defeasible_rules", []) + model.get("undercutter_rules", []),
+        )
 
         # Passo 3: Construir AF base
+        logger.info("[3/5] Building base argumentation framework via LLM...")
         base_af_json = self.build_af(
             knowledge_base=kb_json,
             causal_model=model_json
         ).af_json
+        base_af_data = _try_parse_json(base_af_json)
+        if base_af_data is None:
+            base_af_data = {"knowledge": {"premises": kb.get("premises", []), "axioms": [], "rules": {}}, "arguments": [], "attacks": [], "defeats": []}
+        logger.info("[3/5] Base AF built, invoking solver...")
 
         # Passo 4: Obter resultados base
-        base_grounded, base_explanations = self.solver(base_af_json)
+        logger.info("[4/5] Running solver on base framework...")
+        base_grounded, base_explanations, base_conclusions_json = self.solver(base_af_json)
+        base_grounded_list = json.loads(base_grounded)
+        base_grounded_conclusions = json.loads(base_conclusions_json)  # {id: conclusion}
+        logger.info(
+            "[4/5] Base grounded extension: %d argument(s) | conclusions: %s",
+            len(base_grounded_list),
+            list(base_grounded_conclusions.values()) if base_grounded_conclusions
+            else "[] (empty — target may be ungrounded)",
+        )
 
         # Passo 5: Testar cada causa potencial
+        potential_causes = kb.get("potential_causes", [])
+        logger.info("[5/5] Running counterfactual tests for %d potential cause(s): %s", len(potential_causes), potential_causes)
         causal_results = {}
-        for cause in kb["potential_causes"]:
+        for cause in potential_causes:
+            logger.info("[5/5]   Testing cause: '%s'", cause)
+
             # Create test AF with contrafactual axiom
             context = {
                 "knowledge_base": kb,
                 "causal_model": model,
-                "base_grounded": json.loads(base_grounded),
+                "base_grounded": base_grounded_list,
                 "base_explanations": json.loads(base_explanations)
             }
-            
+
+            negated = negate_fact(cause, context, case_text)
+            logger.info("[5/5]     Counterfactual axiom: '%s'", negated)
+
             test_kb = {
-                "axioms": [negate_fact(cause, context, case_text)],
+                "axioms": [negated],
                 "premises": kb["premises"]
             }
-            
+
             test_af_json = self.build_af(
                 knowledge_base=json.dumps(test_kb),
                 causal_model=model_json
             ).af_json
-            
+
             # Get test results
-            test_grounded, _ = self.solver(test_af_json)
-            
-            # Analyze causation
-            result = self.analyze_test(
-                potential_cause=cause,
-                target_conclusion=kb["target_conclusion"],
-                base_explanations=base_explanations,
-                test_grounded_extension=test_grounded,
-                case_description=case_text
+            test_grounded, _, test_conclusions_json = self.solver(test_af_json)
+            test_grounded_list = json.loads(test_grounded)
+            test_grounded_conclusions = json.loads(test_conclusions_json)
+            logger.info(
+                "[5/5]     Counterfactual grounded extension: %d argument(s) | conclusions: %s",
+                len(test_grounded_list),
+                list(test_grounded_conclusions.values()) if test_grounded_conclusions else "[]",
             )
-            
-            causal_results[cause] = {
-                "is_cause": result.is_cause,
-                "explanation": result.causal_explanation
-            }
+
+            # Analyze causation
+            try:
+                result = self.analyze_test(
+                    potential_cause=cause,
+                    target_conclusion=kb["target_conclusion"],
+                    base_explanations=base_explanations,
+                    test_grounded_extension=test_grounded,
+                    case_description=case_text
+                )
+                logger.info(
+                    "[5/5]     Result for '%s': is_cause=%s | %s",
+                    cause, result.is_cause, result.causal_explanation,
+                )
+                causal_results[cause] = {
+                    "is_cause": result.is_cause,
+                    "explanation": result.causal_explanation
+                }
+            except Exception as e:
+                logger.warning(
+                    "[5/5]     analyze_test failed for '%s': %s — falling back to solver-based determination",
+                    cause, e,
+                )
+                target_clean = (
+                    kb.get("target_conclusion", "")
+                    .lower().replace("(", "").replace(")", "").replace(",", "").replace(" ", "")
+                )
+                base_has_target = any(
+                    target_clean in c.lower().replace("(", "").replace(")", "").replace(",", "").replace(" ", "")
+                    for c in base_grounded_conclusions.values()
+                )
+                test_has_target = any(
+                    target_clean in c.lower().replace("(", "").replace(")", "").replace(",", "").replace(" ", "")
+                    for c in test_grounded_conclusions.values()
+                )
+                is_cause = base_has_target and not test_has_target
+                logger.info(
+                    "[5/5]     Fallback result for '%s': is_cause=%s (base_has_target=%s, test_has_target=%s)",
+                    cause, is_cause, base_has_target, test_has_target,
+                )
+                causal_results[cause] = {
+                    "is_cause": is_cause,
+                    "explanation": f"[solver fallback] base_has_target={base_has_target}, test_has_target={test_has_target}"
+                }
         
         return {
             "case_text": case_text,
             "knowledge_base": kb,
             "causal_model": model,
-            "base_framework": json.loads(base_af_json),
-            "base_grounded": json.loads(base_grounded),
+            "base_framework": base_af_data,
+            "base_grounded": base_grounded_list,
+            "base_grounded_conclusions": base_grounded_conclusions,
             "base_explanations": json.loads(base_explanations),
             "causal_results": causal_results
+        }
+
+    def boardgame_forward(self, case_text: str, goal_str: str) -> Dict[str, Any]:
+        """
+        Simplified forward pass for BoardgameQA benchmarking.
+
+        Unlike the legal causal pipeline, this method asks only one question:
+        is the goal provable from the stated facts and rules?  It therefore:
+          1. Extracts premises ONLY from stated facts (no potential-cause separation)
+          2. Extracts defeasible rules with preference-based strengths (rebuts, not
+             undercutters, for preference conflicts)
+          3. Runs the solver on the resulting AF
+          4. Returns grounded extension conclusions for label determination
+
+        This mode does NOT run counterfactual causal testing — that is specific
+        to the legal causal analysis path (`forward()`).
+
+        Args:
+            case_text: Full game description (facts + rules + preferences).
+            goal_str: Goal predicate string, e.g. '(swan, swear, woodpecker)'.
+
+        Returns:
+            Dict with keys matching what `_map_solver_to_label` expects:
+              - base_grounded: list of grounded argument IDs
+              - base_grounded_conclusions: {arg_id: conclusion}
+              - knowledge_base: {"target_conclusion": str, "premises": [...]}
+              - causal_results: {} (empty — not applicable for boardgame)
+        """
+        logger.info("[BG 1/3] Extracting KB for boardgame case (goal='%s')...", goal_str)
+        kb_json = self.boardgame_extract_kb(
+            case_description=case_text,
+            goal=goal_str,
+        ).knowledge_base
+        kb = _try_parse_json(kb_json)
+        if kb is None:
+            logger.warning("⚠️ Failed to parse boardgame KB JSON, using fallback")
+            kb = {"premises": [], "target_conclusion": ""}
+        logger.info(
+            "[BG 1/3] KB extracted: premises=%s | target=%s",
+            kb.get("premises", []),
+            kb.get("target_conclusion", ""),
+        )
+
+        logger.info("[BG 2/3] Extracting rules...")
+        rules_json = self.boardgame_extract_rules(
+            case_description=case_text,
+            knowledge_base=kb_json,
+        ).causal_model
+        rules = _try_parse_json(rules_json)
+        if rules is None:
+            logger.warning("⚠️ Failed to parse boardgame rules JSON, using fallback")
+            rules = {"defeasible_rules": [], "undercutter_rules": [], "preferences": {}}
+        logger.info(
+            "[BG 2/3] Rules extracted: %d defeasible, %d undercutters | %s",
+            len(rules.get("defeasible_rules", [])),
+            len(rules.get("undercutter_rules", [])),
+            rules.get("defeasible_rules", []) + rules.get("undercutter_rules", []),
+        )
+
+        logger.info("[BG 3/3] Building AF and running solver...")
+        af_kb = {
+            "premises": kb.get("premises", []),
+            "axioms": [],
+            "preferences": rules.get("preferences", {}),
+        }
+        af = ArgumentationFramework(
+            knowledge_base=af_kb,
+            causal_model={
+                "defeasible_rules": rules.get("defeasible_rules", []),
+                "undercutter_rules": rules.get("undercutter_rules", []),
+            },
+        )
+        grounded, _, _ = af.compute_grounded_extension()
+        grounded_conclusions = {arg_id: af.arguments[arg_id].conclusion for arg_id in grounded}
+        logger.info(
+            "[BG 3/3] Grounded extension: %d argument(s) | conclusions: %s",
+            len(grounded),
+            list(grounded_conclusions.values()),
+        )
+
+        return {
+            "case_text": case_text,
+            "knowledge_base": kb,
+            "base_grounded": list(grounded),
+            "base_grounded_conclusions": grounded_conclusions,
+            "causal_results": {},
         }

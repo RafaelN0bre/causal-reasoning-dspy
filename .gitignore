@@ -8,3 +8,12 @@ wheels/
 
 # Virtual environments
 .venv
+
+# Arquivos de ambiente
+.env
+
+# DSPy cache
+.cache/
+
+# Dados / Datasets
+data/

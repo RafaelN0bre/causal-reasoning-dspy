@@ -1,0 +1,179 @@
+{
+  "variant": "Main-depth2",
+  "split": "test",
+  "total_cases": 20,
+  "metrics": {
+    "accuracy": 0.65,
+    "total": 20,
+    "correct": 13,
+    "confusion_matrix": {
+      "proved->proved": 4,
+      "disproved->disproved": 5,
+      "unknown->proved": 2,
+      "unknown->unknown": 4,
+      "proved->unknown": 3,
+      "disproved->unknown": 2
+    },
+    "per_label": {
+      "proved": {
+        "total": 7,
+        "correct": 4,
+        "accuracy": 0.5714285714285714
+      },
+      "disproved": {
+        "total": 7,
+        "correct": 5,
+        "accuracy": 0.7142857142857143
+      },
+      "unknown": {
+        "total": 6,
+        "correct": 4,
+        "accuracy": 0.6666666666666666
+      }
+    },
+    "total_time": 642.1928079128265,
+    "cases_per_second": 0.031143294900796942
+  },
+  "results": [
+    {
+      "index": 0,
+      "goal": "(swan, swear, woodpecker)",
+      "expected": "proved",
+      "predicted": "proved",
+      "correct": true
+    },
+    {
+      "index": 1,
+      "goal": "(crow, tear, dolphin)",
+      "expected": "disproved",
+      "predicted": "disproved",
+      "correct": true
+    },
+    {
+      "index": 2,
+      "goal": "(flamingo, call, bear)",
+      "expected": "unknown",
+      "predicted": "proved",
+      "correct": false
+    },
+    {
+      "index": 3,
+      "goal": "(badger, fall, mouse)",
+      "expected": "proved",
+      "predicted": "proved",
+      "correct": true
+    },
+    {
+      "index": 4,
+      "goal": "(ostrich, refuse, coyote)",
+      "expected": "disproved",
+      "predicted": "disproved",
+      "correct": true
+    },
+    {
+      "index": 5,
+      "goal": "(mermaid, suspect, goat)",
+      "expected": "unknown",
+      "predicted": "unknown",
+      "correct": true
+    },
+    {
+      "index": 6,
+      "goal": "(dalmatian, manage, swan)",
+      "expected": "proved",
+      "predicted": "unknown",
+      "correct": false
+    },
+    {
+      "index": 7,
+      "goal": "(vampire, disarm, bulldog)",
+      "expected": "disproved",
+      "predicted": "unknown",
+      "correct": false
+    },
+    {
+      "index": 8,
+      "goal": "(monkey, pay, rhino)",
+      "expected": "unknown",
+      "predicted": "unknown",
+      "correct": true
+    },
+    {
+      "index": 9,
+      "goal": "(frog, enjoy, crow)",
+      "expected": "proved",
+      "predicted": "proved",
+      "correct": true
+    },
+    {
+      "index": 10,
+      "goal": "(dachshund, refuse, mouse)",
+      "expected": "disproved",
+      "predicted": "disproved",
+      "correct": true
+    },
+    {
+      "index": 11,
+      "goal": "(leopard, trade, cobra)",
+      "expected": "unknown",
+      "predicted": "unknown",
+      "correct": true
+    },
+    {
+      "index": 12,
+      "goal": "(stork, swim, starling)",
+      "expected": "proved",
+      "predicted": "unknown",
+      "correct": false
+    },
+    {
+      "index": 13,
+      "goal": "(elk, swim, mule)",
+      "expected": "disproved",
+      "predicted": "disproved",
+      "correct": true
+    },
+    {
+      "index": 14,
+      "goal": "(crow, fall, wolf)",
+      "expected": "unknown",
+      "predicted": "unknown",
+      "correct": true
+    },
+    {
+      "index": 15,
+      "goal": "(dugong, bring, mule)",
+      "expected": "proved",
+      "predicted": "proved",
+      "correct": true
+    },
+    {
+      "index": 16,
+      "goal": "(dragonfly, destroy, dragon)",
+      "expected": "disproved",
+      "predicted": "disproved",
+      "correct": true
+    },
+    {
+      "index": 17,
+      "goal": "(dugong, capture, bear)",
+      "expected": "unknown",
+      "predicted": "proved",
+      "correct": false
+    },
+    {
+      "index": 18,
+      "goal": "(basenji, capture, dolphin)",
+      "expected": "proved",
+      "predicted": "unknown",
+      "correct": false
+    },
+    {
+      "index": 19,
+      "goal": "(finch, take, bison)",
+      "expected": "disproved",
+      "predicted": "unknown",
+      "correct": false
+    }
+  ]
+}

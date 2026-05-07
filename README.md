@@ -33,26 +33,68 @@ Crie um arquivo `.env` na raiz do projeto com sua chave da API Gemini:
 GEMINI_API_KEY=your-api-key-here
 ```
 
-## 📖 Uso Básico
+## 📖 Uso
 
-### Executar o pipeline completo:
+O ponto de entrada único é `main.py`.  Execute sempre via `uv run main.py [opções]`.
 
-```bash
-python pipeline.py
-```
+### Modo legal (padrão)
 
-Ou como módulo Python:
+Analisa os casos do `GOLDEN_DATASET` (casos jurídicos sintéticos) e valida contra os resultados esperados.
 
 ```bash
-python -m src.pipeline
+# Analisar todos os casos
+uv run main.py
+
+# Analisar um caso específico (IDs 1, 2, 3)
+uv run main.py --legal --case-id 1
 ```
 
-O script irá:
-1. Carregar o dataset de casos de exemplo
-2. Permitir seleção de um caso específico ou análise de todos
-3. Processar cada caso através do pipeline completo
-4. Validar resultados contra expectativas
-5. Salvar resultados detalhados em `outputs/`
+Resultados salvos em `outputs/case_<id>_results.json` e `outputs/analysis_summary.json`.
+
+### Modo BoardgameQA (benchmark)
+
+Executa o benchmark de raciocínio defeasible no dataset BoardgameQA.
+
+```bash
+# Benchmark padrão (Main-depth2, split test, todos os casos)
+uv run main.py --boardgame
+
+# Limitar número de casos (útil para testes rápidos)
+uv run main.py -b -d Main-depth2 -n 50
+
+# Outro variant / split
+uv run main.py -b -d ZeroConflict-depth2 -s valid
+
+# Com geração de gráficos (requer matplotlib)
+uv run main.py -b --charts
+```
+
+#### Variantes disponíveis do BoardgameQA
+
+| Grupo | Variantes |
+|---|---|
+| Main | `Main-depth1`, `Main-depth2`, `Main-depth3` |
+| Conflict | `ZeroConflict-depth2`, `LowConflict-depth2`, `HighConflict-depth2` |
+| Conflict (dificuldade) | `EasyConflict-depth2`, `DifficultConflict-depth2` |
+| Distractors | `SomeDistractors-depth2`, `ManyDistractors-depth2` |
+| Knowledge | `KnowledgeLight-depth2`, `KnowledgeHeavy-depth2` |
+| Binary | `Binary-depth1`, `Binary-depth2`, `Binary-depth3` |
+
+Resultados salvos em `outputs/boardgame/<variant>_<split>_results.json`.
+
+### Opções gerais
+
+| Flag | Atalho | Descrição |
+|---|---|---|
+| `--legal` | `-l` | Modo análise jurídica (padrão) |
+| `--boardgame` | `-b` | Modo benchmark BoardgameQA |
+| `--dataset VARIANT` | `-d` | Variante do dataset (boardgame) |
+| `--split {train,test,valid}` | `-s` | Split (boardgame, padrão: test) |
+| `--limit N` | `-n` | Limitar N casos (boardgame) |
+| `--charts` | `-c` | Gerar gráficos de acurácia |
+| `--output DIR` | `-o` | Diretório de saída (boardgame) |
+| `--case-id ID` | | ID do caso a analisar (legal) |
+| `--max-tokens N` | | Máx. tokens do LM (padrão: 16000) |
 
 ### Usar programaticamente:
 
@@ -67,7 +109,7 @@ load_dotenv()
 
 # Configurar DSPy
 api_key = os.getenv("GEMINI_API_KEY")
-lm = dspy.LM('gemini/gemini-2.5-flash', api_key=api_key, max_tokens=8000)
+lm = dspy.LM('gemini/gemini-2.5-pro', api_key=api_key, max_tokens=8000)
 dspy.configure(lm=lm)
 
 # Inicializar pipeline
@@ -86,13 +128,13 @@ print(result['causal_results'])
 
 ## 🧪 Testes
 
-O projeto inclui validação automática dos resultados do pipeline contra casos esperados. Execute o pipeline para ver as validações:
+Validação automática contra casos esperados:
 
 ```bash
-python src/pipeline.py
+uv run main.py --legal
 ```
 
-Para executar testes unitários (quando disponíveis):
+Testes unitários (quando disponíveis):
 
 ```bash
 pytest tests/ -v
@@ -131,11 +173,10 @@ Implementação do framework ASPIC+:
 - Coordena extração, modelagem, argumentação e análise causal
 
 ### Runner (`src/pipeline.py`)
-Script principal que:
-- Configura ambiente e logging
-- Carrega dataset de casos
-- Executa análises e validações
-- Gera relatórios em JSON
+Funções de execução para cada modo:
+- `run_legal_analysis` — analisa casos do GOLDEN_DATASET e salva resultados
+- `run_boardgame_tests` — executa benchmark BoardgameQA e calcula métricas
+- `generate_boardgame_charts` — gera gráficos de acurácia por variante
 
 ## 📝 Estrutura de Saída
 
@@ -175,16 +216,20 @@ Resultados detalhados são salvos em `outputs/case_{id}_results.json` para cada 
 
 ```
 repo/
-├── src/                    # Implementação principal (versão atual)
-│   ├── dataset.py         # Dataset de casos de exemplo
+├── main.py                # Ponto de entrada (uv run main.py)
+├── src/
+│   ├── dataset.py         # GOLDEN_DATASET (casos jurídicos) + carregamento BoardgameQA
 │   ├── signatures.py      # Assinaturas DSPy
-│   ├── modules.py         # Pipeline e módulos DSPy
-│   ├── solver.py         # Solver de argumentação ASPIC+
-│   └── pipeline.py        # Script runner principal
-├── v1/                    # Primeira versão (histórico)
-├── outputs/               # Resultados das análises
+│   ├── modules.py         # CausalReasoningPipeline + ArgumentationSolver
+│   ├── solver.py          # Solver ASPIC+ (extensão grounded)
+│   └── pipeline.py        # Runners: run_legal_analysis, run_boardgame_tests
+├── data/BoardgameQA/      # Arquivos JSON do benchmark (não versionados)
+├── outputs/               # Resultados gerados
+│   ├── case_*_results.json          # Resultados por caso jurídico
+│   ├── analysis_summary.json        # Sumário modo legal
+│   └── boardgame/<variant>_<split>_results.json
 ├── architecture.md        # Documentação detalhada da arquitetura
-└── pyproject.toml        # Configuração do projeto
+└── pyproject.toml
 ```
 
 ## 📚 Referências

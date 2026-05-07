@@ -311,6 +311,13 @@ class ArgumentationFramework:
         if iteration >= MAX_ITER:
             logger.warning("⚠️ Argument construction stopped after reaching MAX_ITER limit")
 
+        conclusions = [a.conclusion for a in self.arguments.values()]
+        logger.info(
+            "Argument construction complete: %d arguments built | conclusions: %s",
+            len(self.arguments),
+            conclusions,
+        )
+
     def _apply_rule(self, rule: Rule) -> bool:
         antecedent_args = []
         for ant in rule.antecedents:
@@ -362,6 +369,7 @@ class ArgumentationFramework:
         - Undercut: Attack on the applicability of a defeasible rule
         - Rebut: Attack on the conclusion of a defeasible inference
         """
+        logger.info("Identifying attacks among %d arguments...", len(self.arguments))
         for attacker in self.arguments.values():
             for target in self.arguments.values():
                 # Skip if same argument
@@ -396,6 +404,14 @@ class ArgumentationFramework:
                         "rebut",
                         attacked_literal=target.conclusion
                     ))
+
+        by_type = {"undermine": 0, "undercut": 0, "rebut": 0}
+        for att in self.attacks:
+            by_type[att.attack_type] = by_type.get(att.attack_type, 0) + 1
+        logger.info(
+            "Attacks identified: %d total | undermine=%d, undercut=%d, rebut=%d",
+            len(self.attacks), by_type["undermine"], by_type["undercut"], by_type["rebut"],
+        )
     
     def _negate_str(self, literal: str) -> str:
         """Negate a literal string."""
@@ -404,16 +420,17 @@ class ArgumentationFramework:
     def _compute_defeats(self):
         """
         Compute which attacks become defeats following ASPIC+ semantics:
-        
+
         1. Undermining: Always succeeds as ordinary premises are attackable by definition
         2. Undercutting: Succeeds regardless of strength as it challenges rule applicability
         3. Rebutting: Succeeds only if attacker is strictly stronger (prevents cycles)
-        
+
         This implementation follows the principle that:
         - Attacks on premises (undermine) are fundamental
         - Attacks on rule applicability (undercut) are structural
         - Attacks on conclusions (rebut) require clear preference
         """
+        logger.info("Computing defeats from %d attacks...", len(self.attacks))
         self.defeats.clear()
         for attack in self.attacks:
             attacker = self.arguments[attack.attacker_id]
@@ -444,6 +461,13 @@ class ArgumentationFramework:
             
             if succeeds:
                 self.defeats.append(Defeat(attack, attacker.strength, target.strength))
+                logger.debug(
+                    "Defeat: %s -[%s]-> %s (%.2f vs %.2f)",
+                    attack.attacker_id, attack.attack_type, attack.target_id,
+                    attacker.strength, target.strength,
+                )
+
+        logger.info("Defeats computed: %d out of %d attacks succeeded", len(self.defeats), len(self.attacks))
     
     def _compute_argument_strength(self, arg: Argument) -> float:
         """
@@ -516,29 +540,48 @@ class ArgumentationFramework:
         # Start with empty extension
         extension = set()
         explanations = {}
-        
+
+        logger.info(
+            "Computing grounded extension: %d arguments, %d defeats",
+            len(self.arguments), len(self.defeats),
+        )
+
         # Compute least fixed point
+        fp_iter = 0
         while True:
+            fp_iter += 1
             # Find all arguments defended by current extension
             defended = {
                 arg.id for arg in self.arguments.values()
                 if self._is_defended(arg.id, extension)
             }
-            
+
             # Try to expand the extension
             new_extension = extension | defended
-            
+            added = new_extension - extension
+
+            logger.debug(
+                "Fixed-point iteration %d: defended=%d, added=%s",
+                fp_iter, len(defended), sorted(added) if added else "none",
+            )
+
             # Fixed point check
             if new_extension == extension:
                 break
-                
+
             extension = new_extension
-        
+
         # Generate explanations for accepted arguments
         for arg_id in extension:
             arg = self.arguments[arg_id]
             explanations[arg_id] = self._get_explanation(arg)
-        
+
+        grounded_conclusions = [self.arguments[a].conclusion for a in extension]
+        logger.info(
+            "Grounded extension computed in %d iteration(s): %d argument(s) accepted | conclusions: %s",
+            fp_iter, len(extension), grounded_conclusions if grounded_conclusions else "[] (empty extension)",
+        )
+
         return extension, explanations, self.defeats
     
     def _is_defended(self, arg_id: str, defenders: Set[str]) -> bool:
