@@ -535,4 +535,13 @@ class CausalReasoningPipeline(dspy.Module):
             "base_grounded": list(grounded),
             "base_grounded_conclusions": grounded_conclusions,
             "causal_results": {},
+            # Raw LLM outputs preserved for tracing/debugging
+            "_trace": {
+                "kb_json_raw": kb_json,
+                "rules_json_raw": rules_json,
+                "kb_parsed": kb,
+                "rules_parsed": rules,
+                "grounded_ids": list(grounded),
+                "grounded_conclusions": grounded_conclusions,
+            },
         }

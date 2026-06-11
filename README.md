@@ -54,13 +54,23 @@ Resultados salvos em `outputs/case_<id>_results.json` e `outputs/analysis_summar
 ### Modo BoardgameQA (benchmark)
 
 Executa o benchmark de raciocínio defeasible no dataset BoardgameQA.
+Dois pipelines estão disponíveis, selecionados pela flag `--baseline`:
+
+| Pipeline | Flag | Descrição | Saída |
+|---|---|---|---|
+| DSPy + ASPIC+ | *(padrão)* | Extração de KB + solver formal | `outputs/boardgame/dspy/` |
+| Baseline LLM | `--baseline` | Chamada direta ao LLM, sem solver | `outputs/boardgame/baseline/` |
 
 ```bash
-# Benchmark padrão (Main-depth2, split test, todos os casos)
+# Pipeline padrão: DSPy + ASPIC+ (Main-depth2, split test, todos os casos)
 uv run main.py --boardgame
+
+# Baseline: LLM direto, sem solver (mesmos dados, sem framework)
+uv run main.py -b --baseline
 
 # Limitar número de casos (útil para testes rápidos)
 uv run main.py -b -d Main-depth2 -n 50
+uv run main.py -b -d Main-depth2 -n 50 --baseline
 
 # Outro variant / split
 uv run main.py -b -d ZeroConflict-depth2 -s valid
@@ -80,7 +90,7 @@ uv run main.py -b --charts
 | Knowledge | `KnowledgeLight-depth2`, `KnowledgeHeavy-depth2` |
 | Binary | `Binary-depth1`, `Binary-depth2`, `Binary-depth3` |
 
-Resultados salvos em `outputs/boardgame/<variant>_<split>_results.json`.
+Resultados salvos em `outputs/boardgame/dspy/` ou `outputs/boardgame/baseline/` dependendo do pipeline usado.
 
 ### Opções gerais
 
@@ -88,6 +98,7 @@ Resultados salvos em `outputs/boardgame/<variant>_<split>_results.json`.
 |---|---|---|
 | `--legal` | `-l` | Modo análise jurídica (padrão) |
 | `--boardgame` | `-b` | Modo benchmark BoardgameQA |
+| `--baseline` | | LLM direto sem solver (boardgame) |
 | `--dataset VARIANT` | `-d` | Variante do dataset (boardgame) |
 | `--split {train,test,valid}` | `-s` | Split (boardgame, padrão: test) |
 | `--limit N` | `-n` | Limitar N casos (boardgame) |
@@ -172,10 +183,10 @@ Implementação do framework ASPIC+:
 - `ArgumentationSolver` - Integra o solver formal como ferramenta DSPy
 - Coordena extração, modelagem, argumentação e análise causal
 
-### Runner (`src/pipeline.py`)
-Funções de execução para cada modo:
+### Runners (`src/pipeline.py`, `src/baseline.py`)
+- `run_boardgame_tests` — pipeline DSPy + ASPIC+ (extração de KB → solver → label)
+- `run_baseline_tests` — LLM direto sem solver (fatos + regras + goal → label)
 - `run_legal_analysis` — analisa casos do GOLDEN_DATASET e salva resultados
-- `run_boardgame_tests` — executa benchmark BoardgameQA e calcula métricas
 - `generate_boardgame_charts` — gera gráficos de acurácia por variante
 
 ## 📝 Estrutura de Saída
@@ -222,12 +233,15 @@ repo/
 │   ├── signatures.py      # Assinaturas DSPy
 │   ├── modules.py         # CausalReasoningPipeline + ArgumentationSolver
 │   ├── solver.py          # Solver ASPIC+ (extensão grounded)
-│   └── pipeline.py        # Runners: run_legal_analysis, run_boardgame_tests
+│   ├── pipeline.py        # Runner DSPy + ASPIC+: run_boardgame_tests, run_legal_analysis
+│   └── baseline.py        # Runner baseline (LLM direto): run_baseline_tests
 ├── data/BoardgameQA/      # Arquivos JSON do benchmark (não versionados)
 ├── outputs/               # Resultados gerados
 │   ├── case_*_results.json          # Resultados por caso jurídico
 │   ├── analysis_summary.json        # Sumário modo legal
-│   └── boardgame/<variant>_<split>_results.json
+│   └── boardgame/
+│       ├── dspy/                    # Resultados DSPy + ASPIC+
+│       └── baseline/                # Resultados baseline LLM
 ├── architecture.md        # Documentação detalhada da arquitetura
 └── pyproject.toml
 ```

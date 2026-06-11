@@ -3,12 +3,17 @@
 Usage:
     uv run main.py                        # Legal mode (default)
     uv run main.py --legal                # Legal case analysis
-    uv run main.py --legal --case-id 2   # Analyze a specific legal case
+    uv run main.py --legal --case-id 2    # Analyze a specific legal case
 
-    uv run main.py --boardgame                          # BoardgameQA benchmark (Main-depth2, all test cases)
-    uv run main.py -b -d Main-depth2 -n 50              # 50 cases from Main-depth2
-    uv run main.py -b -d ZeroConflict-depth2 -s valid   # Valid split of ZeroConflict
-    uv run main.py -b --charts                          # Run benchmark and generate charts
+    uv run main.py --boardgame                              # DSPy + ASPIC+ (Main-depth2, test split)
+    uv run main.py -b -d Main-depth2 -n 50                  # 50 cases, DSPy pipeline
+    uv run main.py -b -d Main-depth2 --baseline             # Raw LLM, no solver
+    uv run main.py -b -d Main-depth2 -n 50 --baseline       # 50 cases, raw LLM
+    uv run main.py -b --charts                              # Run + generate charts
+
+Output directories:
+    outputs/boardgame/dspy/     ← DSPy + ASPIC+ results (default)
+    outputs/boardgame/baseline/ ← raw LLM results (when --baseline is used)
 
 Available BoardgameQA variants:
     Main-depth1, Main-depth2, Main-depth3
@@ -20,19 +25,18 @@ Available BoardgameQA variants:
 
 Environment:
     GEMINI_API_KEY  (required) — Gemini API key
-    LOG_LEVEL       (optional) — Logging level, default INFO
+    GEMINI_MODEL    (optional) — model name, default gemini-2.5-flash
+    LOG_LEVEL       (optional) — logging level, default INFO
 """
 import os
 import sys
 import logging
 import argparse
 
-import dspy
 from dotenv import load_dotenv
 
 
 def setup_logging() -> logging.Logger:
-    """Configure logging based on LOG_LEVEL env var."""
     log_level_name = os.getenv("LOG_LEVEL", "INFO").upper()
     try:
         log_level = getattr(logging, log_level_name)
@@ -40,27 +44,16 @@ def setup_logging() -> logging.Logger:
         log_level = logging.INFO
     logging.basicConfig(
         level=log_level,
-        format="%(asctime)s %(levelname)s %(name)s: %(message)s"
+        format="%(asctime)s %(levelname)s %(name)s: %(message)s",
     )
     return logging.getLogger(__name__)
 
 
-def setup_dspy(max_tokens: int = 16000) -> dspy.LM:
-    """Initialize DSPy with Gemini LM.
-
-    Args:
-        max_tokens: Maximum tokens for LM responses.
-    """
-    api_key = os.getenv("GEMINI_API_KEY")
-    if not api_key:
-        print("GEMINI_API_KEY not found. Create a .env file with:")
-        print("  GEMINI_API_KEY=your-api-key-here")
-        sys.exit(1)
-
+def setup_dspy(api_key: str, model_name: str, max_tokens: int):
+    import dspy
     os.environ.setdefault("DSPY_CACHEDIR", os.path.join(os.path.dirname(__file__), ".cache", "dspy"))
-    lm = dspy.LM('gemini/gemini-2.5-pro', api_key=api_key, max_tokens=max_tokens)
+    lm = dspy.LM(f"gemini/{model_name}", api_key=api_key, max_tokens=max_tokens)
     dspy.configure(lm=lm)
-    return lm
 
 
 # ---------------------------------------------------------------------------
@@ -68,20 +61,12 @@ def setup_dspy(max_tokens: int = 16000) -> dspy.LM:
 # ---------------------------------------------------------------------------
 
 def run_legal_mode(args, pipeline) -> None:
-    """Run legal case analysis against the golden dataset."""
     from src.pipeline import run_legal_analysis
     run_legal_analysis(pipeline, args.case_id)
 
 
-def run_boardgame_mode(args, pipeline) -> None:
-    """Run BoardgameQA benchmark.
-
-    Loads the requested dataset variant/split, runs the pipeline on each case,
-    and writes results + metrics to --output.  Optionally generates accuracy
-    charts when --charts is set.
-    """
+def run_boardgame_dspy(args, pipeline) -> None:
     from src.pipeline import run_boardgame_tests, generate_boardgame_charts
-
     run_boardgame_tests(
         pipeline=pipeline,
         variant=args.dataset,
@@ -89,9 +74,19 @@ def run_boardgame_mode(args, pipeline) -> None:
         limit=args.limit,
         output_dir=args.output,
     )
-
     if args.charts:
         generate_boardgame_charts(args.output)
+
+
+def run_boardgame_baseline(args, model) -> None:
+    from src.baseline import run_baseline_tests
+    run_baseline_tests(
+        model=model,
+        variant=args.dataset,
+        split=args.split,
+        limit=args.limit,
+        output_dir=args.output,
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -99,7 +94,6 @@ def run_boardgame_mode(args, pipeline) -> None:
 # ---------------------------------------------------------------------------
 
 def main() -> None:
-    """Parse arguments and dispatch to the appropriate mode."""
     from src.dataset import BOARDGAME_VARIANTS
 
     parser = argparse.ArgumentParser(
@@ -107,10 +101,13 @@ def main() -> None:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  uv run main.py                            Legal mode (default, all cases)
-  uv run main.py -l --case-id 1             Analyze legal case #1
-  uv run main.py -b                         BoardgameQA benchmark (Main-depth2, test split)
-  uv run main.py -b -d Main-depth2 -n 50    50 cases from Main-depth2
+  uv run main.py                                  Legal mode (all cases)
+  uv run main.py -l --case-id 1                   Legal case #1
+
+  uv run main.py -b                               BoardgameQA, DSPy + ASPIC+ solver
+  uv run main.py -b --baseline                    BoardgameQA, raw LLM (no solver)
+  uv run main.py -b -d Main-depth2 -n 50          50 cases, DSPy pipeline
+  uv run main.py -b -d Main-depth2 -n 50 --baseline  50 cases, raw LLM
   uv run main.py -b -d Binary-depth1 -s valid --charts
         """,
     )
@@ -127,29 +124,34 @@ Examples:
         help="BoardgameQA benchmark mode",
     )
 
-    # --- boardgame-only options ---
+    # --- boardgame options ---
+    parser.add_argument(
+        "--baseline",
+        action="store_true",
+        help=(
+            "Use raw LLM call instead of DSPy + ASPIC+ solver. "
+            "Output goes to outputs/boardgame/baseline/ by default."
+        ),
+    )
     parser.add_argument(
         "--dataset", "-d",
         choices=BOARDGAME_VARIANTS,
         default="Main-depth2",
         metavar="VARIANT",
-        help=(
-            "BoardgameQA dataset variant (default: Main-depth2). "
-            f"Choices: {', '.join(BOARDGAME_VARIANTS)}"
-        ),
+        help=f"BoardgameQA variant (default: Main-depth2). Choices: {', '.join(BOARDGAME_VARIANTS)}",
     )
     parser.add_argument(
         "--split", "-s",
         choices=["train", "test", "valid"],
         default="test",
-        help="Data split to use (default: test)",
+        help="Data split (default: test)",
     )
     parser.add_argument(
         "--limit", "-n",
         type=int,
         default=None,
         metavar="N",
-        help="Limit number of test cases processed (boardgame mode)",
+        help="Max number of cases to process (default: all)",
     )
     parser.add_argument(
         "--charts", "-c",
@@ -158,11 +160,15 @@ Examples:
     )
     parser.add_argument(
         "--output", "-o",
-        default="outputs/boardgame",
-        help="Output directory for boardgame results (default: outputs/boardgame)",
+        default=None,
+        help=(
+            "Output directory for boardgame results. "
+            "Defaults to outputs/boardgame/dspy or outputs/boardgame/baseline "
+            "depending on --baseline."
+        ),
     )
 
-    # --- legal-only options ---
+    # --- legal options ---
     parser.add_argument(
         "--case-id",
         type=str,
@@ -170,7 +176,12 @@ Examples:
         help="Specific case ID to analyze (legal mode only)",
     )
 
-    # --- shared options ---
+    # --- utility ---
+    parser.add_argument(
+        "--list-models",
+        action="store_true",
+        help="List available Gemini models and exit",
+    )
     parser.add_argument(
         "--max-tokens",
         type=int,
@@ -179,23 +190,68 @@ Examples:
     )
 
     args = parser.parse_args()
+    logger = setup_logging()
+    load_dotenv()
 
-    # Default to legal mode when neither flag is given
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        logger.error("GEMINI_API_KEY not found. Add it to .env")
+        sys.exit(1)
+
+    model_name = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+
+    if args.list_models:
+        import google.generativeai as genai
+        genai.configure(api_key=api_key)
+        for m in genai.list_models():
+            if "generateContent" in m.supported_generation_methods:
+                logger.info("  %s", m.name)
+        sys.exit(0)
+
+    # Default to legal mode when no mode flag is given
     if not args.legal and not args.boardgame:
         args.legal = True
 
-    logger = setup_logging()
-    logger.info("Starting pipeline (mode=%s)", "boardgame" if args.boardgame else "legal")
+    # Resolve default output directory based on mode
+    if args.output is None:
+        args.output = "outputs/boardgame/baseline" if args.baseline else "outputs/boardgame/dspy"
 
-    load_dotenv()
-    setup_dspy(max_tokens=args.max_tokens)
-
-    from src.modules import CausalReasoningPipeline
-    pipeline = CausalReasoningPipeline()
+    mode_label = "boardgame" if args.boardgame else "legal"
+    pipeline_label = "baseline (raw LLM)" if args.baseline else "DSPy + ASPIC+"
+    logger.info("=== Pipeline starting ===")
+    logger.info("Mode       : %s", mode_label)
+    logger.info("Model      : %s", model_name)
+    logger.info("Max tokens : %d", args.max_tokens)
+    if args.boardgame:
+        logger.info("Pipeline   : %s", pipeline_label)
+        logger.info("Dataset    : %s", args.dataset)
+        logger.info("Split      : %s", args.split)
+        logger.info("Limit      : %s", args.limit if args.limit is not None else "all")
+        logger.info("Output dir : %s", args.output)
+    elif args.legal:
+        logger.info("Case ID    : %s", args.case_id if args.case_id else "all")
 
     if args.boardgame:
-        run_boardgame_mode(args, pipeline)
+        if args.baseline:
+            import google.generativeai as genai
+            genai.configure(api_key=api_key)
+            model = genai.GenerativeModel(
+                model_name,
+                generation_config=genai.types.GenerationConfig(
+                    max_output_tokens=args.max_tokens,
+                    temperature=0.0,
+                ),
+            )
+            run_boardgame_baseline(args, model)
+        else:
+            setup_dspy(api_key, model_name, args.max_tokens)
+            from src.modules import CausalReasoningPipeline
+            pipeline = CausalReasoningPipeline()
+            run_boardgame_dspy(args, pipeline)
     else:
+        setup_dspy(api_key, model_name, args.max_tokens)
+        from src.modules import CausalReasoningPipeline
+        pipeline = CausalReasoningPipeline()
         run_legal_mode(args, pipeline)
 
 
