@@ -1,0 +1,117 @@
+{
+  "extract_kb.predict": {
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "augmented": true,
+        "case_description": "Facts: The gecko needs support from the sheep. The pig is named Casper. The squid gives a magnifier to the whale, and is named Chickpea. The squid has a card that is red in color, and does not remove from the board one of the pieces of the turtle. The catfish does not respect the jellyfish.\n\nRules: Rule1: If the parrot does not sing a victory song for the sheep, then the sheep does not prepare armor for the donkey. Rule2: The sheep unquestionably prepares armor for the donkey, in the case where the gecko needs the support of the sheep. Rule3: If you are positive that one of the animals does not respect the jellyfish, you can be certain that it will hold an equal number of points as the donkey without a doubt. Rule4: If the squid does not wink at the donkey but the sheep prepares armor for the donkey, then the donkey knocks down the fortress of the sea bass unavoidably. Rule5: If the catfish holds the same number of points as the donkey, then the donkey is not going to knock down the fortress of the sea bass. Rule6: Be careful when something gives a magnifier to the whale but does not remove from the board one of the pieces of the turtle because in this case it will, surely, not wink at the donkey (this may or may not be problematic).\n\nPreferences: Rule1 is preferred over Rule2. Rule4 is preferred over Rule5. ",
+        "goal": "(donkey, knock, sea bass)",
+        "reasoning": "1. From the facts: \"The gecko needs support from the sheep.\"\n2. Applying Rule2: Since the gecko needs support from the sheep, the sheep prepares armor for the donkey.\n3. From the facts: \"The squid gives a magnifier to the whale\" and \"does not remove from the board one of the pieces of the turtle.\"\n4. Applying Rule6: Since the squid gives a magnifier to the whale and does not remove a piece of the turtle, the squid does not wink at the donkey.\n5. Applying Rule4: Since the squid does not wink at the donkey AND the sheep prepares armor for the donkey, the donkey knocks down the fortress of the sea bass.\n6. From the facts: \"The catfish does not respect the jellyfish.\"\n7. Applying Rule3: Since the catfish does not respect the jellyfish, the catfish holds an equal number of points as the donkey.\n8. Applying Rule5: Since the catfish holds the same number of points as the donkey, the donkey is not going to knock down the fortress of the sea bass.\n9. Conflict: Rule4 (concluding the donkey knocks down the fortress) and Rule5 (concluding the donkey does not knock down the fortress). Rule4 is preferred over Rule5, so the conclusion stands that the donkey knocks down the fortress.",
+        "knowledge_base": "{\n    \"premises\": [\n        \"GeckoNeedsSheepSupport\",\n        \"SquidGivesMagnifierToWhale\",\n        \"SquidDoesNotRemoveTurtlePiece\",\n        \"CatfishDoesNotRespectJellyfish\"\n    ],\n    \"target_conclusion\": \"DonkeyKnocksDownSeaBassFortress\"\n}"
+      },
+      {
+        "augmented": true,
+        "case_description": "Facts: The cat has a card that is green in color. The hippopotamus has a love seat sofa. The phoenix eats the food of the sea bass. The eel does not need support from the raven.\n\nRules: Rule1: If something needs the support of the aardvark, then it does not respect the cat. Rule2: Be careful when something removes from the board one of the pieces of the halibut and also removes from the board one of the pieces of the tilapia because in this case it will surely not learn the basics of resource management from the lion (this may or may not be problematic). Rule3: Regarding the cat, if it has a card whose color appears in the flag of Italy, then we can conclude that it removes one of the pieces of the halibut. Rule4: If the eel does not need support from the raven, then the raven does not learn elementary resource management from the cat. Rule5: If the cat has a musical instrument, then the cat does not remove one of the pieces of the halibut. Rule6: If the hippopotamus has something to sit on, then the hippopotamus respects the cat. Rule7: The cat removes one of the pieces of the tilapia whenever at least one animal eats the food of the sea bass.\n\nPreferences: Rule1 is preferred over Rule6. Rule5 is preferred over Rule3. ",
+        "goal": "(cat, learn, lion)",
+        "reasoning": "1. The goal is to determine if the cat learns the basics of resource management from the lion.\n2. Rule2 states that if something removes a piece of the halibut AND a piece of the tilapia, it will NOT learn the basics of resource management from the lion.\n3. From the facts: \"The cat has a card that is green in color.\" Green is a color in the flag of Italy. Rule3 states that if the cat has a card whose color appears in the flag of Italy, it removes one of the pieces of the halibut.\n4. From the facts: \"The phoenix eats the food of the sea bass.\" Rule7 states that the cat removes one of the pieces of the tilapia whenever at least one animal eats the food of the sea bass.\n5. Since the cat removes a piece of the halibut (Rule3) and a piece of the tilapia (Rule7), Rule2 applies.\n6. Rule2 concludes that the cat will not learn the basics of resource management from the lion. Therefore, the goal (cat, learn, lion) is false.",
+        "knowledge_base": "{\n    \"premises\": [\n        \"CatHasGreenCard\",\n        \"PhoenixEatsSeaBassFood\",\n        \"CatRemovesHalibutPiece\",\n        \"CatRemovesTilapiaPiece\"\n    ],\n    \"target_conclusion\": \"NotCatLearnsBasicsFromLion\"\n}"
+      },
+      {
+        "augmented": true,
+        "case_description": "Facts: The doctorfish knocks down the fortress of the eel. The sheep has a card that is orange in color, and struggles to find food.\n\nRules: Rule1: If something proceeds to the spot that is right after the spot of the cat, then it knocks down the fortress of the donkey, too. Rule2: If you are positive that you saw one of the animals knocks down the fortress of the eel, you can be certain that it will not knock down the fortress of the donkey. Rule3: If the sheep has difficulty to find food, then the sheep learns elementary resource management from the carp. Rule4: If at least one animal learns the basics of resource management from the carp, then the donkey eats the food that belongs to the turtle. Rule5: If the sheep has a card whose color starts with the letter \"r\", then the sheep learns elementary resource management from the carp. Rule6: If the doctorfish does not knock down the fortress that belongs to the donkey however the oscar prepares armor for the donkey, then the donkey will not eat the food that belongs to the turtle.\n\nPreferences: Rule1 is preferred over Rule2. Rule6 is preferred over Rule4. ",
+        "goal": "(donkey, eat, turtle)",
+        "reasoning": "1. The facts state: \"The doctorfish knocks down the fortress of the eel\" and \"The sheep has a card that is orange in color, and struggles to find food.\"\n2. Rule 3 states: \"If the sheep has difficulty to find food, then the sheep learns elementary resource management from the carp.\" Since the sheep struggles to find food, the sheep learns elementary resource management from the carp.\n3. Rule 4 states: \"If at least one animal learns the basics of resource management from the carp, then the donkey eats the food that belongs to the turtle.\" Since the sheep learned this, the donkey eats the food that belongs to the turtle.\n4. Rule 2 states: \"If you are positive that you saw one of the animals knocks down the fortress of the eel, you can be certain that it will not knock down the fortress of the donkey.\" The doctorfish knocked down the fortress of the eel, so the doctorfish will not knock down the fortress of the donkey.\n5. Rule 6 discusses the condition where the doctorfish does not knock down the fortress of the donkey (which is true) and the oscar prepares armor for the donkey. However, there is no information about the oscar preparing armor, so Rule 6 cannot be triggered to negate the conclusion of Rule 4.\n6. Therefore, the conclusion that the donkey eats the food that belongs to the turtle holds.",
+        "knowledge_base": "{\n    \"premises\": [\n        \"SheepStrugglesToFindFood\",\n        \"DoctorfishKnocksDownEelFortress\",\n        \"SheepLearnsResourceManagementFromCarp\",\n        \"DonkeyEatsTurtleFood\"\n    ],\n    \"target_conclusion\": \"DonkeyEatsTurtleFood\"\n}"
+      },
+      {
+        "case_text": "Facts: The turtle has a card that is blue in color.\n\nRules: Rule1: Regarding the turtle, if it has a card whose color is one of the rainbow colors, then we can conclude that it removes one of the pieces of the sheep. Rule2: If you are positive that you saw one of the animals becomes an enemy of the leopard, you can be certain that it will also learn elementary resource management from the lion. Rule3: If you are positive that you saw one of the animals removes one of the pieces of the sheep, you can be certain that it will not learn the basics of resource management from the lion.\n\nPreferences: Rule2 is preferred over Rule3. ",
+        "goal_str": "(turtle, learn, lion)",
+        "label": "disproved"
+      }
+    ],
+    "signature": {
+      "instructions": "Extracts knowledge base from a BoardgameQA case.\n\nOnly facts explicitly stated (or directly derivable via a single rule application\nfrom stated facts) should become premises. Rule antecedents that are NOT mentioned\nas facts must NOT be added as premises — they are simply not true in this game state.\nThe goal literal is the target conclusion to check for provability.",
+      "fields": [
+        {
+          "prefix": "Case Description:",
+          "description": "Full boardgame case: facts, rules, and preferences"
+        },
+        {
+          "prefix": "Goal:",
+          "description": "The goal predicate string, e.g. '(swan, swear, woodpecker)'"
+        },
+        {
+          "prefix": "Reasoning: Let's think step by step in order to",
+          "description": "${reasoning}"
+        },
+        {
+          "prefix": "Knowledge Base:",
+          "description": "JSON containing:\n        - premises: List of ASPIC+ literals derived ONLY from stated facts\n          (e.g. if 'wolf does not take X' is a fact and Rule1 says 'if not X then Y',\n          include 'Y' as a premise; do NOT include rule antecedents that have no\n          factual basis)\n        - target_conclusion: Single ASPIC+ literal representing the goal\n        Example: {\n            \"premises\": [\"SeahorseSurrenders\", \"WolfAcquiresPhoto\"],\n            \"target_conclusion\": \"SwanSwears\"\n        }"
+        }
+      ]
+    },
+    "lm": null
+  },
+  "extract_rules.predict": {
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "augmented": true,
+        "case_description": "Facts: The gecko needs support from the sheep. The pig is named Casper. The squid gives a magnifier to the whale, and is named Chickpea. The squid has a card that is red in color, and does not remove from the board one of the pieces of the turtle. The catfish does not respect the jellyfish.\n\nRules: Rule1: If the parrot does not sing a victory song for the sheep, then the sheep does not prepare armor for the donkey. Rule2: The sheep unquestionably prepares armor for the donkey, in the case where the gecko needs the support of the sheep. Rule3: If you are positive that one of the animals does not respect the jellyfish, you can be certain that it will hold an equal number of points as the donkey without a doubt. Rule4: If the squid does not wink at the donkey but the sheep prepares armor for the donkey, then the donkey knocks down the fortress of the sea bass unavoidably. Rule5: If the catfish holds the same number of points as the donkey, then the donkey is not going to knock down the fortress of the sea bass. Rule6: Be careful when something gives a magnifier to the whale but does not remove from the board one of the pieces of the turtle because in this case it will, surely, not wink at the donkey (this may or may not be problematic).\n\nPreferences: Rule1 is preferred over Rule2. Rule4 is preferred over Rule5. ",
+        "knowledge_base": "{\n    \"premises\": [\n        \"GeckoNeedsSheepSupport\",\n        \"SquidGivesMagnifierToWhale\",\n        \"SquidDoesNotRemoveTurtlePiece\",\n        \"CatfishDoesNotRespectJellyfish\"\n    ],\n    \"target_conclusion\": \"DonkeyKnocksDownSeaBassFortress\"\n}",
+        "reasoning": "1. From `GeckoNeedsSheepSupport` and Rule2, we derive `SheepPreparesArmorForDonkey`.\n2. From `SquidGivesMagnifierToWhale` and `SquidDoesNotRemoveTurtlePiece` and Rule6, we derive `SquidDoesNotWinkAtDonkey`.\n3. With `SquidDoesNotWinkAtDonkey` and `SheepPreparesArmorForDonkey`, Rule4 allows us to conclude `DonkeyKnocksDownSeaBassFortress`.\n4. From `CatfishDoesNotRespectJellyfish` and Rule3, we derive `CatfishHoldsSamePointsAsDonkey`.\n5. From `CatfishHoldsSamePointsAsDonkey` and Rule5, we derive `¬DonkeyKnocksDownSeaBassFortress`.\n6. We have a conflict between Rule4 and Rule5 regarding `DonkeyKnocksDownSeaBassFortress`.\n7. The preferences state Rule4 is preferred over Rule5, so the conclusion `DonkeyKnocksDownSeaBassFortress` holds.",
+        "causal_model": "{\n    \"defeasible_rules\": [\n        \"r2: GeckoNeedsSheepSupport => SheepPreparesArmorForDonkey\",\n        \"r6: SquidGivesMagnifierToWhale AND SquidDoesNotRemoveTurtlePiece => SquidDoesNotWinkAtDonkey\",\n        \"r4: SquidDoesNotWinkAtDonkey AND SheepPreparesArmorForDonkey => DonkeyKnocksDownSeaBassFortress\",\n        \"r3: CatfishDoesNotRespectJellyfish => CatfishHoldsSamePointsAsDonkey\",\n        \"r5: CatfishHoldsSamePointsAsDonkey => ¬DonkeyKnocksDownSeaBassFortress\"\n    ],\n    \"undercutter_rules\": [],\n    \"preferences\": {\n        \"r4\": 0.8,\n        \"r5\": 0.2\n    }\n}"
+      },
+      {
+        "augmented": true,
+        "case_description": "Facts: The cat has a card that is green in color. The hippopotamus has a love seat sofa. The phoenix eats the food of the sea bass. The eel does not need support from the raven.\n\nRules: Rule1: If something needs the support of the aardvark, then it does not respect the cat. Rule2: Be careful when something removes from the board one of the pieces of the halibut and also removes from the board one of the pieces of the tilapia because in this case it will surely not learn the basics of resource management from the lion (this may or may not be problematic). Rule3: Regarding the cat, if it has a card whose color appears in the flag of Italy, then we can conclude that it removes one of the pieces of the halibut. Rule4: If the eel does not need support from the raven, then the raven does not learn elementary resource management from the cat. Rule5: If the cat has a musical instrument, then the cat does not remove one of the pieces of the halibut. Rule6: If the hippopotamus has something to sit on, then the hippopotamus respects the cat. Rule7: The cat removes one of the pieces of the tilapia whenever at least one animal eats the food of the sea bass.\n\nPreferences: Rule1 is preferred over Rule6. Rule5 is preferred over Rule3. ",
+        "knowledge_base": "{\n    \"premises\": [\n        \"CatHasGreenCard\",\n        \"PhoenixEatsSeaBassFood\",\n        \"CatRemovesHalibutPiece\",\n        \"CatRemovesTilapiaPiece\"\n    ],\n    \"target_conclusion\": \"NotCatLearnsBasicsFromLion\"\n}",
+        "reasoning": "1. The goal is to determine if the cat learns the basics of resource management from the lion.\n2. Rule 2 states: If something removes a piece of the halibut AND removes a piece of the tilapia, then it will not learn the basics of resource management from the lion.\n3. From the facts:\n   - The cat has a green card (Rule 3: Green is in the Italian flag, so the cat removes a piece of the halibut).\n   - The phoenix eats the food of the sea bass (Rule 7: This triggers the cat to remove a piece of the tilapia).\n4. Rule 5 (Cat has a musical instrument => ¬CatRemovesHalibutPiece) is preferred over Rule 3 (CatHasGreenCard => CatRemovesHalibutPiece). However, there is no fact stating the cat has a musical instrument. Thus, Rule 3 remains active.\n5. Since the cat removes a piece of the halibut (Rule 3) and a piece of the tilapia (Rule 7), the antecedent of Rule 2 is satisfied.\n6. Therefore, the cat does not learn the basics of resource management from the lion.",
+        "causal_model": "{\n    \"defeasible_rules\": [\n        \"r2: CatRemovesHalibutPiece AND CatRemovesTilapiaPiece => ¬CatLearnsBasicsFromLion\",\n        \"r3: CatHasGreenCard => CatRemovesHalibutPiece\",\n        \"r5: CatHasMusicalInstrument => ¬CatRemovesHalibutPiece\",\n        \"r7: PhoenixEatsSeaBassFood => CatRemovesTilapiaPiece\"\n    ],\n    \"undercutter_rules\": [],\n    \"preferences\": {\n        \"r5\": 0.9,\n        \"r3\": 0.5\n    }\n}"
+      },
+      {
+        "augmented": true,
+        "case_description": "Facts: The doctorfish knocks down the fortress of the eel. The sheep has a card that is orange in color, and struggles to find food.\n\nRules: Rule1: If something proceeds to the spot that is right after the spot of the cat, then it knocks down the fortress of the donkey, too. Rule2: If you are positive that you saw one of the animals knocks down the fortress of the eel, you can be certain that it will not knock down the fortress of the donkey. Rule3: If the sheep has difficulty to find food, then the sheep learns elementary resource management from the carp. Rule4: If at least one animal learns the basics of resource management from the carp, then the donkey eats the food that belongs to the turtle. Rule5: If the sheep has a card whose color starts with the letter \"r\", then the sheep learns elementary resource management from the carp. Rule6: If the doctorfish does not knock down the fortress that belongs to the donkey however the oscar prepares armor for the donkey, then the donkey will not eat the food that belongs to the turtle.\n\nPreferences: Rule1 is preferred over Rule2. Rule6 is preferred over Rule4. ",
+        "knowledge_base": "{\n    \"premises\": [\n        \"SheepStrugglesToFindFood\",\n        \"DoctorfishKnocksDownEelFortress\",\n        \"SheepLearnsResourceManagementFromCarp\",\n        \"DonkeyEatsTurtleFood\"\n    ],\n    \"target_conclusion\": \"DonkeyEatsTurtleFood\"\n}",
+        "reasoning": "1. The doctorfish knocks down the fortress of the eel. According to Rule 2, if an animal knocks down the fortress of the eel, it will not knock down the fortress of the donkey.\n2. The sheep struggles to find food, which triggers Rule 3, leading the sheep to learn elementary resource management from the carp.\n3. Rule 4 states that if an animal learns resource management from the carp, the donkey eats the turtle's food.\n4. Rule 6 provides a condition under which the donkey does not eat the turtle's food (if the doctorfish does not knock down the donkey's fortress AND the oscar prepares armor). However, there is no evidence that the oscar prepares armor, and Rule 6 is preferred over Rule 4 in the case of conflict. Since Rule 6's conditions are not met, Rule 4 remains active.\n5. Rule 1 (if something proceeds to the spot after the cat, it knocks down the donkey's fortress) is irrelevant as there is no information about the cat's spot.\n6. Therefore, the conclusion that the donkey eats the turtle's food holds.",
+        "causal_model": "{\n    \"defeasible_rules\": [\n        \"r2: DoctorfishKnocksDownEelFortress => ¬DoctorfishKnocksDownDonkeyFortress\",\n        \"r3: SheepStrugglesToFindFood => SheepLearnsResourceManagementFromCarp\",\n        \"r4: SheepLearnsResourceManagementFromCarp => DonkeyEatsTurtleFood\",\n        \"r6: ¬DoctorfishKnocksDownDonkeyFortress AND OscarPreparesArmor => ¬DonkeyEatsTurtleFood\"\n    ],\n    \"undercutter_rules\": [],\n    \"preferences\": {\n        \"r1\": 0.8,\n        \"r2\": 0.5,\n        \"r6\": 0.9,\n        \"r4\": 0.4\n    }\n}"
+      },
+      {
+        "case_text": "Facts: The turtle has a card that is blue in color.\n\nRules: Rule1: Regarding the turtle, if it has a card whose color is one of the rainbow colors, then we can conclude that it removes one of the pieces of the sheep. Rule2: If you are positive that you saw one of the animals becomes an enemy of the leopard, you can be certain that it will also learn elementary resource management from the lion. Rule3: If you are positive that you saw one of the animals removes one of the pieces of the sheep, you can be certain that it will not learn the basics of resource management from the lion.\n\nPreferences: Rule2 is preferred over Rule3. ",
+        "goal_str": "(turtle, learn, lion)",
+        "label": "disproved"
+      }
+    ],
+    "signature": {
+      "instructions": "Extracts defeasible rules and preference-based defeat structure from a\nBoardgameQA case. Preferences map to rule strength: if Rule5 > Rule4 and\nboth conclusions conflict, Rule5's argument defeats Rule4's (rebut), so\nrepresent it as a direct negation rebut — NOT an undercutter — unless the\nrule conclusion is literally '¬rN'.",
+      "fields": [
+        {
+          "prefix": "Case Description:",
+          "description": "Full boardgame case: facts, rules, and preferences"
+        },
+        {
+          "prefix": "Knowledge Base:",
+          "description": "The extracted knowledge base JSON"
+        },
+        {
+          "prefix": "Reasoning: Let's think step by step in order to",
+          "description": "${reasoning}"
+        },
+        {
+          "prefix": "Causal Model:",
+          "description": "JSON with:\n        - defeasible_rules: Rules that CAN be defeated. Format: 'rN: A AND B => C'\n          If a rule concludes the NEGATION of another rule's conclusion (rebut),\n          encode it directly, e.g. 'r5: AnimalInvests => ¬SwanSwears'.\n          Only use '¬rN' form (undercutter) when the rule explicitly invalidates\n          the applicability of rule rN.\n        - undercutter_rules: Rules whose conclusion is '¬rN' (undercut rule rN).\n        - preferences: Map rule IDs to float strengths (0-1). Higher-priority rules\n          get higher values so they win rebut battles.\n        Example: {\n            \"defeasible_rules\": [\n                \"r4: SeahorseSurrenders AND WolfAcquiresPhoto => SwanSwears\",\n                \"r5: AnimalInvests => ¬SwanSwears\"\n            ],\n            \"undercutter_rules\": [],\n            \"preferences\": {\"r4\": 0.5, \"r5\": 0.9}\n        }"
+        }
+      ]
+    },
+    "lm": null
+  },
+  "metadata": {
+    "dependency_versions": {
+      "python": "3.13",
+      "dspy": "3.0.3",
+      "cloudpickle": "3.1"
+    }
+  }
+}

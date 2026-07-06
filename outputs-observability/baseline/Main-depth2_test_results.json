@@ -1,0 +1,85 @@
+{
+  "variant": "Main-depth2",
+  "split": "test",
+  "mode": "baseline_llm",
+  "total_cases": 5,
+  "metrics": {
+    "accuracy": 0.2,
+    "total": 5,
+    "correct": 1,
+    "errored": 0,
+    "confusion_matrix": {
+      "proved->disproved": 1,
+      "disproved->proved": 1,
+      "unknown->proved": 1,
+      "proved->unknown": 1,
+      "disproved->disproved": 1
+    },
+    "per_label": {
+      "proved": {
+        "total": 2,
+        "correct": 0,
+        "accuracy": 0.0
+      },
+      "disproved": {
+        "total": 2,
+        "correct": 1,
+        "accuracy": 0.5
+      },
+      "unknown": {
+        "total": 1,
+        "correct": 0,
+        "accuracy": 0.0
+      }
+    },
+    "total_time": 7.39013409614563,
+    "cases_per_second": 0.6765777095449163,
+    "unknown_analysis": {
+      "dataset_unknowns_total": 1,
+      "predicted_unknowns_total": 1,
+      "correct_unknown": 0,
+      "false_unknown_proved": 1,
+      "false_unknown_disproved": 0,
+      "false_proved_unknown": 1,
+      "false_disproved_unknown": 0,
+      "dataset_unknown_accuracy": 0.0
+    }
+  },
+  "results": [
+    {
+      "index": 0,
+      "goal": "(swan, swear, woodpecker)",
+      "expected": "proved",
+      "predicted": "disproved",
+      "correct": false
+    },
+    {
+      "index": 1,
+      "goal": "(crow, tear, dolphin)",
+      "expected": "disproved",
+      "predicted": "proved",
+      "correct": false
+    },
+    {
+      "index": 2,
+      "goal": "(flamingo, call, bear)",
+      "expected": "unknown",
+      "predicted": "proved",
+      "correct": false
+    },
+    {
+      "index": 3,
+      "goal": "(badger, fall, mouse)",
+      "expected": "proved",
+      "predicted": "unknown",
+      "correct": false
+    },
+    {
+      "index": 4,
+      "goal": "(ostrich, refuse, coyote)",
+      "expected": "disproved",
+      "predicted": "disproved",
+      "correct": true
+    }
+  ]
+}

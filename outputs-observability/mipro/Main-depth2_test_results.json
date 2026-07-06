@@ -1,0 +1,92 @@
+{
+  "variant": "Main-depth2",
+  "split": "test",
+  "total_cases": 5,
+  "metrics": {
+    "accuracy": 0.8,
+    "total": 5,
+    "correct": 4,
+    "errored": 0,
+    "confusion_matrix": {
+      "proved->proved": 1,
+      "disproved->disproved": 2,
+      "unknown->unknown": 1,
+      "proved->unknown": 1
+    },
+    "per_label": {
+      "proved": {
+        "total": 2,
+        "correct": 1,
+        "accuracy": 0.5
+      },
+      "disproved": {
+        "total": 2,
+        "correct": 2,
+        "accuracy": 1.0
+      },
+      "unknown": {
+        "total": 1,
+        "correct": 1,
+        "accuracy": 1.0
+      }
+    },
+    "total_time": 0.15966010093688965,
+    "cases_per_second": 31.316527865508473,
+    "unknown_analysis": {
+      "dataset_unknowns_total": 1,
+      "predicted_unknowns_total": 2,
+      "correct_unknown": 1,
+      "false_unknown_proved": 1,
+      "false_unknown_disproved": 0,
+      "false_proved_unknown": 0,
+      "false_disproved_unknown": 0,
+      "dataset_unknown_accuracy": 1.0
+    },
+    "leakage_summary": {
+      "total_cases_checked": 5,
+      "cases_with_warnings": 1,
+      "goal_as_premise_count": 1,
+      "empty_premises_count": 0,
+      "warning_type_counts": {
+        "GOAL_AS_PREMISE": 1
+      }
+    }
+  },
+  "results": [
+    {
+      "index": 0,
+      "goal": "(swan, swear, woodpecker)",
+      "expected": "proved",
+      "predicted": "proved",
+      "correct": true
+    },
+    {
+      "index": 1,
+      "goal": "(crow, tear, dolphin)",
+      "expected": "disproved",
+      "predicted": "disproved",
+      "correct": true
+    },
+    {
+      "index": 2,
+      "goal": "(flamingo, call, bear)",
+      "expected": "unknown",
+      "predicted": "unknown",
+      "correct": true
+    },
+    {
+      "index": 3,
+      "goal": "(badger, fall, mouse)",
+      "expected": "proved",
+      "predicted": "unknown",
+      "correct": false
+    },
+    {
+      "index": 4,
+      "goal": "(ostrich, refuse, coyote)",
+      "expected": "disproved",
+      "predicted": "disproved",
+      "correct": true
+    }
+  ]
+}

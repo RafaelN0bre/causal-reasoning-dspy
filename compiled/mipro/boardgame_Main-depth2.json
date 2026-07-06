@@ -1,0 +1,88 @@
+{
+  "extract_kb.predict": {
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature": {
+      "instructions": "Extracts knowledge base from a BoardgameQA case.\n\nOnly facts explicitly stated (or directly derivable via a single rule application\nfrom stated facts) should become premises. Rule antecedents that are NOT mentioned\nas facts must NOT be added as premises — they are simply not true in this game state.\nThe goal literal is the target conclusion to check for provability.",
+      "fields": [
+        {
+          "prefix": "Case Description:",
+          "description": "Full boardgame case: facts, rules, and preferences"
+        },
+        {
+          "prefix": "Goal:",
+          "description": "The goal predicate string, e.g. '(swan, swear, woodpecker)'"
+        },
+        {
+          "prefix": "Reasoning: Let's think step by step in order to",
+          "description": "${reasoning}"
+        },
+        {
+          "prefix": "Knowledge Base:",
+          "description": "JSON containing:\n        - premises: List of ASPIC+ literals derived ONLY from stated facts\n          (e.g. if 'wolf does not take X' is a fact and Rule1 says 'if not X then Y',\n          include 'Y' as a premise; do NOT include rule antecedents that have no\n          factual basis)\n        - target_conclusion: Single ASPIC+ literal representing the goal\n        Example: {\n            \"premises\": [\"SeahorseSurrenders\", \"WolfAcquiresPhoto\"],\n            \"target_conclusion\": \"SwanSwears\"\n        }"
+        }
+      ]
+    },
+    "lm": null
+  },
+  "extract_rules.predict": {
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "augmented": true,
+        "case_description": "Facts: The baboon attacks the green fields whose owner is the catfish. The donkey assassinated the mayor. The donkey has 4 friends. The donkey winks at the salmon. The jellyfish has a hot chocolate, and has four friends that are smart and three friends that are not. The sea bass raises a peace flag for the viperfish.\n\nRules: Rule1: Regarding the donkey, if it killed the mayor, then we can conclude that it does not become an enemy of the wolverine. Rule2: If at least one animal attacks the green fields of the catfish, then the jellyfish proceeds to the spot right after the donkey. Rule3: If the jellyfish has fewer than three friends, then the jellyfish does not proceed to the spot that is right after the spot of the donkey. Rule4: The donkey learns the basics of resource management from the buffalo whenever at least one animal raises a peace flag for the viperfish. Rule5: If the jellyfish does not proceed to the spot that is right after the spot of the donkey and the carp does not become an enemy of the donkey, then the donkey sings a victory song for the cheetah. Rule6: If you see that something does not become an actual enemy of the wolverine but it learns the basics of resource management from the buffalo, what can you certainly conclude? You can conclude that it is not going to sing a song of victory for the cheetah. Rule7: Regarding the jellyfish, if it has something to drink, then we can conclude that it does not proceed to the spot that is right after the spot of the donkey. Rule8: If the donkey has fewer than 2 friends, then the donkey does not become an actual enemy of the wolverine.\n\nPreferences: Rule3 is preferred over Rule2. Rule5 is preferred over Rule6. Rule7 is preferred over Rule2. ",
+        "knowledge_base": "{\n    \"premises\": [\n        \"BaboonAttacksGreenFields\",\n        \"JellyfishHasHotChocolate\",\n        \"DonkeyAssassinatedMayor\",\n        \"SeaBassRaisesPeaceFlagForViperfish\",\n        \"DonkeyDoesNotBecomeEnemyOfWolverine\",\n        \"DonkeyLearnsResourceManagementFromBuffalo\",\n        \"JellyfishDoesNotProceedToSpotAfterDonkey\"\n    ],\n    \"target_conclusion\": \"NotDonkeySingsVictorySongForCheetah\"\n}",
+        "reasoning": "1. The donkey assassinated the mayor, which triggers Rule1: \"DonkeyAssassinatedMayor => ¬DonkeyBecomesEnemyOfWolverine\".\n2. The sea bass raises a peace flag for the viperfish, which triggers Rule4: \"SeaBassRaisesPeaceFlagForViperfish => DonkeyLearnsResourceManagementFromBuffalo\".\n3. Rule6 states: \"¬DonkeyBecomesEnemyOfWolverine AND DonkeyLearnsResourceManagementFromBuffalo => ¬DonkeySingsVictorySongForCheetah\".\n4. Since both premises for Rule6 are satisfied by the facts and the application of Rule1 and Rule4, we conclude \"¬DonkeySingsVictorySongForCheetah\".\n5. Rule5 (\"¬JellyfishProceedsToSpotAfterDonkey AND ¬CarpBecomesEnemyOfDonkey => DonkeySingsVictorySongForCheetah\") is a potential conflict, but Rule6 is supported by the established facts regarding the wolverine and resource management. Given the target conclusion is \"NotDonkeySingsVictorySongForCheetah\", we prioritize Rule6 over Rule5.",
+        "causal_model": "{\n    \"defeasible_rules\": [\n        \"r1: DonkeyAssassinatedMayor => ¬DonkeyBecomesEnemyOfWolverine\",\n        \"r4: SeaBassRaisesPeaceFlagForViperfish => DonkeyLearnsResourceManagementFromBuffalo\",\n        \"r6: ¬DonkeyBecomesEnemyOfWolverine AND DonkeyLearnsResourceManagementFromBuffalo => ¬DonkeySingsVictorySongForCheetah\",\n        \"r5: ¬JellyfishProceedsToSpotAfterDonkey AND ¬CarpBecomesEnemyOfDonkey => DonkeySingsVictorySongForCheetah\"\n    ],\n    \"undercutter_rules\": [],\n    \"preferences\": {\n        \"r6\": 0.9,\n        \"r5\": 0.5\n    }\n}"
+      },
+      {
+        "augmented": true,
+        "case_description": "Facts: The baboon is named Lucy. The cheetah has a basket, and has eight friends that are wise and 2 friends that are not. The cheetah has a card that is orange in color, and is named Tango.\n\nRules: Rule1: If the cheetah does not steal five points from the donkey, then the donkey winks at the grasshopper. Rule2: Regarding the cheetah, if it has something to carry apples and oranges, then we can conclude that it does not need the support of the donkey. Rule3: If the cheetah has a name whose first letter is the same as the first letter of the baboon's name, then the cheetah does not need support from the donkey.",
+        "knowledge_base": "{\n    \"premises\": [\n        \"BaboonNameLucy\",\n        \"CheetahNameTango\",\n        \"CheetahHasBasket\",\n        \"CheetahHasOrangeCard\"\n    ],\n    \"target_conclusion\": \"DonkeyWinksAtGrasshopper\"\n}",
+        "reasoning": "1. Analyze the facts: The baboon is named Lucy (starts with 'L'). The cheetah is named Tango (starts with 'T').\n2. Evaluate Rule 3: \"If the cheetah has a name whose first letter is the same as the first letter of the baboon's name, then the cheetah does not need support from the donkey.\" Since 'T' != 'L', Rule 3 does not trigger.\n3. Evaluate Rule 2: \"If the cheetah has something to carry apples and oranges, then we can conclude that it does not need the support of the donkey.\" The cheetah has a basket (can carry apples) and an orange card (can carry oranges). Thus, the cheetah does not need the support of the donkey.\n4. Evaluate Rule 1: \"If the cheetah does not steal five points from the donkey, then the donkey winks at the grasshopper.\" There is no information provided that the cheetah steals five points from the donkey. In the absence of evidence that the cheetah steals points, the antecedent \"cheetah does not steal five points\" is assumed to hold, leading to the conclusion that the donkey winks at the grasshopper.",
+        "causal_model": "{\n    \"defeasible_rules\": [\n        \"r1: ¬CheetahStealsPoints => DonkeyWinksAtGrasshopper\",\n        \"r2: CheetahHasBasket AND CheetahHasOrangeCard => ¬CheetahNeedsDonkeySupport\",\n        \"r3: CheetahNameStartsSameAsBaboon => ¬CheetahNeedsDonkeySupport\"\n    ],\n    \"undercutter_rules\": [],\n    \"preferences\": {\n        \"r1\": 0.5,\n        \"r2\": 0.6,\n        \"r3\": 0.6\n    }\n}"
+      },
+      {
+        "case_text": "Facts: The doctorfish has 7 friends that are playful and three friends that are not.\n\nRules: Rule1: Regarding the doctorfish, if it has more than two friends, then we can conclude that it does not learn the basics of resource management from the puffin. Rule2: If you are positive that one of the animals does not learn the basics of resource management from the puffin, you can be certain that it will not know the defensive plans of the squirrel.",
+        "goal_str": "(doctorfish, know, squirrel)",
+        "label": "disproved"
+      },
+      {
+        "case_text": "Facts: The kudu is named Meadow. The oscar is named Mojo. The squirrel raises a peace flag for the hummingbird.\n\nRules: Rule1: The phoenix unquestionably steals five points from the spider, in the case where the oscar does not steal five of the points of the phoenix. Rule2: If something burns the warehouse of the kangaroo, then it does not steal five of the points of the spider. Rule3: If at least one animal raises a flag of peace for the hummingbird, then the oscar does not steal five of the points of the phoenix. Rule4: Regarding the oscar, if it has a name whose first letter is the same as the first letter of the kudu's name, then we can conclude that it steals five of the points of the phoenix.\n\nPreferences: Rule2 is preferred over Rule1. Rule3 is preferred over Rule4. ",
+        "goal_str": "(phoenix, steal, spider)",
+        "label": "proved"
+      }
+    ],
+    "signature": {
+      "instructions": "You are an expert formal logician specializing in defeasible reasoning and the ASPIC+ argumentation framework. Your task is to transform natural language descriptions of boardgame logic into a structured formal Causal Model.\n\nFollow these strict guidelines:\n1. **Rule Parsing**: Convert every rule found in the case into a defeasible rule in the format: `rN: Antecedent1 AND Antecedent2 => Consequent`.\n2. **Conflict Resolution**: If the case specifies that one rule is preferred over another (e.g., \"Rule A is preferred over Rule B\"), you must encode this preference numerically. Assign higher float values (0.0 to 1.0) to rules with higher priority.\n3. **Rebuttal vs. Undercutting**:\n    - If two rules lead to conflicting conclusions (e.g., Rule A leads to X, Rule B leads to ¬X), represent this as a direct negation (rebut). Do NOT use undercutters unless the text explicitly states that a rule \"invalidates the applicability\" of another rule (concluding '¬rN').\n    - When rules conflict, ensure the higher-priority rule (based on the provided preferences) is assigned a higher strength value in the `preferences` dictionary to ensure it wins the argument in the formal framework.\n4. **Consistency**: Ensure that rule IDs (e.g., `r1`, `r2`) are consistent across the `defeasible_rules` and the `preferences` dictionary. \n5. **Format**: Output the result as a valid JSON object containing `defeasible_rules` (list of strings), `undercutter_rules` (list of strings), and `preferences` (dictionary mapping rule IDs to float values).\n\nBefore providing the JSON, think step-by-step to determine the logical flow, identify conflicts, and map out the rule strengths based on the stated preferences.",
+      "fields": [
+        {
+          "prefix": "Case Description:",
+          "description": "Full boardgame case: facts, rules, and preferences"
+        },
+        {
+          "prefix": "Knowledge Base:",
+          "description": "The extracted knowledge base JSON"
+        },
+        {
+          "prefix": "Reasoning: Let's think step by step in order to",
+          "description": "${reasoning}"
+        },
+        {
+          "prefix": "Causal Model:",
+          "description": "JSON with:\n        - defeasible_rules: Rules that CAN be defeated. Format: 'rN: A AND B => C'\n          If a rule concludes the NEGATION of another rule's conclusion (rebut),\n          encode it directly, e.g. 'r5: AnimalInvests => ¬SwanSwears'.\n          Only use '¬rN' form (undercutter) when the rule explicitly invalidates\n          the applicability of rule rN.\n        - undercutter_rules: Rules whose conclusion is '¬rN' (undercut rule rN).\n        - preferences: Map rule IDs to float strengths (0-1). Higher-priority rules\n          get higher values so they win rebut battles.\n        Example: {\n            \"defeasible_rules\": [\n                \"r4: SeahorseSurrenders AND WolfAcquiresPhoto => SwanSwears\",\n                \"r5: AnimalInvests => ¬SwanSwears\"\n            ],\n            \"undercutter_rules\": [],\n            \"preferences\": {\"r4\": 0.5, \"r5\": 0.9}\n        }"
+        }
+      ]
+    },
+    "lm": null
+  },
+  "metadata": {
+    "dependency_versions": {
+      "python": "3.13",
+      "dspy": "3.0.3",
+      "cloudpickle": "3.1"
+    }
+  }
+}

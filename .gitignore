@@ -15,5 +15,12 @@ wheels/
 # DSPy cache
 .cache/
 
-# Dados / Datasets
+# Dados / Datasets
 data/
+.claude
+
+# Programas DSPy compilados (regeneráveis via scripts/optimize_fewshot.py)
+compiled/*.json
+
+# Log files
+logs/

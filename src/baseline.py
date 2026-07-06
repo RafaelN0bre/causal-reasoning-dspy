@@ -19,6 +19,13 @@ from typing import Any, Dict, List, Optional, Tuple
 import google.generativeai as genai
 
 from src.dataset import load_boardgame_dataset, parse_boardgame_case
+from src.observability import (
+    get_langfuse,
+    flush_langfuse,
+    begin_boardgame_trace,
+    end_boardgame_trace,
+    log_generation,
+)
 from src.pipeline import _calculate_metrics, _analyze_unknowns
 
 logger = logging.getLogger(__name__)
@@ -154,6 +161,7 @@ def run_baseline_tests(
     split: str,
     limit: Optional[int],
     output_dir: str,
+    session_suffix: Optional[str] = None,
 ) -> Dict[str, Any]:
     """
     Run the baseline test over a BoardgameQA split.
@@ -193,6 +201,11 @@ def run_baseline_tests(
             logger.warning("Could not load previous results for resume: %s", exc)
             results, done_indices = [], set()
 
+    lf = get_langfuse()
+    lf_session_id = f"{variant}-{split}-baseline"
+    if session_suffix:
+        lf_session_id += f"-{session_suffix}"
+
     start_time = time.time()
     trace_mode = "a" if done_indices else "w"
 
@@ -210,13 +223,39 @@ def run_baseline_tests(
             rules: str = parsed["rules"]
             preferences: str = parsed["preferences"]
 
+            case_text = f"Facts: {facts}\n\nRules: {rules}"
+            if preferences:
+                case_text += f"\n\nPreferences: {preferences}"
+
             logger.debug(
                 "Case %d/%d: goal=%s | expected=%s",
                 idx + 1, len(cases), goal_str, expected_label,
             )
 
+            lf_trace = begin_boardgame_trace(
+                lf,
+                session_id=lf_session_id,
+                idx=idx,
+                case_text=case_text,
+                goal_str=goal_str,
+                expected_label=expected_label,
+                variant=variant,
+                split=split,
+                optimizer="baseline",
+            )
+
             predicted_label, reasoning, raw_response = _call_llm(
                 model, facts, rules, preferences, goal_str,
+            )
+
+            # Log the actual prompt + response as a Langfuse generation
+            prompt_text = _build_prompt(facts, rules, preferences, goal_str)
+            log_generation(
+                name="baseline-llm",
+                model=model.model_name if hasattr(model, "model_name") else str(model),
+                input=prompt_text,
+                output=raw_response,
+                level="ERROR" if predicted_label == "unknown" and reasoning.startswith("API error") else "DEFAULT",
             )
 
             correct = predicted_label == expected_label
@@ -229,6 +268,17 @@ def run_baseline_tests(
                 "correct": correct,
             }
             results.append(result_entry)
+
+            end_boardgame_trace(
+                lf_trace,
+                idx=idx,
+                expected_label=expected_label,
+                predicted_label=predicted_label,
+                correct=correct,
+                pipeline_trace={},
+                prediction_trace={"method": "baseline_llm", "decision_reason": reasoning},
+                error_info=reasoning if reasoning.startswith("API error") else None,
+            )
 
             trace_entry: Dict[str, Any] = {
                 **result_entry,
@@ -269,6 +319,7 @@ def run_baseline_tests(
 
     logger.info("Results → %s", output_file)
     logger.info("Trace   → %s", trace_file)
+    flush_langfuse()
     _print_summary(metrics, variant, split, len(results))
 
     return summary

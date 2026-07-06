@@ -1,0 +1,28 @@
+- [X] executar traces com os prompts no langfuse
+  - [X] executar 5 samples para cada uma das estratégias
+    - baseline
+    - zero-shot + framework(dspy + aspic)
+    - few-shot + framework(dspy + aspic)
+    - mipro + framework(dspy + aspic)
+- [ ] monografia
+  - [ ] alterar teor e título removendo direcionamento para domínio jurídico
+    - somente referenciar como uma boa aplicação, o contexto, referencial teórico pode continuar como está, trazendo o principal embasamento do trabalho
+    - destacar a estrutura de engenharia para alcançar o objetivo da aplicação neuro-simbólica
+  - [ ] finalizar metodologia
+    - [ ] remover referências de cronograma
+    - [ ] atualizar removendo referência a execuções utilizando processos jurídicos
+    - [ ] adicionar seção sobre dspy
+      - descrever com qualidade a utilização e papel do dspy
+      - [ ] adicionar seção sobre o processo de compilação
+        - descrever sobre a compilação como uma otimização de prompt e não necessariamente como treinamento de um modelo
+    - [ ] descrever melhor o uso do dataset
+    - [ ] descrever utilização do langfuse para observabilidade
+  - [ ] finalizar resultados
+    - [ ] apresentar comparativo com todos os métodos de execução
+    - [ ] apresentar samples dos prompts finais, destacando as diferenças entre cada um dos processos de otimização
+      - a ideia aqui é apresentar os samples dos traces do langfuse, destacando o que é alterado entre cada um deles
+  - [ ] revisão de conteúdo e escrita
+  - [ ] revisão de forma
+    - imagens, tabelas, referências
+- [X] atualizar documentação repositório
+  - [X] gerar context.md (artefato para outra IA — estrutura, objetivos, testes, avaliação, ferramentas)

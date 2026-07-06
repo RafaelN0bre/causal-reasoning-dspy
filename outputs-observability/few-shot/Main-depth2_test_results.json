@@ -1,0 +1,89 @@
+{
+  "variant": "Main-depth2",
+  "split": "test",
+  "total_cases": 5,
+  "metrics": {
+    "accuracy": 1.0,
+    "total": 5,
+    "correct": 5,
+    "errored": 0,
+    "confusion_matrix": {
+      "proved->proved": 2,
+      "disproved->disproved": 2,
+      "unknown->unknown": 1
+    },
+    "per_label": {
+      "proved": {
+        "total": 2,
+        "correct": 2,
+        "accuracy": 1.0
+      },
+      "disproved": {
+        "total": 2,
+        "correct": 2,
+        "accuracy": 1.0
+      },
+      "unknown": {
+        "total": 1,
+        "correct": 1,
+        "accuracy": 1.0
+      }
+    },
+    "total_time": 10.307046175003052,
+    "cases_per_second": 0.4851050354393624,
+    "unknown_analysis": {
+      "dataset_unknowns_total": 1,
+      "predicted_unknowns_total": 1,
+      "correct_unknown": 1,
+      "false_unknown_proved": 0,
+      "false_unknown_disproved": 0,
+      "false_proved_unknown": 0,
+      "false_disproved_unknown": 0,
+      "dataset_unknown_accuracy": 1.0
+    },
+    "leakage_summary": {
+      "total_cases_checked": 5,
+      "cases_with_warnings": 0,
+      "goal_as_premise_count": 0,
+      "empty_premises_count": 0,
+      "warning_type_counts": {}
+    }
+  },
+  "results": [
+    {
+      "index": 0,
+      "goal": "(swan, swear, woodpecker)",
+      "expected": "proved",
+      "predicted": "proved",
+      "correct": true
+    },
+    {
+      "index": 1,
+      "goal": "(crow, tear, dolphin)",
+      "expected": "disproved",
+      "predicted": "disproved",
+      "correct": true
+    },
+    {
+      "index": 2,
+      "goal": "(flamingo, call, bear)",
+      "expected": "unknown",
+      "predicted": "unknown",
+      "correct": true
+    },
+    {
+      "index": 3,
+      "goal": "(badger, fall, mouse)",
+      "expected": "proved",
+      "predicted": "proved",
+      "correct": true
+    },
+    {
+      "index": 4,
+      "goal": "(ostrich, refuse, coyote)",
+      "expected": "disproved",
+      "predicted": "disproved",
+      "correct": true
+    }
+  ]
+}

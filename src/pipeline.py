@@ -14,6 +14,13 @@ from typing import Optional, Dict, Any, List, Tuple
 from collections import Counter
 
 from src.modules import CausalReasoningPipeline
+from src.observability import (
+    get_langfuse,
+    flush_langfuse,
+    register_dspy_callback,
+    begin_boardgame_trace,
+    end_boardgame_trace,
+)
 from src.dataset import (
     GOLDEN_DATASET, 
     BOARDGAME_VARIANTS,
@@ -104,7 +111,9 @@ def run_boardgame_tests(
     variant: str = "Main-depth2",
     split: str = "test",
     limit: Optional[int] = None,
-    output_dir: str = "outputs/boardgame"
+    output_dir: str = "outputs/boardgame",
+    optimizer: str = "zero-shot",
+    session_suffix: Optional[str] = None,
 ) -> Dict[str, Any]:
     """
     Run BoardgameQA benchmark tests.
@@ -153,6 +162,12 @@ def run_boardgame_tests(
     label_predictions: Dict[str, List[str]] = {"proved": [], "disproved": [], "unknown": []}
     label_actuals: Dict[str, List[str]] = {"proved": [], "disproved": [], "unknown": []}
 
+    lf = get_langfuse()
+    register_dspy_callback(lf)
+    lf_session_id = f"{variant}-{split}-{optimizer}"
+    if session_suffix:
+        lf_session_id += f"-{session_suffix}"
+
     start_time = time.time()
 
     trace_mode = "a" if done_indices else "w"
@@ -195,6 +210,19 @@ def run_boardgame_tests(
             leakage_check: Dict[str, Any] = {}
             error_info: Optional[str] = None
 
+            # Create trace BEFORE the pipeline so LM calls are linked as child generations
+            lf_trace = begin_boardgame_trace(
+                lf,
+                session_id=lf_session_id,
+                idx=idx,
+                case_text=case_text,
+                goal_str=goal_str,
+                expected_label=expected_label,
+                variant=variant,
+                split=split,
+                optimizer=optimizer,
+            )
+
             try:
                 # Only case_text and goal_str enter the pipeline.
                 # expected_label is held here and used only after the call returns.
@@ -233,7 +261,7 @@ def run_boardgame_tests(
 
             except Exception as e:
                 logger.warning("Error on case %d: %s", idx + 1, e)
-                predicted_label = "unknown"
+                predicted_label = "error"
                 prediction_trace = {"method": "error", "decision_reason": str(e)}
                 error_info = str(e)
 
@@ -244,11 +272,24 @@ def run_boardgame_tests(
                 "expected": expected_label,
                 "predicted": predicted_label,
                 "correct": correct,
+                **({"error": True} if error_info else {}),
             }
             results.append(result_entry)
 
-            label_predictions[predicted_label].append(expected_label)
-            label_actuals[expected_label].append(predicted_label)
+            if predicted_label != "error":
+                label_predictions[predicted_label].append(expected_label)
+                label_actuals[expected_label].append(predicted_label)
+
+            end_boardgame_trace(
+                lf_trace,
+                idx=idx,
+                expected_label=expected_label,
+                predicted_label=predicted_label,
+                correct=correct,
+                pipeline_trace=pipeline_trace,
+                prediction_trace=prediction_trace,
+                error_info=error_info,
+            )
 
             # --- Write full trace line to JSONL ---
             trace_entry: Dict[str, Any] = {
@@ -272,6 +313,8 @@ def run_boardgame_tests(
                     trace_entry["unknown_reason"] = "empty_grounded_extension"
                 else:
                     trace_entry["unknown_reason"] = "goal_not_in_grounded_conclusions"
+            elif predicted_label == "error":
+                trace_entry["unknown_reason"] = "api_error"
             if expected_label == "unknown":
                 trace_entry["dataset_unknown"] = True  # ground-truth is unknown
 
@@ -302,6 +345,7 @@ def run_boardgame_tests(
 
     logger.info("💾 Results saved to: %s", output_file)
     logger.info("🔍 Full trace saved to: %s", trace_file)
+    flush_langfuse()
     _print_boardgame_summary(metrics, variant, split, len(results))
 
     return {
@@ -591,17 +635,19 @@ def _summarize_leakage(trace_file: str) -> Dict[str, Any]:
 
 
 def _calculate_metrics(results: List[Dict[str, Any]]) -> Dict[str, Any]:
-    """Calculate accuracy metrics from test results."""
-    total = len(results)
-    correct = sum(1 for r in results if r["correct"])
+    """Calculate accuracy metrics from test results. Errored cases are excluded from accuracy."""
+    errored = [r for r in results if r.get("predicted") == "error"]
+    valid = [r for r in results if r.get("predicted") != "error"]
+    total = len(valid)
+    correct = sum(1 for r in valid if r["correct"])
     
     confusion = Counter()
-    for r in results:
+    for r in valid:
         confusion[(r["expected"], r["predicted"])] += 1
-    
+
     label_metrics = {}
     for label in ["proved", "disproved", "unknown"]:
-        label_results = [r for r in results if r["expected"] == label]
+        label_results = [r for r in valid if r["expected"] == label]
         if label_results:
             label_correct = sum(1 for r in label_results if r["correct"])
             label_metrics[label] = {
@@ -609,11 +655,12 @@ def _calculate_metrics(results: List[Dict[str, Any]]) -> Dict[str, Any]:
                 "correct": label_correct,
                 "accuracy": label_correct / len(label_results) if label_results else 0
             }
-    
+
     return {
         "accuracy": correct / total if total > 0 else 0,
         "total": total,
         "correct": correct,
+        "errored": len(errored),
         "confusion_matrix": {f"{k[0]}->{k[1]}": v for k, v in dict(confusion).items()},
         "per_label": label_metrics
     }
@@ -630,6 +677,7 @@ def _print_boardgame_summary(
     logger.info("🎲 BoardgameQA Results: %s (%s)", variant, split)
     logger.info("=" * 50)
     logger.info("Total cases: %d", total)
+    logger.info("Errored (excluded): %d", metrics.get("errored", 0))
     logger.info("Accuracy: %.2f%%", metrics["accuracy"] * 100)
     logger.info("Correct: %d/%d", metrics["correct"], metrics["total"])
     logger.info("-" * 50)

@@ -1,0 +1,113 @@
+{
+  "extract_kb.predict": {
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "augmented": true,
+        "case_description": "Facts: The squirrel removes from the board one of the pieces of the sheep. The zander knocks down the fortress of the sheep.\n\nRules: Rule1: If the squirrel removes one of the pieces of the sheep and the zander knocks down the fortress of the sheep, then the sheep removes one of the pieces of the whale.",
+        "goal": "(sheep, remove, whale)",
+        "reasoning": "The case description provides two facts: \"The squirrel removes from the board one of the pieces of the sheep\" and \"The zander knocks down the fortress of the sheep.\" Rule1 states that if both of these conditions are met, then \"the sheep removes one of the pieces of the whale.\" Since both conditions are explicitly stated as facts, the conclusion that the sheep removes one of the pieces of the whale is directly derivable.",
+        "knowledge_base": "{\n    \"premises\": [\n        \"SquirrelRemovesSheepPiece\",\n        \"ZanderKnocksDownSheepFortress\",\n        \"SheepRemovesWhalePiece\"\n    ],\n    \"target_conclusion\": \"SheepRemovesWhalePiece\"\n}"
+      },
+      {
+        "augmented": true,
+        "case_description": "Facts: The elephant does not attack the green fields whose owner is the catfish. The hummingbird does not owe money to the elephant.\n\nRules: Rule1: If something does not attack the green fields of the catfish, then it does not burn the warehouse of the bat. Rule2: For the elephant, if the belief is that the hummingbird does not owe $$$ to the elephant and the whale does not offer a job position to the elephant, then you can add \"the elephant burns the warehouse of the bat\" to your conclusions.\n\nPreferences: Rule2 is preferred over Rule1. ",
+        "goal": "(elephant, burn, bat)",
+        "reasoning": "1. From the facts, we know \"The elephant does not attack the green fields whose owner is the catfish.\"\n2. Rule 1 states: \"If something does not attack the green fields of the catfish, then it does not burn the warehouse of the bat.\"\n3. Applying Rule 1 to the elephant, we derive: \"The elephant does not burn the warehouse of the bat.\"\n4. Rule 2 provides a condition to conclude \"the elephant burns the warehouse of the bat,\" but it requires the whale to not offer a job position to the elephant. This fact is not provided in the case description.\n5. Since the premise for Rule 2 is incomplete, we cannot conclude that the elephant burns the warehouse. Conversely, Rule 1 is supported by the facts, leading to the conclusion that the elephant does not burn the warehouse. Therefore, the goal \"(elephant, burn, bat)\" is not provable.",
+        "knowledge_base": "{\n    \"premises\": [\"ElephantDoesNotAttackGreenFieldsOfCatfish\", \"HummingbirdDoesNotOweMoneyToElephant\"],\n    \"target_conclusion\": \"ElephantBurnsWarehouseOfBat\"\n}"
+      },
+      {
+        "augmented": true,
+        "case_description": "Facts: The puffin does not eat the food of the cheetah.\n\nRules: Rule1: If you are positive that you saw one of the animals eats the food that belongs to the cheetah, you can be certain that it will also steal five points from the zander.",
+        "goal": "(puffin, steal, zander)",
+        "reasoning": "The goal is to determine if the puffin steals five points from the zander. According to Rule1, this action occurs if an animal eats the food belonging to the cheetah. The facts state that the puffin does *not* eat the food of the cheetah. Since the condition for Rule1 is not met (and no other animal is mentioned as eating the cheetah's food), the conclusion that the puffin steals points from the zander cannot be derived.",
+        "knowledge_base": "{\n    \"premises\": [\"NotPuffinEatsCheetahFood\"],\n    \"target_conclusion\": \"PuffinStealsZanderPoints\"\n}"
+      },
+      {
+        "augmented": true,
+        "case_description": "Facts: The grasshopper proceeds to the spot right after the oscar. The oscar has 1 friend.\n\nRules: Rule1: The oscar unquestionably attacks the green fields of the penguin, in the case where the grasshopper proceeds to the spot that is right after the spot of the oscar. Rule2: Regarding the oscar, if it has fewer than nine friends, then we can conclude that it does not attack the green fields whose owner is the penguin.\n\nPreferences: Rule1 is preferred over Rule2. ",
+        "goal": "(oscar, attack, penguin)",
+        "reasoning": "The case provides two facts: 1) The grasshopper proceeds to the spot right after the oscar, and 2) The oscar has 1 friend. \nRule 1 states that if the grasshopper proceeds to the spot right after the oscar, the oscar attacks the green fields of the penguin. Since the fact matches the antecedent, Rule 1 is triggered, leading to the conclusion that the oscar attacks the penguin's green fields. \nRule 2 states that if the oscar has fewer than nine friends, it does not attack the penguin's green fields. Since the oscar has 1 friend (which is less than nine), Rule 2 is also triggered, leading to the conclusion that the oscar does not attack the penguin's green fields. \nBecause Rule 1 is explicitly preferred over Rule 2, the conclusion from Rule 1 (the oscar attacks the penguin) overrides the conclusion from Rule 2.",
+        "knowledge_base": "{\n    \"premises\": [\n        \"GrasshopperAfterOscar\",\n        \"OscarHasOneFriend\",\n        \"OscarAttacksPenguin\"\n    ],\n    \"target_conclusion\": \"OscarAttacksPenguin\"\n}"
+      }
+    ],
+    "signature": {
+      "instructions": "You are an expert logical reasoner tasked with parsing natural language game descriptions into a formal knowledge base for an ASPIC+ argumentation framework.\n\nYour goal is to extract the foundational facts and identify the target conclusion. Follow these strict logical constraints:\n\n1. **Premises Identification**: \n   - Extract only facts explicitly stated in the \"Facts\" section. \n   - You may include a conclusion derived from a rule IF AND ONLY IF all of that rule's antecedents are explicitly present as facts.\n   - Do NOT include any rule antecedents or hypothetical conditions that lack factual support in the text.\n   - Convert natural language claims into concise, unique, and descriptive CamelCase literals (e.g., \"The cat eats the fish\" -> \"CatEatsFish\").\n\n2. **Goal Mapping**: \n   - Map the provided goal string into an ASPIC+ literal format that matches your extracted premises. \n\n3. **Reasoning Trace**: \n   - Before outputting the JSON, provide a step-by-step logical chain. Explicitly identify which facts are available and evaluate whether the goal can be reached via a single-step inference or if it remains unsupported based on the provided information.\n\n4. **Output Format**:\n   - Return a JSON object with two keys:\n     - `premises`: A list of strings representing the grounded facts (including directly derived conclusions).\n     - `target_conclusion`: The literal representing the goal to be checked.\n\nLogical rigor is paramount: if the evidence is insufficient to prove the goal, do not fabricate premises. Simply represent the known facts as the basis for the subsequent argumentation process.",
+      "fields": [
+        {
+          "prefix": "Case Description:",
+          "description": "Full boardgame case: facts, rules, and preferences"
+        },
+        {
+          "prefix": "Goal:",
+          "description": "The goal predicate string, e.g. '(swan, swear, woodpecker)'"
+        },
+        {
+          "prefix": "Reasoning: Let's think step by step in order to",
+          "description": "${reasoning}"
+        },
+        {
+          "prefix": "Knowledge Base:",
+          "description": "JSON containing:\n        - premises: List of ASPIC+ literals derived ONLY from stated facts\n          (e.g. if 'wolf does not take X' is a fact and Rule1 says 'if not X then Y',\n          include 'Y' as a premise; do NOT include rule antecedents that have no\n          factual basis)\n        - target_conclusion: Single ASPIC+ literal representing the goal\n        Example: {\n            \"premises\": [\"SeahorseSurrenders\", \"WolfAcquiresPhoto\"],\n            \"target_conclusion\": \"SwanSwears\"\n        }"
+        }
+      ]
+    },
+    "lm": null
+  },
+  "extract_rules.predict": {
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "case_text": "Facts: The mosquito has a knapsack, and has a knife.\n\nRules: Rule1: Regarding the mosquito, if it has something to sit on, then we can conclude that it offers a job to the pig. Rule2: If the mosquito has a sharp object, then the mosquito does not offer a job to the pig. Rule3: Regarding the mosquito, if it has a sharp object, then we can conclude that it does not offer a job to the pig.\n\nPreferences: Rule1 is preferred over Rule2. Rule1 is preferred over Rule3. ",
+        "goal_str": "(mosquito, offer, pig)",
+        "label": "disproved"
+      },
+      {
+        "case_text": "Facts: The eagle rolls the dice for the hummingbird. The hummingbird has a card that is red in color. The hummingbird has a tablet.\n\nRules: Rule1: Regarding the hummingbird, if it has a leafy green vegetable, then we can conclude that it prepares armor for the tiger. Rule2: Regarding the hummingbird, if it has a card whose color starts with the letter \"e\", then we can conclude that it prepares armor for the tiger. Rule3: If the parrot does not knock down the fortress of the hummingbird however the eagle rolls the dice for the hummingbird, then the hummingbird will not prepare armor for the tiger.\n\nPreferences: Rule3 is preferred over Rule1. Rule3 is preferred over Rule2. ",
+        "goal_str": "(hummingbird, prepare, tiger)",
+        "label": "unknown"
+      },
+      {
+        "case_text": "Facts: The hippopotamus is named Tango. The salmon has a blade, and has two friends. The salmon is named Tarzan.\n\nRules: Rule1: If the salmon has something to drink, then the salmon does not wink at the moose. Rule2: If the salmon has a name whose first letter is the same as the first letter of the hippopotamus's name, then the salmon does not wink at the moose.",
+        "goal_str": "(salmon, wink, moose)",
+        "label": "disproved"
+      },
+      {
+        "case_text": "Facts: The salmon has a card that is black in color, and proceeds to the spot right after the whale. The salmon is named Beauty. The starfish is named Pablo.\n\nRules: Rule1: If something proceeds to the spot right after the whale, then it does not eat the food of the koala.",
+        "goal_str": "(salmon, eat, koala)",
+        "label": "disproved"
+      }
+    ],
+    "signature": {
+      "instructions": "Analyze the provided game case and knowledge base to structure the formal argumentation model. \n\n1. **Defeasible Rules**: Extract all conditional logical rules as `rN: A AND B => C`. If a rule leads to a negation (e.g., \"does not burn\"), represent it as `=> ¬Conclusion`.\n2. **Preference Mapping**: Analyze explicit statements regarding rule hierarchy. Assign float values (0.0 to 1.0) to rules such that if Rule A is preferred over Rule B, Rule A has a higher value. This allows the solver to resolve rebuttals where rules conflict.\n3. **Undercutter Rules**: Only identify rules that explicitly invalidate the applicability of another rule (as opposed to simply providing a contradictory conclusion) and label them as `¬rN`.\n4. **Consistency**: Ensure that all extracted rules are consistent with the provided premises and represent the complete logical flow of the scenario.\n\nOutput the result as a JSON object containing `defeasible_rules` (list of strings), `undercutter_rules` (list of strings), and `preferences` (dictionary mapping rule IDs to floats).",
+      "fields": [
+        {
+          "prefix": "Case Description:",
+          "description": "Full boardgame case: facts, rules, and preferences"
+        },
+        {
+          "prefix": "Knowledge Base:",
+          "description": "The extracted knowledge base JSON"
+        },
+        {
+          "prefix": "Reasoning: Let's think step by step in order to",
+          "description": "${reasoning}"
+        },
+        {
+          "prefix": "Causal Model:",
+          "description": "JSON with:\n        - defeasible_rules: Rules that CAN be defeated. Format: 'rN: A AND B => C'\n          If a rule concludes the NEGATION of another rule's conclusion (rebut),\n          encode it directly, e.g. 'r5: AnimalInvests => ¬SwanSwears'.\n          Only use '¬rN' form (undercutter) when the rule explicitly invalidates\n          the applicability of rule rN.\n        - undercutter_rules: Rules whose conclusion is '¬rN' (undercut rule rN).\n        - preferences: Map rule IDs to float strengths (0-1). Higher-priority rules\n          get higher values so they win rebut battles.\n        Example: {\n            \"defeasible_rules\": [\n                \"r4: SeahorseSurrenders AND WolfAcquiresPhoto => SwanSwears\",\n                \"r5: AnimalInvests => ¬SwanSwears\"\n            ],\n            \"undercutter_rules\": [],\n            \"preferences\": {\"r4\": 0.5, \"r5\": 0.9}\n        }"
+        }
+      ]
+    },
+    "lm": null
+  },
+  "metadata": {
+    "dependency_versions": {
+      "python": "3.13",
+      "dspy": "3.0.3",
+      "cloudpickle": "3.1"
+    }
+  }
+}
