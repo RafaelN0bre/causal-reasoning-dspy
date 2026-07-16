@@ -1,0 +1,283 @@
+{
+  "case": {
+    "id": 24,
+    "name": "Vacinas Estragadas (Preempção)",
+    "pattern": "preempcao",
+    "case_text": "A transportadora quebrou a cadeia de refrigeração e as vacinas chegaram estragadas ao destino (FaRe).\nNo dia seguinte houve queda de energia na câmara fria do posto (QuEn), mas as doses já estavam inutilizadas (DoIn).\nPergunta-se: a falha de refrigeração no transporte (FaRe) e a queda de energia (QuEn) foram causas da perda das vacinas (VaPe)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "FaRe",
+        "QuEn",
+        "DoIn"
+      ],
+      "potential_causes": [
+        "FaRe",
+        "QuEn"
+      ],
+      "target_conclusion": "VaPe"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: FaRe => VaPe",
+        "r1: QuEn => VaPe"
+      ],
+      "undercutter_rules": [
+        "r2: DoIn => ¬r1"
+      ]
+    },
+    "expected_causal_result": {
+      "FaRe": true,
+      "QuEn": false
+    }
+  },
+  "analysis": {
+    "case_text": "A transportadora quebrou a cadeia de refrigeração e as vacinas chegaram estragadas ao destino (FaRe).\nNo dia seguinte houve queda de energia na câmara fria do posto (QuEn), mas as doses já estavam inutilizadas (DoIn).\nPergunta-se: a falha de refrigeração no transporte (FaRe) e a queda de energia (QuEn) foram causas da perda das vacinas (VaPe)?",
+    "knowledge_base": {
+      "premises": [
+        "FaRe",
+        "QuEn",
+        "DoIn"
+      ],
+      "potential_causes": [
+        "FaRe",
+        "QuEn"
+      ],
+      "target_conclusion": "VaPe"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: FaRe => VaPe",
+        "r1: QuEn => VaPe"
+      ],
+      "undercutter_rules": [
+        "r2: DoIn => ¬r1"
+      ],
+      "preferences": {
+        "r0": 0.9,
+        "r1": 0.7,
+        "r2": 0.95
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "FaRe",
+          "QuEn",
+          "DoIn"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: FaRe => VaPe",
+            "r1: QuEn => VaPe"
+          ],
+          "undercutters": [
+            "r2: DoIn => ¬r1"
+          ]
+        },
+        "preferences": {
+          "r0": 0.9,
+          "r1": 0.7,
+          "r2": 0.95
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "FaRe"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "VaPe",
+          "strength": 0.9
+        },
+        {
+          "id": "A2",
+          "premises": [
+            "QuEn"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r1"
+          ],
+          "conclusion": "VaPe",
+          "strength": 0.7
+        },
+        {
+          "id": "A3",
+          "premises": [
+            "DoIn"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r2"
+          ],
+          "conclusion": "¬r1",
+          "strength": 0.95
+        }
+      ],
+      "attacks": [
+        {
+          "attacker": "A3",
+          "target": "A2",
+          "type": "undercut",
+          "rule": "r1",
+          "succeeds": true
+        }
+      ],
+      "defeats": [
+        {
+          "defeater": "A3",
+          "defeated": "A2",
+          "type": "undercut",
+          "explanation": "Argumento A3 (força 0.95) derrota A2 (força 0.7) via undercut na regra r1"
+        }
+      ]
+    },
+    "base_grounded": [
+      "A0",
+      "A1",
+      "A3",
+      "A5",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A0": "FaRe",
+      "A1": "QuEn",
+      "A3": "VaPe",
+      "A5": "¬r1",
+      "A2": "DoIn"
+    },
+    "base_explanations": {
+      "A0": [
+        "A0"
+      ],
+      "A1": [
+        "A1"
+      ],
+      "A3": [
+        "A3",
+        "A0"
+      ],
+      "A5": [
+        "A5",
+        "A2"
+      ],
+      "A2": [
+        "A2"
+      ]
+    },
+    "causal_results": {
+      "FaRe": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Identificada como \"preemption\" (preempção). A falha de refrigeração no transporte (`FaRe`) inutilizou as vacinas antes que a queda de energia (`QuEn`) pudesse ocorrer.\n2. **Regras Críticas**: A regra `FaRe => DoIn` foi a que efetivamente causou o dano no mundo real.\n3. **Argumentos Derrotados**: O argumento `A5` (baseado em `FaRe`) é invalidado pela negação da premissa, mas a conclusão `VaPe` permanece no sistema devido à redundância causal causada pela queda de energia.\n4. **Justificativa Jurídica**: Embora o teste contrafactual puro falhe (pois as vacinas seriam perdidas de qualquer forma pela queda de energia), a falha no transporte é causa-in-fact porque foi o evento que, de fato, consumou o dano. A preempção ocorre quando uma causa \"ganha a corrida\" para produzir o efeito, tornando a causa alternativa irrelevante para o resultado final, embora suficiente para o mesmo.\n5. **Conclusão**: A falha no transporte é causa do dano, pois foi o evento que efetivamente inutilizou as vacinas, sobrepondo-se à causa subsequente.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "VaPe",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      },
+      "QuEn": {
+        "is_cause": false,
+        "explanation": "1. **Tipo de Causa**: \"none\". A queda de energia (`QuEn`) não é causa-in-fact, pois o dano (`VaPe`) já havia se concretizado anteriormente devido à falha no transporte (`FaRe`).\n2. **Regras Críticas**: A regra que ligaria `QuEn` a `VaPe` é inócua, pois o estado de \"vacinas inutilizadas\" (`DoIn`) já existia antes do evento da queda de energia.\n3. **Argumentos Derrotados**: Não há derrota de cadeia causal, pois a conclusão `VaPe` permanece no conjunto fundamentado mesmo na ausência de `QuEn`.\n4. **Justificativa Jurídica**: O teste *but-for* falha: \"Mas não fosse a queda de energia, as vacinas ainda estariam perdidas\". Como a condição necessária não é satisfeita, `QuEn` não pode ser considerado causa jurídica do dano.\n5. **Conceito**: Trata-se de um evento posterior que não possui nexo causal com o dano, uma vez que o dano já era um fato consumado (precedência temporal e causal de `FaRe`).",
+        "llm_is_cause": false,
+        "solver_evidence": {
+          "target": "VaPe",
+          "base_has_target": true,
+          "test_has_target": true
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "FaRe",
+          "QuEn",
+          "DoIn"
+        ],
+        "potential_causes": [
+          "FaRe",
+          "QuEn"
+        ],
+        "target_conclusion": "VaPe"
+      },
+      "got": {
+        "premises": [
+          "FaRe",
+          "QuEn",
+          "DoIn"
+        ],
+        "potential_causes": [
+          "FaRe",
+          "QuEn"
+        ],
+        "target_conclusion": "VaPe"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: FaRe => VaPe",
+          "r1: QuEn => VaPe"
+        ],
+        "undercutter_rules": [
+          "r2: DoIn => ¬r1"
+        ]
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: FaRe => VaPe",
+          "r1: QuEn => VaPe"
+        ],
+        "undercutter_rules": [
+          "r2: DoIn => ¬r1"
+        ],
+        "preferences": {
+          "r0": 0.9,
+          "r1": 0.7,
+          "r2": 0.95
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "FaRe": true,
+        "QuEn": false
+      },
+      "got": {
+        "FaRe": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Identificada como \"preemption\" (preempção). A falha de refrigeração no transporte (`FaRe`) inutilizou as vacinas antes que a queda de energia (`QuEn`) pudesse ocorrer.\n2. **Regras Críticas**: A regra `FaRe => DoIn` foi a que efetivamente causou o dano no mundo real.\n3. **Argumentos Derrotados**: O argumento `A5` (baseado em `FaRe`) é invalidado pela negação da premissa, mas a conclusão `VaPe` permanece no sistema devido à redundância causal causada pela queda de energia.\n4. **Justificativa Jurídica**: Embora o teste contrafactual puro falhe (pois as vacinas seriam perdidas de qualquer forma pela queda de energia), a falha no transporte é causa-in-fact porque foi o evento que, de fato, consumou o dano. A preempção ocorre quando uma causa \"ganha a corrida\" para produzir o efeito, tornando a causa alternativa irrelevante para o resultado final, embora suficiente para o mesmo.\n5. **Conclusão**: A falha no transporte é causa do dano, pois foi o evento que efetivamente inutilizou as vacinas, sobrepondo-se à causa subsequente.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "VaPe",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        },
+        "QuEn": {
+          "is_cause": false,
+          "explanation": "1. **Tipo de Causa**: \"none\". A queda de energia (`QuEn`) não é causa-in-fact, pois o dano (`VaPe`) já havia se concretizado anteriormente devido à falha no transporte (`FaRe`).\n2. **Regras Críticas**: A regra que ligaria `QuEn` a `VaPe` é inócua, pois o estado de \"vacinas inutilizadas\" (`DoIn`) já existia antes do evento da queda de energia.\n3. **Argumentos Derrotados**: Não há derrota de cadeia causal, pois a conclusão `VaPe` permanece no conjunto fundamentado mesmo na ausência de `QuEn`.\n4. **Justificativa Jurídica**: O teste *but-for* falha: \"Mas não fosse a queda de energia, as vacinas ainda estariam perdidas\". Como a condição necessária não é satisfeita, `QuEn` não pode ser considerado causa jurídica do dano.\n5. **Conceito**: Trata-se de um evento posterior que não possui nexo causal com o dano, uma vez que o dano já era um fato consumado (precedência temporal e causal de `FaRe`).",
+          "llm_is_cause": false,
+          "solver_evidence": {
+            "target": "VaPe",
+            "base_has_target": true,
+            "test_has_target": true
+          }
+        }
+      }
+    }
+  }
+}

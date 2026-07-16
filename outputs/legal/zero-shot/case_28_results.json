@@ -1,0 +1,233 @@
+{
+  "case": {
+    "id": 28,
+    "name": "Dois Poluentes (Sobredeterminação)",
+    "pattern": "sobredeterminacao",
+    "case_text": "No mesmo dia, duas indústrias despejaram no lago volumes de poluente (PoA e PoB), cada um suficiente, sozinho, para matar os peixes.\nOs peixes do lago morreram.\nPergunta-se: o despejo da primeira indústria (PoA) e o despejo da segunda indústria (PoB) foram causas da mortandade dos peixes (MoPe)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "PoA",
+        "PoB"
+      ],
+      "potential_causes": [
+        "PoA",
+        "PoB"
+      ],
+      "target_conclusion": "MoPe"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: PoA => MoPe",
+        "r1: PoB => MoPe"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "PoA": false,
+      "PoB": false
+    }
+  },
+  "analysis": {
+    "case_text": "No mesmo dia, duas indústrias despejaram no lago volumes de poluente (PoA e PoB), cada um suficiente, sozinho, para matar os peixes.\nOs peixes do lago morreram.\nPergunta-se: o despejo da primeira indústria (PoA) e o despejo da segunda indústria (PoB) foram causas da mortandade dos peixes (MoPe)?",
+    "knowledge_base": {
+      "premises": [
+        "PoA",
+        "PoB"
+      ],
+      "potential_causes": [
+        "PoA",
+        "PoB"
+      ],
+      "target_conclusion": "MoPe"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: PoA => MoPe",
+        "r1: PoB => MoPe"
+      ],
+      "undercutter_rules": [],
+      "preferences": {
+        "r0": 0.5,
+        "r1": 0.5
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "PoA",
+          "PoB"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: PoA => MoPe",
+            "r1: PoB => MoPe"
+          ],
+          "undercutters": []
+        },
+        "preferences": {
+          "r0": 0.5,
+          "r1": 0.5
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "PoA"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "MoPe",
+          "strength": 0.5
+        },
+        {
+          "id": "A2",
+          "premises": [
+            "PoB"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r1"
+          ],
+          "conclusion": "MoPe",
+          "strength": 0.5
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A1",
+      "A3",
+      "A0",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A1": "PoB",
+      "A3": "MoPe",
+      "A0": "PoA",
+      "A2": "MoPe"
+    },
+    "base_explanations": {
+      "A1": [
+        "A1"
+      ],
+      "A3": [
+        "A1",
+        "A3"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A2",
+        "A0"
+      ]
+    },
+    "causal_results": {
+      "PoA": {
+        "is_cause": false,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"production\". PoA é um fator que, por si só, é suficiente para gerar o efeito MoPe.\n2. **Regras Críticas**: A regra \"PoA => MoPe\" é a cadeia causal direta que é interrompida pela negação de PoA.\n3. **Argumentos Derrotados**: O argumento que ligava PoA à morte dos peixes (MoPe) deixa de ser sustentado no grounded extension quando PoA é negado.\n4. **Justificativa Jurídica**: Embora o teste contrafactual simples falhe (pois MoPe ocorre mesmo sem PoA devido à presença de PoB), a Definição 4.3 trata casos de sobredeterminação simétrica. Como PoA é um fator que, isoladamente, produz o resultado, ele é considerado causa-in-fact, evitando que a presença de um segundo poluidor exima o primeiro de responsabilidade.\n5. **Conceito**: Aplicação do critério de suficiência causal em cenários de redundância.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "MoPe",
+          "base_has_target": true,
+          "test_has_target": true
+        }
+      },
+      "PoB": {
+        "is_cause": false,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"production\". PoB é um agente que, por si só, produz o efeito MoPe.\n2. **Regras Críticas**: A regra \"PoB => MoPe\" é a cadeia causal direta que conecta o despejo da segunda indústria ao dano ambiental.\n3. **Argumentos Derrotados**: O argumento A1, que estabelece a relação direta entre PoB e MoPe, é invalidado quando PoB é negado. Contudo, a conclusão MoPe permanece válida no sistema devido à existência de uma cadeia causal alternativa (PoA => MoPe).\n4. **Justificativa Jurídica**: Embora PoB não seja uma causa necessária (o dano ocorreria sem ele devido a PoA), ele é classificado como causa-in-fact sob a doutrina de \"causas suficientes independentes\" (sobredeterminação). De acordo com a Definição 4.3, PoB é uma causa porque, no cenário de produção, ele é um fator que contribui ativamente para a realização do dano, sendo irrelevante a existência de outro fator que também o causaria.\n5. **Conclusão**: PoB é causa-in-fact pois, embora a negação de PoB não impeça MoPe (devido à redundância), a presença de PoB no cenário original é suficiente para a produção do dano.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "MoPe",
+          "base_has_target": true,
+          "test_has_target": true
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "PoA",
+          "PoB"
+        ],
+        "potential_causes": [
+          "PoA",
+          "PoB"
+        ],
+        "target_conclusion": "MoPe"
+      },
+      "got": {
+        "premises": [
+          "PoA",
+          "PoB"
+        ],
+        "potential_causes": [
+          "PoA",
+          "PoB"
+        ],
+        "target_conclusion": "MoPe"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: PoA => MoPe",
+          "r1: PoB => MoPe"
+        ],
+        "undercutter_rules": []
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: PoA => MoPe",
+          "r1: PoB => MoPe"
+        ],
+        "undercutter_rules": [],
+        "preferences": {
+          "r0": 0.5,
+          "r1": 0.5
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "PoA": false,
+        "PoB": false
+      },
+      "got": {
+        "PoA": {
+          "is_cause": false,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"production\". PoA é um fator que, por si só, é suficiente para gerar o efeito MoPe.\n2. **Regras Críticas**: A regra \"PoA => MoPe\" é a cadeia causal direta que é interrompida pela negação de PoA.\n3. **Argumentos Derrotados**: O argumento que ligava PoA à morte dos peixes (MoPe) deixa de ser sustentado no grounded extension quando PoA é negado.\n4. **Justificativa Jurídica**: Embora o teste contrafactual simples falhe (pois MoPe ocorre mesmo sem PoA devido à presença de PoB), a Definição 4.3 trata casos de sobredeterminação simétrica. Como PoA é um fator que, isoladamente, produz o resultado, ele é considerado causa-in-fact, evitando que a presença de um segundo poluidor exima o primeiro de responsabilidade.\n5. **Conceito**: Aplicação do critério de suficiência causal em cenários de redundância.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "MoPe",
+            "base_has_target": true,
+            "test_has_target": true
+          }
+        },
+        "PoB": {
+          "is_cause": false,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"production\". PoB é um agente que, por si só, produz o efeito MoPe.\n2. **Regras Críticas**: A regra \"PoB => MoPe\" é a cadeia causal direta que conecta o despejo da segunda indústria ao dano ambiental.\n3. **Argumentos Derrotados**: O argumento A1, que estabelece a relação direta entre PoB e MoPe, é invalidado quando PoB é negado. Contudo, a conclusão MoPe permanece válida no sistema devido à existência de uma cadeia causal alternativa (PoA => MoPe).\n4. **Justificativa Jurídica**: Embora PoB não seja uma causa necessária (o dano ocorreria sem ele devido a PoA), ele é classificado como causa-in-fact sob a doutrina de \"causas suficientes independentes\" (sobredeterminação). De acordo com a Definição 4.3, PoB é uma causa porque, no cenário de produção, ele é um fator que contribui ativamente para a realização do dano, sendo irrelevante a existência de outro fator que também o causaria.\n5. **Conclusão**: PoB é causa-in-fact pois, embora a negação de PoB não impeça MoPe (devido à redundância), a presença de PoB no cenário original é suficiente para a produção do dano.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "MoPe",
+            "base_has_target": true,
+            "test_has_target": true
+          }
+        }
+      }
+    }
+  }
+}

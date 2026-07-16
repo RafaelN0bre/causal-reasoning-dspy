@@ -1,0 +1,171 @@
+{
+  "case": {
+    "id": 10,
+    "name": "Aço Fora de Especificação (Produção Simples)",
+    "pattern": "producao",
+    "case_text": "Um engenheiro aprovou a concretagem de uma laje com aço abaixo da bitola especificada em projeto (AcIn).\nMeses depois, a laje desabou (LaDe).\nPergunta-se: a aprovação do aço fora de especificação (AcIn) foi causa do desabamento da laje (LaDe)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "AcIn"
+      ],
+      "potential_causes": [
+        "AcIn"
+      ],
+      "target_conclusion": "LaDe"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: AcIn => LaDe"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "AcIn": true
+    }
+  },
+  "analysis": {
+    "case_text": "Um engenheiro aprovou a concretagem de uma laje com aço abaixo da bitola especificada em projeto (AcIn).\nMeses depois, a laje desabou (LaDe).\nPergunta-se: a aprovação do aço fora de especificação (AcIn) foi causa do desabamento da laje (LaDe)?",
+    "knowledge_base": {
+      "premises": [
+        "AcIn"
+      ],
+      "potential_causes": [
+        "AcIn"
+      ],
+      "target_conclusion": "LaDe"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: AcIn => LaDe"
+      ],
+      "undercutter_rules": [],
+      "preferences": {
+        "r0": 0.5
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "AcIn"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: AcIn => LaDe"
+          ],
+          "undercutters": []
+        },
+        "preferences": {
+          "r0": 0.5
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "AcIn"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "LaDe",
+          "strength": 0.5
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A0",
+      "A1"
+    ],
+    "base_grounded_conclusions": {
+      "A0": "AcIn",
+      "A1": "LaDe"
+    },
+    "base_explanations": {
+      "A0": [
+        "A0"
+      ],
+      "A1": [
+        "A0",
+        "A1"
+      ]
+    },
+    "causal_results": {
+      "AcIn": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois a aprovação do aço fora de especificação (AcIn) é o fator técnico que produz diretamente a falha estrutural (LaDe).\n2. **Regras Críticas**: A regra \"AcIn => LaDe\" é a regra crítica. Ao negar AcIn, a premissa necessária para o disparo desta regra deixa de existir.\n3. **Argumentos Derrotados**: O argumento que sustentava a conclusão \"LaDe\" foi derrotado, pois sua base factual foi alterada pela introdução de ¬AcIn no sistema.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, AcIn é causa-in-fact porque, na ausência deste evento (contrafactual), a conclusão LaDe não é mais derivada pela extensão fundamentada do sistema. O evento é uma condição *sine qua non* para o dano.\n5. **Conclusão**: A conduta do engenheiro ao aprovar material fora de especificação estabeleceu a cadeia causal direta que resultou no desabamento da laje.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "LaDe",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "AcIn"
+        ],
+        "potential_causes": [
+          "AcIn"
+        ],
+        "target_conclusion": "LaDe"
+      },
+      "got": {
+        "premises": [
+          "AcIn"
+        ],
+        "potential_causes": [
+          "AcIn"
+        ],
+        "target_conclusion": "LaDe"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: AcIn => LaDe"
+        ],
+        "undercutter_rules": []
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: AcIn => LaDe"
+        ],
+        "undercutter_rules": [],
+        "preferences": {
+          "r0": 0.5
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "AcIn": true
+      },
+      "got": {
+        "AcIn": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois a aprovação do aço fora de especificação (AcIn) é o fator técnico que produz diretamente a falha estrutural (LaDe).\n2. **Regras Críticas**: A regra \"AcIn => LaDe\" é a regra crítica. Ao negar AcIn, a premissa necessária para o disparo desta regra deixa de existir.\n3. **Argumentos Derrotados**: O argumento que sustentava a conclusão \"LaDe\" foi derrotado, pois sua base factual foi alterada pela introdução de ¬AcIn no sistema.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, AcIn é causa-in-fact porque, na ausência deste evento (contrafactual), a conclusão LaDe não é mais derivada pela extensão fundamentada do sistema. O evento é uma condição *sine qua non* para o dano.\n5. **Conclusão**: A conduta do engenheiro ao aprovar material fora de especificação estabeleceu a cadeia causal direta que resultou no desabamento da laje.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "LaDe",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,183 @@
+{
+  "case": {
+    "id": 13,
+    "name": "Medicamento Vencido (Produção com Conjunção)",
+    "pattern": "producao",
+    "case_text": "Uma farmácia vendeu medicamento vencido (MeVe) e o paciente o ingeriu seguindo a posologia (PaIg).\nO paciente sofreu reação adversa grave (ReAd).\nPergunta-se: a venda do medicamento vencido (MeVe) foi causa da reação adversa (ReAd)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "MeVe",
+        "PaIg"
+      ],
+      "potential_causes": [
+        "MeVe"
+      ],
+      "target_conclusion": "ReAd"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: MeVe AND PaIg => ReAd"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "MeVe": true
+    }
+  },
+  "analysis": {
+    "case_text": "Uma farmácia vendeu medicamento vencido (MeVe) e o paciente o ingeriu seguindo a posologia (PaIg).\nO paciente sofreu reação adversa grave (ReAd).\nPergunta-se: a venda do medicamento vencido (MeVe) foi causa da reação adversa (ReAd)?",
+    "knowledge_base": {
+      "premises": [
+        "MeVe",
+        "PaIg"
+      ],
+      "potential_causes": [
+        "MeVe"
+      ],
+      "target_conclusion": "ReAd"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: MeVe AND PaIg => ReAd"
+      ],
+      "undercutter_rules": [],
+      "preferences": {
+        "r0": 0.5
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "MeVe",
+          "PaIg"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: MeVe AND PaIg => ReAd"
+          ],
+          "undercutters": []
+        },
+        "preferences": {
+          "r0": 0.5
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "MeVe",
+            "PaIg"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "ReAd",
+          "strength": 0.5
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A1",
+      "A0",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A1": "MeVe",
+      "A0": "PaIg",
+      "A2": "ReAd"
+    },
+    "base_explanations": {
+      "A1": [
+        "A1"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A2",
+        "A1",
+        "A0"
+      ]
+    },
+    "causal_results": {
+      "MeVe": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Identificada como \"production\", pois a venda do medicamento vencido (MeVe) é um componente ativo e necessário na cadeia causal que leva diretamente à reação adversa (ReAd).\n2. **Regras Críticas**: A regra \"MeVe ∧ PaIg => ReAd\" é a regra crítica. Ao negar 'MeVe', o antecedente da regra torna-se falso, impedindo a ativação da consequência.\n3. **Argumentos Derrotados**: O argumento A2, que sustentava a conclusão 'ReAd', perde sua validade no sistema, pois sua base de suporte foi alterada pela exclusão de 'MeVe'.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, 'MeVe' é causa-in-fact porque, na ausência deste fator (¬MeVe), a conclusão 'ReAd' não é mais derivada pelo sistema (grounded extension). O teste contrafactual confirma que a conduta foi indispensável para o resultado danoso.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "ReAd",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "MeVe",
+          "PaIg"
+        ],
+        "potential_causes": [
+          "MeVe"
+        ],
+        "target_conclusion": "ReAd"
+      },
+      "got": {
+        "premises": [
+          "MeVe",
+          "PaIg"
+        ],
+        "potential_causes": [
+          "MeVe"
+        ],
+        "target_conclusion": "ReAd"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: MeVe AND PaIg => ReAd"
+        ],
+        "undercutter_rules": []
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: MeVe AND PaIg => ReAd"
+        ],
+        "undercutter_rules": [],
+        "preferences": {
+          "r0": 0.5
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "MeVe": true
+      },
+      "got": {
+        "MeVe": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Identificada como \"production\", pois a venda do medicamento vencido (MeVe) é um componente ativo e necessário na cadeia causal que leva diretamente à reação adversa (ReAd).\n2. **Regras Críticas**: A regra \"MeVe ∧ PaIg => ReAd\" é a regra crítica. Ao negar 'MeVe', o antecedente da regra torna-se falso, impedindo a ativação da consequência.\n3. **Argumentos Derrotados**: O argumento A2, que sustentava a conclusão 'ReAd', perde sua validade no sistema, pois sua base de suporte foi alterada pela exclusão de 'MeVe'.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, 'MeVe' é causa-in-fact porque, na ausência deste fator (¬MeVe), a conclusão 'ReAd' não é mais derivada pelo sistema (grounded extension). O teste contrafactual confirma que a conduta foi indispensável para o resultado danoso.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "ReAd",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

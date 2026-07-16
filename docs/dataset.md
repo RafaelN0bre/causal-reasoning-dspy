@@ -1,8 +1,32 @@
-# Dataset BoardgameQA
+# Datasets
+
+O projeto usa dois datasets: o benchmark público **BoardgameQA** (raciocínio defeasible) e um
+**dataset legal próprio** de casos causais pré-rotulados (`data/legal/`).
+
+## BoardgameQA
 
 BoardgameQA é um benchmark de raciocínio defeasible baseado em cenários de jogos de tabuleiro.
 Cada caso contém fatos, regras condicionais (possivelmente conflitantes) e preferências entre regras.
 A tarefa é determinar se um goal é **proved**, **disproved** ou **unknown**.
+
+Referência: Kazemi et al., *BoardgameQA: A Dataset for Natural Language Reasoning with
+Contradictory Information* (NeurIPS 2023).
+
+## Download do BoardgameQA
+
+O dataset é distribuído pelo Google Research como um zip único (~todas as variantes):
+
+```bash
+# Da raiz do repositório
+curl -L -o /tmp/BoardgameQA.zip \
+  "https://storage.googleapis.com/gresearch/BoardgameQA/BoardgameQA.zip"
+unzip /tmp/BoardgameQA.zip -d data/
+```
+
+Após extrair, confira que a estrutura ficou como em [Formato dos Arquivos](#formato-dos-arquivos):
+cada variante em uma pasta `data/BoardgameQA/BoardgameQA-<VARIANTE>/` contendo
+`train.json`, `valid.json` e `test.json`. A pasta `data/` está no `.gitignore`, então
+o download precisa ser refeito em cada clone novo.
 
 ## Variantes Disponíveis
 
@@ -56,22 +80,25 @@ Label: proved
 
 ## Formato dos Arquivos
 
-Os datasets ficam em `data/BoardgameQA/<VARIANT>/`:
+Os datasets ficam em `data/BoardgameQA/BoardgameQA-<VARIANT>/` (o prefixo `BoardgameQA-`
+vem do próprio zip oficial; `src/dataset.py` monta o caminho como
+`data/BoardgameQA/BoardgameQA-{variant}/{split}.json`):
 
 ```
 data/BoardgameQA/
-├── Main-depth1/
+├── BoardgameQA-Main-depth1/
 │   ├── train.json
 │   ├── valid.json
 │   └── test.json
-├── Main-depth2/
+├── BoardgameQA-Main-depth2/
 │   └── ...
 └── ...
 ```
 
 Cada arquivo é uma lista de objetos JSON com os campos `story`, `label`, e `proof`.
 
-> **Nota**: a pasta `data/` está no `.gitignore` — o dataset BoardgameQA deve ser obtido à parte e colocado nessa estrutura.
+> **Nota**: a pasta `data/` está no `.gitignore`; veja a seção
+> [Download do BoardgameQA](#download-do-boardgameqa) para obter os arquivos.
 
 ## Resultados por Variante
 

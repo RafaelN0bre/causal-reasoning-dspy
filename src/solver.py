@@ -233,7 +233,16 @@ class ArgumentationFramework:
 
     def _parse_rules(self, knowledge_base: Dict, causal_model: Dict):
         logger.info("Parsing rules from causal model...")
-        
+
+        # Parse strict rules (Rs) — indefeasible, written with '->'
+        strict_rules = causal_model.get("strict_rules", [])
+        logger.info(f"Found {len(strict_rules)} strict rules")
+        for r_str in strict_rules:
+            rule_id = r_str.split(":")[0].strip()
+            ants, cons = self._parse_rule(r_str)
+            self.strict_rules[rule_id] = Rule(rule_id, ants, cons, is_strict=True)
+            logger.debug(f"Parsed strict rule: {r_str}")
+
         # Parse defeasible rules
         defeasible_rules = causal_model.get("defeasible_rules", [])
         logger.info(f"Found {len(defeasible_rules)} defeasible rules")
@@ -256,21 +265,27 @@ class ArgumentationFramework:
         """Construct all possible arguments from the knowledge base and rules."""
         logger.info("Starting argument construction...")
 
-        # Create atomic arguments from premises
-        logger.info(f"Creating atomic arguments from {len(self.premises)} premises")
-        for i, premise in enumerate(self.premises):
+        # Create atomic arguments from premises (Kp) and axioms (Kn).
+        # Axiom-based atomic arguments are indefeasible: _identify_attacks
+        # never generates undermine attacks on axiom literals.
+        logger.info(
+            f"Creating atomic arguments from {len(self.premises)} premises "
+            f"and {len(self.axioms)} axioms"
+        )
+        for i, literal in enumerate([*self.premises, *self.axioms]):
+            sig = (frozenset([literal.name]), literal.name, tuple(), tuple())
+            if sig in self._argument_signatures:
+                continue  # literal present in both Kp and Kn
             arg_id = f"A{i}"
             self.arguments[arg_id] = Argument(
                 id=arg_id,
-                premises=[premise.name],
+                premises=[literal.name],
                 strict_rules=[],
                 defeasible_rules=[],
-                conclusion=premise.name
+                conclusion=literal.name
             )
-            # Add signature for atomic argument
-            sig = (frozenset([premise.name]), premise.name, tuple(), tuple())
             self._argument_signatures.add(sig)
-            logger.debug(f"Created atomic argument {arg_id} from premise: {premise.name}")
+            logger.debug(f"Created atomic argument {arg_id} from literal: {literal.name}")
 
         # Get all rules
         all_rules = [*self.strict_rules.values(),
@@ -351,8 +366,8 @@ class ArgumentationFramework:
             new_arg = Argument(
                 id=new_id,
                 premises=list(set(premises)),
-                strict_rules=strict_rules if rule.is_strict else [],
-                defeasible_rules=defeasible_rules + [rule.id] if not rule.is_strict else [],
+                strict_rules=strict_rules + ([rule.id] if rule.is_strict else []),
+                defeasible_rules=defeasible_rules + ([rule.id] if not rule.is_strict else []),
                 conclusion=conclusion,
                 sub_arguments=list(combo)
             )
@@ -370,14 +385,18 @@ class ArgumentationFramework:
         - Rebut: Attack on the conclusion of a defeasible inference
         """
         logger.info("Identifying attacks among %d arguments...", len(self.arguments))
+        axiom_names = {a.name for a in self.axioms}
         for attacker in self.arguments.values():
             for target in self.arguments.values():
                 # Skip if same argument
                 if attacker.id == target.id:
                     continue
-                    
+
                 # Check for undermining (attacks on ordinary premises)
+                # Axioms (Kn) are indefeasible and cannot be undermined
                 for premise in target.premises:
+                    if premise in axiom_names:
+                        continue
                     if attacker.conclusion == self._negate_str(premise):
                         self.attacks.append(Attack(
                             attacker.id, target.id, 

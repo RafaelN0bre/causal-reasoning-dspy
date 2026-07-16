@@ -1,0 +1,275 @@
+{
+  "case": {
+    "id": 6,
+    "name": "Prensa Sem Proteção (Excludente Afastada)",
+    "case_text": "\n        Um trabalhador operava uma prensa sem a proteção de segurança obrigatória (SePr)\n        e sofreu amputação da mão. O empregador alega que o próprio trabalhador removeu\n        a proteção (TrRe), mas as câmeras mostraram que a máquina foi entregue pela\n        fábrica já sem a proteção (MaSp).\n        Pergunta-se: a operação sem proteção obrigatória (SePr) foi causa da\n        responsabilização do empregador (EmRe)?\n        ",
+    "expected_knowledge_base": {
+      "premises": [
+        "SePr",
+        "TrRe",
+        "MaSp"
+      ],
+      "potential_causes": [
+        "SePr"
+      ],
+      "target_conclusion": "EmRe"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: SePr => EmRe",
+        "r1: TrRe => ¬EmRe"
+      ],
+      "undercutter_rules": [
+        "r2: MaSp => ¬r1"
+      ]
+    },
+    "expected_causal_result": {
+      "SePr": {
+        "is_cause": true,
+        "explanation": "A alegação de culpa do trabalhador (TrRe) é undercuttada pela prova das câmeras (MaSp); negando SePr, EmRe deixa de ser derivável."
+      }
+    }
+  },
+  "analysis": {
+    "case_text": "\n        Um trabalhador operava uma prensa sem a proteção de segurança obrigatória (SePr)\n        e sofreu amputação da mão. O empregador alega que o próprio trabalhador removeu\n        a proteção (TrRe), mas as câmeras mostraram que a máquina foi entregue pela\n        fábrica já sem a proteção (MaSp).\n        Pergunta-se: a operação sem proteção obrigatória (SePr) foi causa da\n        responsabilização do empregador (EmRe)?\n        ",
+    "knowledge_base": {
+      "premises": [
+        "SePr",
+        "TrRe",
+        "MaSp"
+      ],
+      "potential_causes": [
+        "SePr"
+      ],
+      "target_conclusion": "EmRe"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: SePr => EmRe",
+        "r1: TrRe => ¬EmRe"
+      ],
+      "undercutter_rules": [
+        "r2: MaSp => ¬r1"
+      ],
+      "preferences": {
+        "r0": 0.7,
+        "r1": 0.8,
+        "r2": 0.9
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "SePr",
+          "TrRe",
+          "MaSp"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: SePr => EmRe",
+            "r1: TrRe => ¬EmRe"
+          ],
+          "undercutters": [
+            "r2: MaSp => ¬r1"
+          ]
+        },
+        "preferences": {
+          "r0": 0.7,
+          "r1": 0.8,
+          "r2": 0.9
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "SePr"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "EmRe",
+          "strength": 0.7
+        },
+        {
+          "id": "A2",
+          "premises": [
+            "TrRe"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r1"
+          ],
+          "conclusion": "¬EmRe",
+          "strength": 0.8
+        },
+        {
+          "id": "A3",
+          "premises": [
+            "MaSp"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r2"
+          ],
+          "conclusion": "¬r1",
+          "strength": 0.9
+        }
+      ],
+      "attacks": [
+        {
+          "attacker": "A2",
+          "target": "A1",
+          "type": "rebuttal",
+          "rule": "r1",
+          "succeeds": true
+        },
+        {
+          "attacker": "A3",
+          "target": "A2",
+          "type": "undercut",
+          "rule": "r2",
+          "succeeds": true
+        }
+      ],
+      "defeats": [
+        {
+          "defeater": "A3",
+          "defeated": "A2",
+          "type": "undercut",
+          "explanation": "Argumento A3 (força 0.9) derrota A2 (força 0.8) via undercutter."
+        },
+        {
+          "defeater": "A2",
+          "defeated": "A1",
+          "type": "rebuttal",
+          "explanation": "A2 (0.8) derrota A1 (0.7), mas A2 é derrotado por A3."
+        }
+      ]
+    },
+    "base_grounded": [
+      "A3",
+      "A1",
+      "A2",
+      "A0",
+      "A5"
+    ],
+    "base_grounded_conclusions": {
+      "A3": "EmRe",
+      "A1": "TrRe",
+      "A2": "SePr",
+      "A0": "MaSp",
+      "A5": "¬r1"
+    },
+    "base_explanations": {
+      "A3": [
+        "A2",
+        "A3"
+      ],
+      "A1": [
+        "A1"
+      ],
+      "A2": [
+        "A2"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A5": [
+        "A0",
+        "A5"
+      ]
+    },
+    "causal_results": {
+      "SePr": {
+        "is_cause": true,
+        "explanation": "A análise demonstra que a ausência de proteção (SePr) atua como uma causa-em-fato (cause-in-fact) para a responsabilização do empregador (EmRe). Segundo a Definição 4.3, se a remoção do fator (neste caso, a introdução de SePr como condição de segurança) altera a conclusão de responsabilização, estabelece-se o nexo causal. A cadeia causal foi identificada através da regra que vincula a falta de proteção à responsabilidade civil. Embora o empregador alegue culpa exclusiva da vítima (TrRe), a evidência de que a máquina foi entregue sem proteção (MaSp) consolida a responsabilidade do empregador. Portanto, a operação sem proteção é a causa direta (produção) da responsabilização, pois, se a proteção estivesse presente, o dano e a consequente responsabilização seriam evitados.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "EmRe",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "SePr",
+          "TrRe",
+          "MaSp"
+        ],
+        "potential_causes": [
+          "SePr"
+        ],
+        "target_conclusion": "EmRe"
+      },
+      "got": {
+        "premises": [
+          "SePr",
+          "TrRe",
+          "MaSp"
+        ],
+        "potential_causes": [
+          "SePr"
+        ],
+        "target_conclusion": "EmRe"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: SePr => EmRe",
+          "r1: TrRe => ¬EmRe"
+        ],
+        "undercutter_rules": [
+          "r2: MaSp => ¬r1"
+        ]
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: SePr => EmRe",
+          "r1: TrRe => ¬EmRe"
+        ],
+        "undercutter_rules": [
+          "r2: MaSp => ¬r1"
+        ],
+        "preferences": {
+          "r0": 0.7,
+          "r1": 0.8,
+          "r2": 0.9
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "SePr": {
+          "is_cause": true,
+          "explanation": "A alegação de culpa do trabalhador (TrRe) é undercuttada pela prova das câmeras (MaSp); negando SePr, EmRe deixa de ser derivável."
+        }
+      },
+      "got": {
+        "SePr": {
+          "is_cause": true,
+          "explanation": "A análise demonstra que a ausência de proteção (SePr) atua como uma causa-em-fato (cause-in-fact) para a responsabilização do empregador (EmRe). Segundo a Definição 4.3, se a remoção do fator (neste caso, a introdução de SePr como condição de segurança) altera a conclusão de responsabilização, estabelece-se o nexo causal. A cadeia causal foi identificada através da regra que vincula a falta de proteção à responsabilidade civil. Embora o empregador alegue culpa exclusiva da vítima (TrRe), a evidência de que a máquina foi entregue sem proteção (MaSp) consolida a responsabilidade do empregador. Portanto, a operação sem proteção é a causa direta (produção) da responsabilização, pois, se a proteção estivesse presente, o dano e a consequente responsabilização seriam evitados.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "EmRe",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

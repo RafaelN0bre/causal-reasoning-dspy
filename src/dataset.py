@@ -103,98 +103,38 @@ def _parse_goal(goal_str: str) -> Tuple[str, ...]:
     return (goal_str,)
 
 
-GOLDEN_DATASET = [
-    {
-        "id": 1,
-        "name": "Caso da Leucemia (Omissão)",
-        "case_text": """
-        Uma criança com leucemia (ChLe) não recebeu quimioterapia (Chem) porque seus pais se recusaram a consentir (¬PaCo).
-        Os médicos recomendaram fortemente a quimioterapia. A criança não foi tratada e morreu (ChDi).
-        Fonte: Baseado em Cassazione penale (2023) 
-        """,
-        "expected_knowledge_base": {
-            "premises": ["ChLe", "¬PaCo"],
-            "potential_causes": ["¬PaCo"],
-            "target_conclusion": "ChDi",
-            "axioms": []
-        },
-        "expected_causal_model": {
-            "defeasible_rules": [
-                "r0: ChLe => ChDi",
-                "r1: PaCo => Chem"
-            ],
-            "undercutter_rules": [
-                "r2: Chem => ¬r0"
-            ]
-        },
-        "expected_causal_result": {
-            "is_cause": True,
-            "explanation": "A omissão do consentimento (¬PaCo) é uma causa da morte (ChDi). " + 
-                        "Se uma intervenção fosse feita adicionando 'PaCo'[cite: 343], " +
-                        "um novo argumento justificado 'Chem' seria criado (via r1), " + 
-                        "que por sua vez ativaria a regra 'r2' para derrotar 'r0'[cite: 344, 345]. " +
-                        "Isso bloquearia a conclusão 'ChDi', provando que '¬PaCo' era causal."
-        }
-    },
-    {
-        "id": 2,
-        "name": "Dlugash Case (Preemption)",
-        "case_text": """
-        Dlugash atirou em uma vítima (DlKi), mas Bush já havia atirado antes (BuKi) 
-        e a vítima já estava morta (ViDe).
-        """,
-        "expected_knowledge_base": {
-            "premises": ["DlKi", "BuKi", "ViDe"],
-            "potential_causes": ["DlKi", "BuKi"],
-            "target_conclusion": "ViDe"
-        },
-        "expected_causal_model": {
-            "defeasible_rules": [
-                "r1: DlKi => ViDe",  # Tiro de Dlugash causa morte
-                "r2: BuKi => ViDe"   # Tiro de Bush causa morte
-            ],
-            "undercutter_rules": [
-                "r3: BuKi => ¬r1"    # Tiro prévio de Bush impede causalidade de Dlugash
-            ]
-        },
-        "expected_causal_result": {
-            "BuKi": {
-                "is_cause": True,
-                "explanation": "O tiro de Bush (BuKi) é causa da morte pois foi o primeiro e efetivo."
-            },
-            "DlKi": {
-                "is_cause": False,
-                "explanation": "O tiro de Dlugash (DlKi) não é causa da morte pois a vítima já estava morta."
-            }
-        }
-    },
-    {
-        "id": 3,
-        "name": "Celular à Prova D'água (Consumer Law)",
-        "case_text": """
-        Um celular anunciado como à prova d'água (PhWp) caiu na piscina (PoFa) e parou de funcionar.
-        A empresa alega mau uso (MiUs), mas cair na piscina é um uso normal para um celular à prova d'água (NoUs).
-        """,
-        "expected_knowledge_base": {
-            "premises": ["PhWp", "PoFa", "MiUs", "NoUs"],
-            "potential_causes": ["PhWp", "PoFa"],
-            "target_conclusion": "PrLi"  # Product Liability
-        },
-        "expected_causal_model": {
-            "defeasible_rules": [
-                "r1: PhWp AND PoFa => PrLi",     # Falha do produto à prova d'água gera responsabilidade
-                "r2: MiUs => ¬PrLi"              # Mau uso exclui responsabilidade
-            ],
-            "undercutter_rules": [
-                "r3: NoUs => ¬r2"                # Uso normal impede alegação de mau uso
-            ]
-        },
-        "expected_causal_result": {
-            "PhWp": {
-                "is_cause": True,
-                "explanation": "A característica à prova d'água (PhWp) é causa da responsabilidade " +
-                             "pois criou a expectativa de funcionamento na água."
-            }
-        }
-    }
-]
+LEGAL_DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "legal")
+
+
+def load_legal_dataset(split: str) -> List[Dict[str, Any]]:
+    """
+    Load a legal causal-analysis dataset split from data/legal/<split>.json.
+
+    Args:
+        split: "test" (golden de avaliação, usado por `main.py --legal`) ou
+               "train" (compilação few-shot, usado por scripts/optimize_fewshot_legal.py)
+
+    Returns:
+        List of labeled cases, each containing:
+        - id, name, pattern: identificação e padrão causal do caso
+        - case_text: texto do caso com literais entre parênteses e pergunta explícita
+        - expected_knowledge_base: premises, potential_causes, target_conclusion
+        - expected_causal_model: defeasible_rules, undercutter_rules
+        - expected_causal_result: veredito is_cause esperado por causa potencial
+    """
+    if split not in ("train", "test"):
+        raise ValueError(f"Invalid split: {split}. Must be train or test")
+
+    file_path = os.path.join(LEGAL_DATA_DIR, f"{split}.json")
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"Legal dataset file not found: {file_path}")
+
+    with open(file_path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+# Splits disjuntos (cenários distintos) para evitar contaminação treino/avaliação.
+# Todos os rótulos são auto-consistentes sob a Definição 4.3; a checagem
+# determinística roda em scripts/optimize_fewshot_legal.py --check-only.
+GOLDEN_DATASET = load_legal_dataset("test")
+LEGAL_TRAIN_DATASET = load_legal_dataset("train")

@@ -1,0 +1,187 @@
+{
+  "case": {
+    "id": 16,
+    "name": "Vazamento de Gás (Cadeia de Dois Passos)",
+    "pattern": "cadeia",
+    "case_text": "Um vazamento de gás no apartamento não foi reparado pela distribuidora (VaGa).\nO gás acumulado explodiu (ExAp) e a explosão provocou incêndio no prédio (InPr).\nPergunta-se: o vazamento de gás (VaGa) foi causa do incêndio no prédio (InPr)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "VaGa"
+      ],
+      "potential_causes": [
+        "VaGa"
+      ],
+      "target_conclusion": "InPr"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: VaGa => ExAp",
+        "r1: ExAp => InPr"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "VaGa": true
+    }
+  },
+  "analysis": {
+    "case_text": "Um vazamento de gás no apartamento não foi reparado pela distribuidora (VaGa).\nO gás acumulado explodiu (ExAp) e a explosão provocou incêndio no prédio (InPr).\nPergunta-se: o vazamento de gás (VaGa) foi causa do incêndio no prédio (InPr)?",
+    "knowledge_base": {
+      "premises": [
+        "VaGa"
+      ],
+      "potential_causes": [
+        "VaGa"
+      ],
+      "target_conclusion": "InPr"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: VaGa => ExAp",
+        "r1: ExAp => InPr"
+      ],
+      "undercutter_rules": [],
+      "preferences": {
+        "r0": 0.5,
+        "r1": 0.5
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "VaGa"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: VaGa => ExAp",
+            "r1: ExAp => InPr"
+          ],
+          "undercutters": []
+        },
+        "preferences": {
+          "r0": 0.5,
+          "r1": 0.5
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "VaGa"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0",
+            "r1"
+          ],
+          "conclusion": "InPr",
+          "strength": 0.5
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A0",
+      "A2",
+      "A1"
+    ],
+    "base_grounded_conclusions": {
+      "A0": "VaGa",
+      "A2": "InPr",
+      "A1": "ExAp"
+    },
+    "base_explanations": {
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A2",
+        "A0",
+        "A1"
+      ],
+      "A1": [
+        "A0",
+        "A1"
+      ]
+    },
+    "causal_results": {
+      "VaGa": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois o vazamento de gás é o evento inicial que, através de uma sequência lógica de fatos (explosão), produz diretamente o incêndio.\n2. **Regras Críticas**: A regra `VaGa => ExAp` é a regra crítica. A sua inativação pela negação de `VaGa` impede que a regra subsequente (`ExAp => InPr`) seja disparada.\n3. **Argumentos Derrotados**: O argumento `A2`, que sustentava a conclusão `InPr`, torna-se inoperante no AF modificado, pois a base factual necessária para sua conclusão foi removida.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, `VaGa` é causa-in-fact porque, na ausência deste evento (contrafactual), o resultado `InPr` não teria ocorrido. O vazamento é uma condição *sine qua non* para o dano.\n5. **Conclusão**: A falha em reparar o vazamento de gás estabeleceu a cadeia causal direta que resultou no incêndio, configurando a responsabilidade causal da distribuidora.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "InPr",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "VaGa"
+        ],
+        "potential_causes": [
+          "VaGa"
+        ],
+        "target_conclusion": "InPr"
+      },
+      "got": {
+        "premises": [
+          "VaGa"
+        ],
+        "potential_causes": [
+          "VaGa"
+        ],
+        "target_conclusion": "InPr"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: VaGa => ExAp",
+          "r1: ExAp => InPr"
+        ],
+        "undercutter_rules": []
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: VaGa => ExAp",
+          "r1: ExAp => InPr"
+        ],
+        "undercutter_rules": [],
+        "preferences": {
+          "r0": 0.5,
+          "r1": 0.5
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "VaGa": true
+      },
+      "got": {
+        "VaGa": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois o vazamento de gás é o evento inicial que, através de uma sequência lógica de fatos (explosão), produz diretamente o incêndio.\n2. **Regras Críticas**: A regra `VaGa => ExAp` é a regra crítica. A sua inativação pela negação de `VaGa` impede que a regra subsequente (`ExAp => InPr`) seja disparada.\n3. **Argumentos Derrotados**: O argumento `A2`, que sustentava a conclusão `InPr`, torna-se inoperante no AF modificado, pois a base factual necessária para sua conclusão foi removida.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, `VaGa` é causa-in-fact porque, na ausência deste evento (contrafactual), o resultado `InPr` não teria ocorrido. O vazamento é uma condição *sine qua non* para o dano.\n5. **Conclusão**: A falha em reparar o vazamento de gás estabeleceu a cadeia causal direta que resultou no incêndio, configurando a responsabilidade causal da distribuidora.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "InPr",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

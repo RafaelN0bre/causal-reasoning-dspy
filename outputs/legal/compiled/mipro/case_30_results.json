@@ -1,0 +1,275 @@
+{
+  "case": {
+    "id": 30,
+    "name": "Infarto Fulminante (Concausa Irrelevante)",
+    "pattern": "nao_causa",
+    "case_text": "Um paciente sofreu infarto fulminante (InFu) e morreu.\nA ambulância chegou com atraso (AmAt), mas a perícia concluiu que nem o atendimento imediato teria evitado a morte.\nPergunta-se: o infarto fulminante (InFu) e o atraso da ambulância (AmAt) foram causas da morte do paciente (PaMo)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "InFu",
+        "AmAt"
+      ],
+      "potential_causes": [
+        "InFu",
+        "AmAt"
+      ],
+      "target_conclusion": "PaMo"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: InFu => PaMo"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "InFu": true,
+      "AmAt": false
+    }
+  },
+  "analysis": {
+    "case_text": "Um paciente sofreu infarto fulminante (InFu) e morreu.\nA ambulância chegou com atraso (AmAt), mas a perícia concluiu que nem o atendimento imediato teria evitado a morte.\nPergunta-se: o infarto fulminante (InFu) e o atraso da ambulância (AmAt) foram causas da morte do paciente (PaMo)?",
+    "knowledge_base": {
+      "premises": [
+        "InFu",
+        "AmAt",
+        "AtIm"
+      ],
+      "potential_causes": [
+        "InFu",
+        "AmAt"
+      ],
+      "target_conclusion": "PaMo"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: InFu => PaMo",
+        "r1: AmAt => PaMo"
+      ],
+      "undercutter_rules": [
+        "r2: AtIm => ¬r1"
+      ],
+      "preferences": {
+        "r0": 0.9,
+        "r1": 0.5,
+        "r2": 0.95
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "InFu",
+          "AmAt",
+          "AtIm"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: InFu => PaMo",
+            "r1: AmAt => PaMo"
+          ],
+          "undercutters": [
+            "r2: AtIm => ¬r1"
+          ]
+        },
+        "preferences": {
+          "r0": 0.9,
+          "r1": 0.5,
+          "r2": 0.95
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "InFu"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "PaMo",
+          "strength": 0.9
+        },
+        {
+          "id": "A2",
+          "premises": [
+            "AmAt"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r1"
+          ],
+          "conclusion": "PaMo",
+          "strength": 0.5
+        },
+        {
+          "id": "A3",
+          "premises": [
+            "AtIm"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r2"
+          ],
+          "conclusion": "¬r1",
+          "strength": 0.95
+        }
+      ],
+      "attacks": [
+        {
+          "attacker": "A3",
+          "target": "A2",
+          "type": "undercut",
+          "rule": "r1",
+          "succeeds": true
+        }
+      ],
+      "defeats": [
+        {
+          "defeater": "A3",
+          "defeated": "A2",
+          "type": "undercut",
+          "explanation": "Argumento A3 (força 0.95) derrota A2 (força 0.5) via undercut na regra r1"
+        }
+      ]
+    },
+    "base_grounded": [
+      "A0",
+      "A1",
+      "A3",
+      "A5",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A0": "AtIm",
+      "A1": "InFu",
+      "A3": "PaMo",
+      "A5": "¬r1",
+      "A2": "AmAt"
+    },
+    "base_explanations": {
+      "A0": [
+        "A0"
+      ],
+      "A1": [
+        "A1"
+      ],
+      "A3": [
+        "A1",
+        "A3"
+      ],
+      "A5": [
+        "A0",
+        "A5"
+      ],
+      "A2": [
+        "A2"
+      ]
+    },
+    "causal_results": {
+      "InFu": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Identificada como \"production\". O infarto fulminante (`InFu`) é o evento que produz diretamente o resultado morte (`PaMo`).\n2. **Regras Críticas**: A regra `InFu => PaMo` é a regra central. A sua desativação pela negação da premissa `InFu` impede a derivação do dano.\n3. **Argumentos Derrotados**: O argumento que sustenta a morte do paciente é derrotado no framework modificado, pois a causa primária foi removida.\n4. **Justificativa Jurídica**: O infarto fulminante é a causa-in-fact, pois, \"but-for\" o infarto, o paciente não teria falecido naquele momento. Em contraste, o atraso da ambulância (`AmAt`) não é causa-in-fact, pois a perícia estabeleceu que o resultado morte seria o mesmo independentemente da ação da ambulância (ausência de nexo causal).\n5. **Conceito**: A análise confirma que apenas o evento que é condição necessária para o resultado (e que o produz) satisfaz o teste de causalidade, excluindo fatores que, embora presentes, não alterariam o desfecho final.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "PaMo",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      },
+      "AmAt": {
+        "is_cause": false,
+        "explanation": "1. **Tipo de Causa**: \"none\". O atraso da ambulância não é causa-in-fact da morte, pois o resultado ocorreria independentemente da ação (ou omissão) da ambulância.\n2. **Regras Críticas**: A regra que vincula o atraso ao resultado foi invalidada como fator causal, pois a perícia estabeleceu que o infarto fulminante (`InFu`) é a causa suficiente e determinante.\n3. **Argumentos Derrotados**: Nenhum argumento que sustenta a morte foi derrotado pela negação de `AmAt`, pois a conclusão `PaMo` é mantida por outros fatores (o infarto).\n4. **Justificativa Jurídica**: O teste *but-for* (sine qua non) falha: \"Mas não fosse o atraso da ambulância, o paciente teria sobrevivido?\" A resposta é negativa, pois o infarto fulminante era fatal por si só. Portanto, o atraso não é causa-in-fact do óbito.\n5. **Conceito da Definição 4.3**: Como a conclusão `PaMo` permanece no `test_grounded_extension` mesmo após a negação de `AmAt`, a condição de causalidade não é satisfeita.",
+        "llm_is_cause": false,
+        "solver_evidence": {
+          "target": "PaMo",
+          "base_has_target": true,
+          "test_has_target": true
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": false,
+      "expected": {
+        "premises": [
+          "InFu",
+          "AmAt"
+        ],
+        "potential_causes": [
+          "InFu",
+          "AmAt"
+        ],
+        "target_conclusion": "PaMo"
+      },
+      "got": {
+        "premises": [
+          "InFu",
+          "AmAt",
+          "AtIm"
+        ],
+        "potential_causes": [
+          "InFu",
+          "AmAt"
+        ],
+        "target_conclusion": "PaMo"
+      }
+    },
+    "causal_model": {
+      "matches": false,
+      "expected": {
+        "defeasible_rules": [
+          "r0: InFu => PaMo"
+        ],
+        "undercutter_rules": []
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: InFu => PaMo",
+          "r1: AmAt => PaMo"
+        ],
+        "undercutter_rules": [
+          "r2: AtIm => ¬r1"
+        ],
+        "preferences": {
+          "r0": 0.9,
+          "r1": 0.5,
+          "r2": 0.95
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "InFu": true,
+        "AmAt": false
+      },
+      "got": {
+        "InFu": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Identificada como \"production\". O infarto fulminante (`InFu`) é o evento que produz diretamente o resultado morte (`PaMo`).\n2. **Regras Críticas**: A regra `InFu => PaMo` é a regra central. A sua desativação pela negação da premissa `InFu` impede a derivação do dano.\n3. **Argumentos Derrotados**: O argumento que sustenta a morte do paciente é derrotado no framework modificado, pois a causa primária foi removida.\n4. **Justificativa Jurídica**: O infarto fulminante é a causa-in-fact, pois, \"but-for\" o infarto, o paciente não teria falecido naquele momento. Em contraste, o atraso da ambulância (`AmAt`) não é causa-in-fact, pois a perícia estabeleceu que o resultado morte seria o mesmo independentemente da ação da ambulância (ausência de nexo causal).\n5. **Conceito**: A análise confirma que apenas o evento que é condição necessária para o resultado (e que o produz) satisfaz o teste de causalidade, excluindo fatores que, embora presentes, não alterariam o desfecho final.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "PaMo",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        },
+        "AmAt": {
+          "is_cause": false,
+          "explanation": "1. **Tipo de Causa**: \"none\". O atraso da ambulância não é causa-in-fact da morte, pois o resultado ocorreria independentemente da ação (ou omissão) da ambulância.\n2. **Regras Críticas**: A regra que vincula o atraso ao resultado foi invalidada como fator causal, pois a perícia estabeleceu que o infarto fulminante (`InFu`) é a causa suficiente e determinante.\n3. **Argumentos Derrotados**: Nenhum argumento que sustenta a morte foi derrotado pela negação de `AmAt`, pois a conclusão `PaMo` é mantida por outros fatores (o infarto).\n4. **Justificativa Jurídica**: O teste *but-for* (sine qua non) falha: \"Mas não fosse o atraso da ambulância, o paciente teria sobrevivido?\" A resposta é negativa, pois o infarto fulminante era fatal por si só. Portanto, o atraso não é causa-in-fact do óbito.\n5. **Conceito da Definição 4.3**: Como a conclusão `PaMo` permanece no `test_grounded_extension` mesmo após a negação de `AmAt`, a condição de causalidade não é satisfeita.",
+          "llm_is_cause": false,
+          "solver_evidence": {
+            "target": "PaMo",
+            "base_has_target": true,
+            "test_has_target": true
+          }
+        }
+      }
+    }
+  }
+}

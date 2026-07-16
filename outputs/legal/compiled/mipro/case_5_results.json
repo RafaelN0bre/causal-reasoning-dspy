@@ -1,0 +1,244 @@
+{
+  "case": {
+    "id": 5,
+    "name": "Dois Venenos (Sobredeterminação)",
+    "case_text": "\n        Dois agressores, agindo de forma independente, colocaram veneno no café da vítima.\n        A dose do primeiro agressor (VeA) e a dose do segundo agressor (VeB) eram, cada uma,\n        suficientes para matar. A vítima bebeu o café e morreu.\n        Pergunta-se: a dose do primeiro agressor (VeA) e a dose do segundo agressor (VeB)\n        foram causas da morte da vítima (MoVe)?\n        ",
+    "expected_knowledge_base": {
+      "premises": [
+        "VeA",
+        "VeB"
+      ],
+      "potential_causes": [
+        "VeA",
+        "VeB"
+      ],
+      "target_conclusion": "MoVe"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: VeA => MoVe",
+        "r1: VeB => MoVe"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "VeA": {
+        "is_cause": false,
+        "explanation": "Sobredeterminação: negando VeA, MoVe continua derivável por VeB, então o teste but-for da Definição 4.3 falha. Limitação conhecida do critério sine qua non."
+      },
+      "VeB": {
+        "is_cause": false,
+        "explanation": "Simétrico a VeA: cada dose sozinha era suficiente, logo nenhuma é condição necessária sob o teste but-for estrito."
+      }
+    }
+  },
+  "analysis": {
+    "case_text": "\n        Dois agressores, agindo de forma independente, colocaram veneno no café da vítima.\n        A dose do primeiro agressor (VeA) e a dose do segundo agressor (VeB) eram, cada uma,\n        suficientes para matar. A vítima bebeu o café e morreu.\n        Pergunta-se: a dose do primeiro agressor (VeA) e a dose do segundo agressor (VeB)\n        foram causas da morte da vítima (MoVe)?\n        ",
+    "knowledge_base": {
+      "premises": [
+        "VeA",
+        "VeB"
+      ],
+      "potential_causes": [
+        "VeA",
+        "VeB"
+      ],
+      "target_conclusion": "MoVe"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: VeA => MoVe",
+        "r1: VeB => MoVe"
+      ],
+      "undercutter_rules": [],
+      "preferences": {
+        "r0": 0.5,
+        "r1": 0.5
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "VeA",
+          "VeB"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: VeA => MoVe",
+            "r1: VeB => MoVe"
+          ],
+          "undercutters": []
+        },
+        "preferences": {
+          "r0": 0.5,
+          "r1": 0.5
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "VeA"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "MoVe",
+          "strength": 0.5
+        },
+        {
+          "id": "A2",
+          "premises": [
+            "VeB"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r1"
+          ],
+          "conclusion": "MoVe",
+          "strength": 0.5
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A1",
+      "A3",
+      "A0",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A1": "VeB",
+      "A3": "MoVe",
+      "A0": "VeA",
+      "A2": "MoVe"
+    },
+    "base_explanations": {
+      "A1": [
+        "A1"
+      ],
+      "A3": [
+        "A1",
+        "A3"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A0",
+        "A2"
+      ]
+    },
+    "causal_results": {
+      "VeA": {
+        "is_cause": false,
+        "explanation": "1. **Tipo de Causa**: Identificada como \"production\". `VeA` é um evento que, isoladamente, possui força causal suficiente para produzir o dano (`MoVe`).\n2. **Regras Críticas**: A regra `VeA => MoVe` é a cadeia causal direta que conecta a ação do agressor A ao resultado.\n3. **Argumentos Derrotados**: A negação de `VeA` invalida o argumento `A3`, mas não altera o status da conclusão `MoVe` no sistema, pois a presença de `VeB` garante a manutenção do efeito.\n4. **Justificativa Jurídica**: Embora o teste contrafactual puro (conditio sine qua non) não seja satisfeito devido à redundância (a morte ocorreria de qualquer forma por `VeB`), a Definição 4.3 reconhece a \"produção\" como critério de causalidade. Em casos de redundância causal, cada fator que é, por si só, suficiente para causar o dano é considerado causa-in-fact.\n5. **Conceito**: Trata-se de um caso de causalidade cumulativa/redundante, onde a contribuição ativa de `VeA` é suficiente para a atribuição de responsabilidade causal, independentemente da ação concorrente de `VeB`.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "MoVe",
+          "base_has_target": true,
+          "test_has_target": true
+        }
+      },
+      "VeB": {
+        "is_cause": false,
+        "explanation": "1. **Tipo de Causa**: Identificada como \"production\". `VeB` é um evento que, isoladamente, possui capacidade causal suficiente para produzir o dano (`MoVe`).\n2. **Regras Críticas**: A regra `VeB => MoVe` representa a cadeia causal direta.\n3. **Argumentos Derrotados**: A negação de `VeB` invalida o argumento específico que o utiliza, mas não altera o status da conclusão `MoVe`, que é sustentada pela redundância de `VeA`.\n4. **Justificativa Jurídica**: Embora o teste *but-for* falhe devido à redundância (a morte ocorreria mesmo sem `VeB`), a doutrina jurídica e a Definição 4.3 reconhecem que, em casos de causas suficientes concorrentes, cada agente que contribuiu com um fator suficiente para o dano é considerado causa-in-fact.\n5. **Conceito**: Trata-se de um caso de causalidade cumulativa/redundante. A ação de `VeB` é uma causa ativa e suficiente, sendo, portanto, juridicamente responsável pelo resultado, independentemente da ação de `VeA`.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "MoVe",
+          "base_has_target": true,
+          "test_has_target": true
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "VeA",
+          "VeB"
+        ],
+        "potential_causes": [
+          "VeA",
+          "VeB"
+        ],
+        "target_conclusion": "MoVe"
+      },
+      "got": {
+        "premises": [
+          "VeA",
+          "VeB"
+        ],
+        "potential_causes": [
+          "VeA",
+          "VeB"
+        ],
+        "target_conclusion": "MoVe"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: VeA => MoVe",
+          "r1: VeB => MoVe"
+        ],
+        "undercutter_rules": []
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: VeA => MoVe",
+          "r1: VeB => MoVe"
+        ],
+        "undercutter_rules": [],
+        "preferences": {
+          "r0": 0.5,
+          "r1": 0.5
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "VeA": {
+          "is_cause": false,
+          "explanation": "Sobredeterminação: negando VeA, MoVe continua derivável por VeB, então o teste but-for da Definição 4.3 falha. Limitação conhecida do critério sine qua non."
+        },
+        "VeB": {
+          "is_cause": false,
+          "explanation": "Simétrico a VeA: cada dose sozinha era suficiente, logo nenhuma é condição necessária sob o teste but-for estrito."
+        }
+      },
+      "got": {
+        "VeA": {
+          "is_cause": false,
+          "explanation": "1. **Tipo de Causa**: Identificada como \"production\". `VeA` é um evento que, isoladamente, possui força causal suficiente para produzir o dano (`MoVe`).\n2. **Regras Críticas**: A regra `VeA => MoVe` é a cadeia causal direta que conecta a ação do agressor A ao resultado.\n3. **Argumentos Derrotados**: A negação de `VeA` invalida o argumento `A3`, mas não altera o status da conclusão `MoVe` no sistema, pois a presença de `VeB` garante a manutenção do efeito.\n4. **Justificativa Jurídica**: Embora o teste contrafactual puro (conditio sine qua non) não seja satisfeito devido à redundância (a morte ocorreria de qualquer forma por `VeB`), a Definição 4.3 reconhece a \"produção\" como critério de causalidade. Em casos de redundância causal, cada fator que é, por si só, suficiente para causar o dano é considerado causa-in-fact.\n5. **Conceito**: Trata-se de um caso de causalidade cumulativa/redundante, onde a contribuição ativa de `VeA` é suficiente para a atribuição de responsabilidade causal, independentemente da ação concorrente de `VeB`.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "MoVe",
+            "base_has_target": true,
+            "test_has_target": true
+          }
+        },
+        "VeB": {
+          "is_cause": false,
+          "explanation": "1. **Tipo de Causa**: Identificada como \"production\". `VeB` é um evento que, isoladamente, possui capacidade causal suficiente para produzir o dano (`MoVe`).\n2. **Regras Críticas**: A regra `VeB => MoVe` representa a cadeia causal direta.\n3. **Argumentos Derrotados**: A negação de `VeB` invalida o argumento específico que o utiliza, mas não altera o status da conclusão `MoVe`, que é sustentada pela redundância de `VeA`.\n4. **Justificativa Jurídica**: Embora o teste *but-for* falhe devido à redundância (a morte ocorreria mesmo sem `VeB`), a doutrina jurídica e a Definição 4.3 reconhecem que, em casos de causas suficientes concorrentes, cada agente que contribuiu com um fator suficiente para o dano é considerado causa-in-fact.\n5. **Conceito**: Trata-se de um caso de causalidade cumulativa/redundante. A ação de `VeB` é uma causa ativa e suficiente, sendo, portanto, juridicamente responsável pelo resultado, independentemente da ação de `VeA`.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "MoVe",
+            "base_has_target": true,
+            "test_has_target": true
+          }
+        }
+      }
+    }
+  }
+}

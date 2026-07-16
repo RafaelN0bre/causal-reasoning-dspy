@@ -1,0 +1,225 @@
+{
+  "case": {
+    "id": 17,
+    "name": "Corrosão na Passarela (Cadeia de Dois Passos)",
+    "pattern": "cadeia",
+    "case_text": "A concessionária deixou de tratar a corrosão nos cabos da passarela (CoNt).\nOs cabos se romperam e a estrutura cedeu (EsCe), causando a queda de pedestres que a atravessavam (PeQu).\nPergunta-se: a corrosão não tratada (CoNt) foi causa da queda dos pedestres (PeQu)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "CoNt"
+      ],
+      "potential_causes": [
+        "CoNt"
+      ],
+      "target_conclusion": "PeQu"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: CoNt => EsCe",
+        "r1: EsCe => PeQu"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "CoNt": true
+    }
+  },
+  "analysis": {
+    "case_text": "A concessionária deixou de tratar a corrosão nos cabos da passarela (CoNt).\nOs cabos se romperam e a estrutura cedeu (EsCe), causando a queda de pedestres que a atravessavam (PeQu).\nPergunta-se: a corrosão não tratada (CoNt) foi causa da queda dos pedestres (PeQu)?",
+    "knowledge_base": {
+      "premises": [
+        "CoNt",
+        "EsCe"
+      ],
+      "potential_causes": [
+        "CoNt"
+      ],
+      "target_conclusion": "PeQu"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: CoNt => EsCe",
+        "r1: EsCe => PeQu"
+      ],
+      "undercutter_rules": [],
+      "preferences": {
+        "r0": 0.9,
+        "r1": 0.9
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "CoNt",
+          "EsCe"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: CoNt => EsCe",
+            "r1: EsCe => PeQu"
+          ],
+          "undercutters": []
+        },
+        "preferences": {
+          "r0": 0.9,
+          "r1": 0.9
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "CoNt"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "EsCe",
+          "strength": 0.9
+        },
+        {
+          "id": "A2",
+          "premises": [
+            "CoNt"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0",
+            "r1"
+          ],
+          "conclusion": "PeQu",
+          "strength": 0.9
+        },
+        {
+          "id": "A3",
+          "premises": [
+            "EsCe"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r1"
+          ],
+          "conclusion": "PeQu",
+          "strength": 0.9
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A3",
+      "A4",
+      "A1",
+      "A0",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A3": "PeQu",
+      "A4": "PeQu",
+      "A1": "CoNt",
+      "A0": "EsCe",
+      "A2": "EsCe"
+    },
+    "base_explanations": {
+      "A3": [
+        "A3",
+        "A0"
+      ],
+      "A4": [
+        "A2",
+        "A1",
+        "A4"
+      ],
+      "A1": [
+        "A1"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A2",
+        "A1"
+      ]
+    },
+    "causal_results": {
+      "CoNt": {
+        "is_cause": false,
+        "explanation": "1. **Tipo de Causa**: A análise indica \"none\" (nenhuma causa-em-fato), pois a conclusão PeQu (queda de pedestres) permanece presente na extensão fundamentada mesmo quando a negação da causa (¬CoNt) é introduzida como axioma.\n2. **Regras Críticas**: A regra que vinculava a omissão do tratamento (CoNt) à falha estrutural (EsCe) foi neutralizada pela introdução de ¬CoNt.\n3. **Argumentos Derrotados**: O argumento A3, que dependia da premissa CoNt para sustentar a conclusão PeQu, perde sua força causal no cenário contrafactual.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, para que φ seja causa-em-fato de ψ, a negação de φ deve resultar na ausência de ψ na extensão fundamentada. Como PeQu persiste no `test_grounded_extension` mesmo com ¬CoNt, a omissão não é condição necessária para o dano, falhando no teste da \"condição sine qua non\".\n5. **Conclusão**: A omissão do tratamento da corrosão não é causa-em-fato da queda dos pedestres sob a lógica estrita do AF, sugerindo que outros fatores (não modelados ou independentes) sustentam a conclusão PeQu.",
+        "llm_is_cause": false,
+        "solver_evidence": {
+          "target": "PeQu",
+          "base_has_target": true,
+          "test_has_target": true
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": false,
+      "expected": {
+        "premises": [
+          "CoNt"
+        ],
+        "potential_causes": [
+          "CoNt"
+        ],
+        "target_conclusion": "PeQu"
+      },
+      "got": {
+        "premises": [
+          "CoNt",
+          "EsCe"
+        ],
+        "potential_causes": [
+          "CoNt"
+        ],
+        "target_conclusion": "PeQu"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: CoNt => EsCe",
+          "r1: EsCe => PeQu"
+        ],
+        "undercutter_rules": []
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: CoNt => EsCe",
+          "r1: EsCe => PeQu"
+        ],
+        "undercutter_rules": [],
+        "preferences": {
+          "r0": 0.9,
+          "r1": 0.9
+        }
+      }
+    },
+    "causal_results": {
+      "matches": false,
+      "expected": {
+        "CoNt": true
+      },
+      "got": {
+        "CoNt": {
+          "is_cause": false,
+          "explanation": "1. **Tipo de Causa**: A análise indica \"none\" (nenhuma causa-em-fato), pois a conclusão PeQu (queda de pedestres) permanece presente na extensão fundamentada mesmo quando a negação da causa (¬CoNt) é introduzida como axioma.\n2. **Regras Críticas**: A regra que vinculava a omissão do tratamento (CoNt) à falha estrutural (EsCe) foi neutralizada pela introdução de ¬CoNt.\n3. **Argumentos Derrotados**: O argumento A3, que dependia da premissa CoNt para sustentar a conclusão PeQu, perde sua força causal no cenário contrafactual.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, para que φ seja causa-em-fato de ψ, a negação de φ deve resultar na ausência de ψ na extensão fundamentada. Como PeQu persiste no `test_grounded_extension` mesmo com ¬CoNt, a omissão não é condição necessária para o dano, falhando no teste da \"condição sine qua non\".\n5. **Conclusão**: A omissão do tratamento da corrosão não é causa-em-fato da queda dos pedestres sob a lógica estrita do AF, sugerindo que outros fatores (não modelados ou independentes) sustentam a conclusão PeQu.",
+          "llm_is_cause": false,
+          "solver_evidence": {
+            "target": "PeQu",
+            "base_has_target": true,
+            "test_has_target": true
+          }
+        }
+      }
+    }
+  }
+}

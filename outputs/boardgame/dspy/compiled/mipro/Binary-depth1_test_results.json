@@ -1,0 +1,264 @@
+{
+  "variant": "Binary-depth1",
+  "split": "test",
+  "total_cases": 30,
+  "metrics": {
+    "accuracy": 0.8333333333333334,
+    "total": 30,
+    "correct": 25,
+    "errored": 0,
+    "confusion_matrix": {
+      "proved->proved": 13,
+      "disproved->disproved": 12,
+      "proved->unknown": 1,
+      "disproved->unknown": 3,
+      "proved->disproved": 1
+    },
+    "per_label": {
+      "proved": {
+        "total": 15,
+        "correct": 13,
+        "accuracy": 0.8666666666666667
+      },
+      "disproved": {
+        "total": 15,
+        "correct": 12,
+        "accuracy": 0.8
+      }
+    },
+    "total_time": 85.4060001373291,
+    "cases_per_second": 0.35126337671546864,
+    "unknown_analysis": {
+      "dataset_unknowns_total": 0,
+      "predicted_unknowns_total": 4,
+      "correct_unknown": 0,
+      "false_unknown_proved": 1,
+      "false_unknown_disproved": 3,
+      "false_proved_unknown": 0,
+      "false_disproved_unknown": 0,
+      "dataset_unknown_accuracy": null
+    },
+    "leakage_summary": {
+      "total_cases_checked": 30,
+      "cases_with_warnings": 19,
+      "goal_as_premise_count": 19,
+      "empty_premises_count": 0,
+      "warning_type_counts": {
+        "GOAL_AS_PREMISE": 19,
+        "NEG_GOAL_AS_PREMISE": 12
+      }
+    }
+  },
+  "results": [
+    {
+      "index": 0,
+      "goal": "(finch, leave, basenji)",
+      "expected": "proved",
+      "predicted": "proved",
+      "correct": true
+    },
+    {
+      "index": 1,
+      "goal": "(badger, build, finch)",
+      "expected": "disproved",
+      "predicted": "disproved",
+      "correct": true
+    },
+    {
+      "index": 2,
+      "goal": "(shark, take, camel)",
+      "expected": "proved",
+      "predicted": "proved",
+      "correct": true
+    },
+    {
+      "index": 3,
+      "goal": "(vampire, trade, llama)",
+      "expected": "disproved",
+      "predicted": "disproved",
+      "correct": true
+    },
+    {
+      "index": 4,
+      "goal": "(crab, create, beetle)",
+      "expected": "proved",
+      "predicted": "proved",
+      "correct": true
+    },
+    {
+      "index": 5,
+      "goal": "(husky, stop, monkey)",
+      "expected": "disproved",
+      "predicted": "disproved",
+      "correct": true
+    },
+    {
+      "index": 6,
+      "goal": "(songbird, take, gorilla)",
+      "expected": "proved",
+      "predicted": "unknown",
+      "correct": false
+    },
+    {
+      "index": 7,
+      "goal": "(fish, pay, coyote)",
+      "expected": "disproved",
+      "predicted": "disproved",
+      "correct": true
+    },
+    {
+      "index": 8,
+      "goal": "(dachshund, enjoy, gorilla)",
+      "expected": "proved",
+      "predicted": "proved",
+      "correct": true
+    },
+    {
+      "index": 9,
+      "goal": "(mannikin, acquire, ostrich)",
+      "expected": "disproved",
+      "predicted": "disproved",
+      "correct": true
+    },
+    {
+      "index": 10,
+      "goal": "(seal, fall, flamingo)",
+      "expected": "proved",
+      "predicted": "proved",
+      "correct": true
+    },
+    {
+      "index": 11,
+      "goal": "(swan, manage, butterfly)",
+      "expected": "disproved",
+      "predicted": "disproved",
+      "correct": true
+    },
+    {
+      "index": 12,
+      "goal": "(chinchilla, manage, cougar)",
+      "expected": "proved",
+      "predicted": "proved",
+      "correct": true
+    },
+    {
+      "index": 13,
+      "goal": "(bear, reveal, stork)",
+      "expected": "disproved",
+      "predicted": "unknown",
+      "correct": false
+    },
+    {
+      "index": 14,
+      "goal": "(peafowl, capture, poodle)",
+      "expected": "proved",
+      "predicted": "proved",
+      "correct": true
+    },
+    {
+      "index": 15,
+      "goal": "(shark, call, chinchilla)",
+      "expected": "disproved",
+      "predicted": "disproved",
+      "correct": true
+    },
+    {
+      "index": 16,
+      "goal": "(owl, capture, swallow)",
+      "expected": "proved",
+      "predicted": "proved",
+      "correct": true
+    },
+    {
+      "index": 17,
+      "goal": "(beetle, want, gorilla)",
+      "expected": "disproved",
+      "predicted": "disproved",
+      "correct": true
+    },
+    {
+      "index": 18,
+      "goal": "(camel, bring, beaver)",
+      "expected": "proved",
+      "predicted": "proved",
+      "correct": true
+    },
+    {
+      "index": 19,
+      "goal": "(camel, invest, poodle)",
+      "expected": "disproved",
+      "predicted": "unknown",
+      "correct": false
+    },
+    {
+      "index": 20,
+      "goal": "(ant, pay, coyote)",
+      "expected": "proved",
+      "predicted": "proved",
+      "correct": true
+    },
+    {
+      "index": 21,
+      "goal": "(frog, fall, dalmatian)",
+      "expected": "disproved",
+      "predicted": "disproved",
+      "correct": true
+    },
+    {
+      "index": 22,
+      "goal": "(gorilla, trade, dragonfly)",
+      "expected": "proved",
+      "predicted": "proved",
+      "correct": true
+    },
+    {
+      "index": 23,
+      "goal": "(husky, swear, dove)",
+      "expected": "disproved",
+      "predicted": "disproved",
+      "correct": true
+    },
+    {
+      "index": 24,
+      "goal": "(llama, enjoy, flamingo)",
+      "expected": "proved",
+      "predicted": "proved",
+      "correct": true
+    },
+    {
+      "index": 25,
+      "goal": "(starling, create, goat)",
+      "expected": "disproved",
+      "predicted": "disproved",
+      "correct": true
+    },
+    {
+      "index": 26,
+      "goal": "(crab, invest, ant)",
+      "expected": "proved",
+      "predicted": "disproved",
+      "correct": false
+    },
+    {
+      "index": 27,
+      "goal": "(vampire, want, mule)",
+      "expected": "disproved",
+      "predicted": "unknown",
+      "correct": false
+    },
+    {
+      "index": 28,
+      "goal": "(worm, swim, frog)",
+      "expected": "proved",
+      "predicted": "proved",
+      "correct": true
+    },
+    {
+      "index": 29,
+      "goal": "(mannikin, fall, worm)",
+      "expected": "disproved",
+      "predicted": "disproved",
+      "correct": true
+    }
+  ]
+}

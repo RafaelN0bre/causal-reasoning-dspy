@@ -1,0 +1,267 @@
+{
+  "case": {
+    "id": 29,
+    "name": "Pane Elétrica e Cigarro (Concausa Irrelevante)",
+    "pattern": "nao_causa",
+    "case_text": "Um apartamento pegou fogo por pane elétrica no quadro de luz (PaEl).\nO morador fumava dentro do imóvel (MoFu), mas a perícia descartou o cigarro como origem do fogo.\nPergunta-se: a pane elétrica (PaEl) e o hábito de fumar do morador (MoFu) foram causas do incêndio do apartamento (InAp)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "PaEl",
+        "MoFu"
+      ],
+      "potential_causes": [
+        "PaEl",
+        "MoFu"
+      ],
+      "target_conclusion": "InAp"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: PaEl => InAp"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "PaEl": true,
+      "MoFu": false
+    }
+  },
+  "analysis": {
+    "case_text": "Um apartamento pegou fogo por pane elétrica no quadro de luz (PaEl).\nO morador fumava dentro do imóvel (MoFu), mas a perícia descartou o cigarro como origem do fogo.\nPergunta-se: a pane elétrica (PaEl) e o hábito de fumar do morador (MoFu) foram causas do incêndio do apartamento (InAp)?",
+    "knowledge_base": {
+      "premises": [
+        "PaEl",
+        "MoFu"
+      ],
+      "potential_causes": [
+        "PaEl",
+        "MoFu"
+      ],
+      "target_conclusion": "InAp"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: PaEl => InAp",
+        "r1: MoFu => InAp"
+      ],
+      "undercutter_rules": [
+        "r2: MoFu => ¬r1"
+      ],
+      "preferences": {
+        "r0": 0.8,
+        "r1": 0.7,
+        "r2": 0.9
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "PaEl",
+          "MoFu"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: PaEl => InAp",
+            "r1: MoFu => InAp"
+          ],
+          "undercutters": [
+            "r2: MoFu => ¬r1"
+          ]
+        },
+        "preferences": {
+          "r0": 0.8,
+          "r1": 0.7,
+          "r2": 0.9
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "PaEl"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "InAp",
+          "strength": 0.8
+        },
+        {
+          "id": "A2",
+          "premises": [
+            "MoFu"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r1"
+          ],
+          "conclusion": "InAp",
+          "strength": 0.7
+        },
+        {
+          "id": "A3",
+          "premises": [
+            "MoFu"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r2"
+          ],
+          "conclusion": "¬r1",
+          "strength": 0.9
+        }
+      ],
+      "attacks": [
+        {
+          "attacker": "A3",
+          "target": "A2",
+          "type": "undercut",
+          "rule": "r1",
+          "succeeds": true
+        }
+      ],
+      "defeats": [
+        {
+          "defeater": "A3",
+          "defeated": "A2",
+          "type": "undercut",
+          "explanation": "Argumento A3 (força 0.9) derrota A2 (força 0.7) via undercutter r2"
+        }
+      ]
+    },
+    "base_grounded": [
+      "A1",
+      "A4",
+      "A0",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A1": "MoFu",
+      "A4": "¬r1",
+      "A0": "PaEl",
+      "A2": "InAp"
+    },
+    "base_explanations": {
+      "A1": [
+        "A1"
+      ],
+      "A4": [
+        "A1",
+        "A4"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A2",
+        "A0"
+      ]
+    },
+    "causal_results": {
+      "PaEl": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: A pane elétrica (PaEl) é classificada como \"production\", pois sua ocorrência é a condição suficiente e necessária dentro do modelo para a deflagração do incêndio (InAp).\n2. **Regras Críticas**: A regra \"PaEl => InAp\" é a regra central afetada. Sem a premissa PaEl, a conclusão InAp não é alcançada no AF modificado.\n3. **Argumentos Derrotados**: O argumento que ligava a pane elétrica ao incêndio foi derrotado pela ausência da premissa, resultando na perda da conclusão \"InAp\" no grounded extension.\n4. **Justificativa Jurídica**: De acordo com a Definição 4.3, PaEl é causa-in-fact porque, no cenário contrafactual onde PaEl é negado (¬PaEl), a conclusão ψ (InAp) não é mais derivada. A perícia técnica reforça que PaEl é o fator determinante, enquanto outros fatores (como MoFu) foram descartados ou não possuem força causal suficiente para sustentar a conclusão de incêndio.\n5. **Conclusão**: A pane elétrica é, portanto, causa necessária e suficiente para o dano observado.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "InAp",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      },
+      "MoFu": {
+        "is_cause": false,
+        "explanation": "A análise causal baseada na Definição 4.3 demonstra que o hábito de fumar do morador (MoFu) não é causa-in-fact do incêndio (InAp). No teste contrafactual, ao assumir a ausência de MoFu (¬MoFu), a conclusão InAp permanece presente na extensão fundamentada, sustentada pela cadeia causal da pane elétrica (PaEl). Como a negação do potencial fator não resulta na ausência do efeito, não há relação de causalidade. O incêndio é atribuído exclusivamente à pane elétrica, tornando MoFu um fator irrelevante para a cadeia causal do dano.",
+        "llm_is_cause": false,
+        "solver_evidence": {
+          "target": "InAp",
+          "base_has_target": true,
+          "test_has_target": true
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "PaEl",
+          "MoFu"
+        ],
+        "potential_causes": [
+          "PaEl",
+          "MoFu"
+        ],
+        "target_conclusion": "InAp"
+      },
+      "got": {
+        "premises": [
+          "PaEl",
+          "MoFu"
+        ],
+        "potential_causes": [
+          "PaEl",
+          "MoFu"
+        ],
+        "target_conclusion": "InAp"
+      }
+    },
+    "causal_model": {
+      "matches": false,
+      "expected": {
+        "defeasible_rules": [
+          "r0: PaEl => InAp"
+        ],
+        "undercutter_rules": []
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: PaEl => InAp",
+          "r1: MoFu => InAp"
+        ],
+        "undercutter_rules": [
+          "r2: MoFu => ¬r1"
+        ],
+        "preferences": {
+          "r0": 0.8,
+          "r1": 0.7,
+          "r2": 0.9
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "PaEl": true,
+        "MoFu": false
+      },
+      "got": {
+        "PaEl": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: A pane elétrica (PaEl) é classificada como \"production\", pois sua ocorrência é a condição suficiente e necessária dentro do modelo para a deflagração do incêndio (InAp).\n2. **Regras Críticas**: A regra \"PaEl => InAp\" é a regra central afetada. Sem a premissa PaEl, a conclusão InAp não é alcançada no AF modificado.\n3. **Argumentos Derrotados**: O argumento que ligava a pane elétrica ao incêndio foi derrotado pela ausência da premissa, resultando na perda da conclusão \"InAp\" no grounded extension.\n4. **Justificativa Jurídica**: De acordo com a Definição 4.3, PaEl é causa-in-fact porque, no cenário contrafactual onde PaEl é negado (¬PaEl), a conclusão ψ (InAp) não é mais derivada. A perícia técnica reforça que PaEl é o fator determinante, enquanto outros fatores (como MoFu) foram descartados ou não possuem força causal suficiente para sustentar a conclusão de incêndio.\n5. **Conclusão**: A pane elétrica é, portanto, causa necessária e suficiente para o dano observado.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "InAp",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        },
+        "MoFu": {
+          "is_cause": false,
+          "explanation": "A análise causal baseada na Definição 4.3 demonstra que o hábito de fumar do morador (MoFu) não é causa-in-fact do incêndio (InAp). No teste contrafactual, ao assumir a ausência de MoFu (¬MoFu), a conclusão InAp permanece presente na extensão fundamentada, sustentada pela cadeia causal da pane elétrica (PaEl). Como a negação do potencial fator não resulta na ausência do efeito, não há relação de causalidade. O incêndio é atribuído exclusivamente à pane elétrica, tornando MoFu um fator irrelevante para a cadeia causal do dano.",
+          "llm_is_cause": false,
+          "solver_evidence": {
+            "target": "InAp",
+            "base_has_target": true,
+            "test_has_target": true
+          }
+        }
+      }
+    }
+  }
+}

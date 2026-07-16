@@ -1,0 +1,209 @@
+{
+  "case": {
+    "id": 14,
+    "name": "Combustível Adulterado (Produção com Conjunção)",
+    "pattern": "producao",
+    "case_text": "Um posto vendeu combustível adulterado (CoAd) e o motorista abasteceu o veículo com ele (MoAb).\nO motor foi danificado (MoDa).\nPergunta-se: a venda do combustível adulterado (CoAd) e o abastecimento (MoAb) foram causas do dano ao motor (MoDa)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "CoAd",
+        "MoAb"
+      ],
+      "potential_causes": [
+        "CoAd",
+        "MoAb"
+      ],
+      "target_conclusion": "MoDa"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: CoAd AND MoAb => MoDa"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "CoAd": true,
+      "MoAb": true
+    }
+  },
+  "analysis": {
+    "case_text": "Um posto vendeu combustível adulterado (CoAd) e o motorista abasteceu o veículo com ele (MoAb).\nO motor foi danificado (MoDa).\nPergunta-se: a venda do combustível adulterado (CoAd) e o abastecimento (MoAb) foram causas do dano ao motor (MoDa)?",
+    "knowledge_base": {
+      "premises": [
+        "CoAd",
+        "MoAb"
+      ],
+      "potential_causes": [
+        "CoAd",
+        "MoAb"
+      ],
+      "target_conclusion": "MoDa"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: CoAd AND MoAb => MoDa"
+      ],
+      "undercutter_rules": [],
+      "preferences": {
+        "r0": 0.9
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "CoAd",
+          "MoAb"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: CoAd AND MoAb => MoDa"
+          ],
+          "undercutters": []
+        },
+        "preferences": {
+          "r0": 0.9
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "CoAd",
+            "MoAb"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "MoDa",
+          "strength": 0.9
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A1",
+      "A0",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A1": "MoAb",
+      "A0": "CoAd",
+      "A2": "MoDa"
+    },
+    "base_explanations": {
+      "A1": [
+        "A1"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A2",
+        "A1",
+        "A0"
+      ]
+    },
+    "causal_results": {
+      "CoAd": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois a presença do combustível adulterado (CoAd) é um componente ativo e necessário na cadeia causal que resulta diretamente no dano ao motor (MoDa).\n2. **Regras Críticas**: A regra 'MoAb & CoAd => MoDa' é a regra crítica. Ao negar 'CoAd', o antecedente da regra torna-se falso, impedindo a derivação da conclusão 'MoDa'.\n3. **Argumentos Derrotados**: O argumento 'A2', que sustentava a conclusão 'MoDa', perde sua validade no sistema modificado, pois sua premissa fundamental ('CoAd') foi removida.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, 'CoAd' é causa-in-fact porque, na ausência deste fator (contrafactual), o dano ao motor não ocorreria. O combustível adulterado é um elemento essencial para a concretização do dano, estabelecendo um nexo causal direto entre a conduta (venda/uso do combustível) e o resultado (dano).\n5. **Conceitos**: A análise confirma que 'CoAd' satisfaz o teste de \"but-for\" (conditio sine qua non), sendo um fator indispensável para a cadeia causal que culmina no dano.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "MoDa",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      },
+      "MoAb": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois o abastecimento com combustível adulterado é um componente ativo e necessário para a produção direta do dano ao motor.\n2. **Regras Críticas**: A regra \"MoAb & CoAd => MoDa\" é a regra central. Ao negar MoAb, a regra perde sua validade, pois a conjunção necessária para a conclusão MoDa não é mais satisfeita.\n3. **Argumentos Derrotados**: O argumento A2, que sustentava a conclusão de dano ao motor (MoDa), foi derrotado pela ausência da premissa MoAb.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, MoAb é causa-in-fact porque, na ausência de MoAb (¬MoAb), o dano ao motor (MoDa) não ocorre. O abastecimento é uma condição necessária (sine qua non) para a materialização do dano, estabelecendo um nexo causal direto entre a conduta e o resultado.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "MoDa",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "CoAd",
+          "MoAb"
+        ],
+        "potential_causes": [
+          "CoAd",
+          "MoAb"
+        ],
+        "target_conclusion": "MoDa"
+      },
+      "got": {
+        "premises": [
+          "CoAd",
+          "MoAb"
+        ],
+        "potential_causes": [
+          "CoAd",
+          "MoAb"
+        ],
+        "target_conclusion": "MoDa"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: CoAd AND MoAb => MoDa"
+        ],
+        "undercutter_rules": []
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: CoAd AND MoAb => MoDa"
+        ],
+        "undercutter_rules": [],
+        "preferences": {
+          "r0": 0.9
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "CoAd": true,
+        "MoAb": true
+      },
+      "got": {
+        "CoAd": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois a presença do combustível adulterado (CoAd) é um componente ativo e necessário na cadeia causal que resulta diretamente no dano ao motor (MoDa).\n2. **Regras Críticas**: A regra 'MoAb & CoAd => MoDa' é a regra crítica. Ao negar 'CoAd', o antecedente da regra torna-se falso, impedindo a derivação da conclusão 'MoDa'.\n3. **Argumentos Derrotados**: O argumento 'A2', que sustentava a conclusão 'MoDa', perde sua validade no sistema modificado, pois sua premissa fundamental ('CoAd') foi removida.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, 'CoAd' é causa-in-fact porque, na ausência deste fator (contrafactual), o dano ao motor não ocorreria. O combustível adulterado é um elemento essencial para a concretização do dano, estabelecendo um nexo causal direto entre a conduta (venda/uso do combustível) e o resultado (dano).\n5. **Conceitos**: A análise confirma que 'CoAd' satisfaz o teste de \"but-for\" (conditio sine qua non), sendo um fator indispensável para a cadeia causal que culmina no dano.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "MoDa",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        },
+        "MoAb": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois o abastecimento com combustível adulterado é um componente ativo e necessário para a produção direta do dano ao motor.\n2. **Regras Críticas**: A regra \"MoAb & CoAd => MoDa\" é a regra central. Ao negar MoAb, a regra perde sua validade, pois a conjunção necessária para a conclusão MoDa não é mais satisfeita.\n3. **Argumentos Derrotados**: O argumento A2, que sustentava a conclusão de dano ao motor (MoDa), foi derrotado pela ausência da premissa MoAb.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, MoAb é causa-in-fact porque, na ausência de MoAb (¬MoAb), o dano ao motor (MoDa) não ocorre. O abastecimento é uma condição necessária (sine qua non) para a materialização do dano, estabelecendo um nexo causal direto entre a conduta e o resultado.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "MoDa",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

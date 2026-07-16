@@ -1,0 +1,284 @@
+{
+  "case": {
+    "id": 27,
+    "name": "Infiltração no Apartamento (Excludente Afastada)",
+    "pattern": "excludente",
+    "case_text": "Um apartamento novo apresentou infiltração generalizada (ApIn).\nA construtora alega que a reforma feita pelo comprador causou o problema (ReCo), mas a perícia identificou falha na impermeabilização original (FaIm).\nPergunta-se: a infiltração no imóvel novo (ApIn) foi causa da responsabilização da construtora (CtRe)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "ApIn",
+        "ReCo",
+        "FaIm"
+      ],
+      "potential_causes": [
+        "ApIn"
+      ],
+      "target_conclusion": "CtRe"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: ApIn => CtRe",
+        "r1: ReCo => ¬CtRe"
+      ],
+      "undercutter_rules": [
+        "r2: FaIm => ¬r1"
+      ]
+    },
+    "expected_causal_result": {
+      "ApIn": true
+    }
+  },
+  "analysis": {
+    "case_text": "Um apartamento novo apresentou infiltração generalizada (ApIn).\nA construtora alega que a reforma feita pelo comprador causou o problema (ReCo), mas a perícia identificou falha na impermeabilização original (FaIm).\nPergunta-se: a infiltração no imóvel novo (ApIn) foi causa da responsabilização da construtora (CtRe)?",
+    "knowledge_base": {
+      "premises": [
+        "ReCo",
+        "FaIm"
+      ],
+      "potential_causes": [
+        "ReCo",
+        "FaIm"
+      ],
+      "target_conclusion": "CtRe"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: FaIm => CtRe",
+        "r1: ReCo => ¬CtRe"
+      ],
+      "undercutter_rules": [
+        "r2: FaIm => ¬r1"
+      ],
+      "preferences": {
+        "r0": 0.8,
+        "r1": 0.7,
+        "r2": 0.9
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "ReCo",
+          "FaIm"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: FaIm => CtRe",
+            "r1: ReCo => ¬CtRe"
+          ],
+          "undercutters": [
+            "r2: FaIm => ¬r1"
+          ]
+        },
+        "preferences": {
+          "r0": 0.8,
+          "r1": 0.7,
+          "r2": 0.9
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "FaIm"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "CtRe",
+          "strength": 0.8
+        },
+        {
+          "id": "A2",
+          "premises": [
+            "ReCo"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r1"
+          ],
+          "conclusion": "¬CtRe",
+          "strength": 0.7
+        },
+        {
+          "id": "A3",
+          "premises": [
+            "FaIm"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r2"
+          ],
+          "conclusion": "¬r1",
+          "strength": 0.9
+        }
+      ],
+      "attacks": [
+        {
+          "attacker": "A1",
+          "target": "A2",
+          "type": "rebuttal",
+          "rule": "r1",
+          "succeeds": true
+        },
+        {
+          "attacker": "A3",
+          "target": "A2",
+          "type": "undercut",
+          "rule": "r1",
+          "succeeds": true
+        }
+      ],
+      "defeats": [
+        {
+          "defeater": "A1",
+          "defeated": "A2",
+          "type": "rebuttal",
+          "explanation": "Argumento A1 (força 0.8) derrota A2 (força 0.7)"
+        },
+        {
+          "defeater": "A3",
+          "defeated": "A2",
+          "type": "undercut",
+          "explanation": "Argumento A3 (força 0.9) invalida a regra r1 de A2"
+        }
+      ]
+    },
+    "base_grounded": [
+      "A1",
+      "A4",
+      "A0",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A1": "FaIm",
+      "A4": "¬r1",
+      "A0": "ReCo",
+      "A2": "CtRe"
+    },
+    "base_explanations": {
+      "A1": [
+        "A1"
+      ],
+      "A4": [
+        "A1",
+        "A4"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A2",
+        "A1"
+      ]
+    },
+    "causal_results": {
+      "ReCo": {
+        "is_cause": false,
+        "explanation": "A análise causal indica que a reforma realizada pelo comprador (ReCo) não é causa-in-fact da responsabilização da construtora (CtRe). De acordo com a Definição 4.3, para que φ seja causa de ψ, a negação de φ deve resultar na ausência de ψ. No presente caso, ao removermos ReCo (testando ¬ReCo), a conclusão CtRe permanece presente na extensão fundamentada (através do argumento A3, que aponta a falha na impermeabilização - FaIm - como causa suficiente). Portanto, a responsabilização da construtora ocorre independentemente da reforma do comprador, sendo a falha na impermeabilização o fator determinante. Não há relação de produção, omissão ou preempção, classificando a relação como 'none'.",
+        "llm_is_cause": false,
+        "solver_evidence": {
+          "target": "CtRe",
+          "base_has_target": true,
+          "test_has_target": true
+        }
+      },
+      "FaIm": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Identificou-se uma relação de \"produção\", onde a falha na impermeabilização (FaIm) é o fator determinante que gera a obrigação de responsabilização da construtora (CtRe).\n2. **Regras Críticas**: A regra fundamental \"FaIm => CtRe\" foi a afetada. Sem a premissa de que houve falha na impermeabilização, a regra não pode ser disparada.\n3. **Argumentos Derrotados**: O argumento A1, que conectava a falha técnica à responsabilidade jurídica, perde sua sustentação factual. No teste com ¬FaIm, o sistema converge para a conclusão ¬CtRe, confirmando que a responsabilidade não subsiste sem a falha original.\n4. **Justificativa Jurídica**: De acordo com a Definição 4.3, FaIm é causa-in-fact pois, na ausência deste evento, o efeito (CtRe) não ocorre. A perícia técnica estabelece o nexo causal direto entre o vício construtivo e a responsabilidade da construtora, tornando a falha na impermeabilização o elemento central da cadeia causal.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "CtRe",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": false,
+      "expected": {
+        "premises": [
+          "ApIn",
+          "ReCo",
+          "FaIm"
+        ],
+        "potential_causes": [
+          "ApIn"
+        ],
+        "target_conclusion": "CtRe"
+      },
+      "got": {
+        "premises": [
+          "ReCo",
+          "FaIm"
+        ],
+        "potential_causes": [
+          "ReCo",
+          "FaIm"
+        ],
+        "target_conclusion": "CtRe"
+      }
+    },
+    "causal_model": {
+      "matches": false,
+      "expected": {
+        "defeasible_rules": [
+          "r0: ApIn => CtRe",
+          "r1: ReCo => ¬CtRe"
+        ],
+        "undercutter_rules": [
+          "r2: FaIm => ¬r1"
+        ]
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: FaIm => CtRe",
+          "r1: ReCo => ¬CtRe"
+        ],
+        "undercutter_rules": [
+          "r2: FaIm => ¬r1"
+        ],
+        "preferences": {
+          "r0": 0.8,
+          "r1": 0.7,
+          "r2": 0.9
+        }
+      }
+    },
+    "causal_results": {
+      "matches": false,
+      "expected": {
+        "ApIn": true
+      },
+      "got": {
+        "ReCo": {
+          "is_cause": false,
+          "explanation": "A análise causal indica que a reforma realizada pelo comprador (ReCo) não é causa-in-fact da responsabilização da construtora (CtRe). De acordo com a Definição 4.3, para que φ seja causa de ψ, a negação de φ deve resultar na ausência de ψ. No presente caso, ao removermos ReCo (testando ¬ReCo), a conclusão CtRe permanece presente na extensão fundamentada (através do argumento A3, que aponta a falha na impermeabilização - FaIm - como causa suficiente). Portanto, a responsabilização da construtora ocorre independentemente da reforma do comprador, sendo a falha na impermeabilização o fator determinante. Não há relação de produção, omissão ou preempção, classificando a relação como 'none'.",
+          "llm_is_cause": false,
+          "solver_evidence": {
+            "target": "CtRe",
+            "base_has_target": true,
+            "test_has_target": true
+          }
+        },
+        "FaIm": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Identificou-se uma relação de \"produção\", onde a falha na impermeabilização (FaIm) é o fator determinante que gera a obrigação de responsabilização da construtora (CtRe).\n2. **Regras Críticas**: A regra fundamental \"FaIm => CtRe\" foi a afetada. Sem a premissa de que houve falha na impermeabilização, a regra não pode ser disparada.\n3. **Argumentos Derrotados**: O argumento A1, que conectava a falha técnica à responsabilidade jurídica, perde sua sustentação factual. No teste com ¬FaIm, o sistema converge para a conclusão ¬CtRe, confirmando que a responsabilidade não subsiste sem a falha original.\n4. **Justificativa Jurídica**: De acordo com a Definição 4.3, FaIm é causa-in-fact pois, na ausência deste evento, o efeito (CtRe) não ocorre. A perícia técnica estabelece o nexo causal direto entre o vício construtivo e a responsabilidade da construtora, tornando a falha na impermeabilização o elemento central da cadeia causal.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "CtRe",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

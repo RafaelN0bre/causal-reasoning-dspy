@@ -1,0 +1,202 @@
+{
+  "case": {
+    "id": 18,
+    "name": "Elevador Sem Conserto (Omissão)",
+    "pattern": "omissao",
+    "case_text": "O elevador do condomínio tinha defeito conhecido no freio (DeFr).\nO condomínio não realizou o conserto (¬CoRe).\nO conserto teria eliminado o defeito (DeEl).\nA cabine despencou com um morador dentro (CaDe).\nPergunta-se: a falta de conserto (¬CoRe) foi causa da queda da cabine (CaDe)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "DeFr",
+        "¬CoRe"
+      ],
+      "potential_causes": [
+        "¬CoRe"
+      ],
+      "target_conclusion": "CaDe"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: DeFr => CaDe",
+        "r1: CoRe => DeEl"
+      ],
+      "undercutter_rules": [
+        "r2: DeEl => ¬r0"
+      ]
+    },
+    "expected_causal_result": {
+      "¬CoRe": true
+    }
+  },
+  "analysis": {
+    "case_text": "O elevador do condomínio tinha defeito conhecido no freio (DeFr).\nO condomínio não realizou o conserto (¬CoRe).\nO conserto teria eliminado o defeito (DeEl).\nA cabine despencou com um morador dentro (CaDe).\nPergunta-se: a falta de conserto (¬CoRe) foi causa da queda da cabine (CaDe)?",
+    "knowledge_base": {
+      "premises": [
+        "DeFr",
+        "¬CoRe"
+      ],
+      "potential_causes": [
+        "¬CoRe"
+      ],
+      "target_conclusion": "CaDe"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: DeFr => CaDe",
+        "r1: CoRe => DeEl"
+      ],
+      "undercutter_rules": [
+        "r2: DeEl => ¬r0"
+      ],
+      "preferences": {
+        "r0": 0.8,
+        "r1": 0.8,
+        "r2": 0.9
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "DeFr",
+          "¬CoRe"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: DeFr => CaDe",
+            "r1: CoRe => DeEl"
+          ],
+          "undercutters": [
+            "r2: DeEl => ¬r0"
+          ]
+        },
+        "preferences": {
+          "r0": 0.8,
+          "r1": 0.8,
+          "r2": 0.9
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "DeFr"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "CaDe",
+          "strength": 0.8
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A0",
+      "A2",
+      "A1"
+    ],
+    "base_grounded_conclusions": {
+      "A0": "¬CoRe",
+      "A2": "CaDe",
+      "A1": "DeFr"
+    },
+    "base_explanations": {
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A2",
+        "A1"
+      ],
+      "A1": [
+        "A1"
+      ]
+    },
+    "causal_results": {
+      "¬CoRe": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"omission\", pois a falha do condomínio em realizar o conserto (`¬CoRe`) é a omissão que permitiu que o defeito no freio (`DeFr`) resultasse na queda da cabine (`CaDe`).\n2. **Regras Críticas**: A regra `DeFr ∧ ¬CoRe => CaDe` é a regra crítica. A omissão é um componente essencial para a ativação desta regra.\n3. **Argumentos Derrotados**: No cenário contrafactual, a introdução de `CoRe` ativa o argumento `A4` (`DeEl`), que derrota a cadeia causal da queda, provando que a omissão foi o fator determinante.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, a omissão é causa-in-fact porque, na ausência da omissão (ou seja, se o conserto tivesse sido feito), o resultado `CaDe` não teria ocorrido. A omissão é, portanto, uma condição *sine qua non* para o dano.\n5. **Conclusão**: O condomínio, ao omitir-se do dever de manutenção, criou o risco que se materializou na queda, configurando uma relação causal direta por omissão.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "CaDe",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "DeFr",
+          "¬CoRe"
+        ],
+        "potential_causes": [
+          "¬CoRe"
+        ],
+        "target_conclusion": "CaDe"
+      },
+      "got": {
+        "premises": [
+          "DeFr",
+          "¬CoRe"
+        ],
+        "potential_causes": [
+          "¬CoRe"
+        ],
+        "target_conclusion": "CaDe"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: DeFr => CaDe",
+          "r1: CoRe => DeEl"
+        ],
+        "undercutter_rules": [
+          "r2: DeEl => ¬r0"
+        ]
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: DeFr => CaDe",
+          "r1: CoRe => DeEl"
+        ],
+        "undercutter_rules": [
+          "r2: DeEl => ¬r0"
+        ],
+        "preferences": {
+          "r0": 0.8,
+          "r1": 0.8,
+          "r2": 0.9
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "¬CoRe": true
+      },
+      "got": {
+        "¬CoRe": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"omission\", pois a falha do condomínio em realizar o conserto (`¬CoRe`) é a omissão que permitiu que o defeito no freio (`DeFr`) resultasse na queda da cabine (`CaDe`).\n2. **Regras Críticas**: A regra `DeFr ∧ ¬CoRe => CaDe` é a regra crítica. A omissão é um componente essencial para a ativação desta regra.\n3. **Argumentos Derrotados**: No cenário contrafactual, a introdução de `CoRe` ativa o argumento `A4` (`DeEl`), que derrota a cadeia causal da queda, provando que a omissão foi o fator determinante.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, a omissão é causa-in-fact porque, na ausência da omissão (ou seja, se o conserto tivesse sido feito), o resultado `CaDe` não teria ocorrido. A omissão é, portanto, uma condição *sine qua non* para o dano.\n5. **Conclusão**: O condomínio, ao omitir-se do dever de manutenção, criou o risco que se materializou na queda, configurando uma relação causal direta por omissão.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "CaDe",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

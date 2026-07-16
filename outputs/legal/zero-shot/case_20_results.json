@@ -1,0 +1,238 @@
+{
+  "case": {
+    "id": 20,
+    "name": "Cartão Não Bloqueado (Omissão)",
+    "pattern": "omissao",
+    "case_text": "O banco recebeu alerta de fraude no cartão do correntista (AlFr).\nO banco não bloqueou o cartão (¬CaBl).\nO bloqueio teria barrado as transações seguintes (TrBa).\nO correntista sofreu prejuízo com compras fraudulentas (PrCo).\nPergunta-se: a falta de bloqueio do cartão (¬CaBl) foi causa do prejuízo (PrCo)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "AlFr",
+        "¬CaBl"
+      ],
+      "potential_causes": [
+        "¬CaBl"
+      ],
+      "target_conclusion": "PrCo"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: AlFr => PrCo",
+        "r1: CaBl => TrBa"
+      ],
+      "undercutter_rules": [
+        "r2: TrBa => ¬r0"
+      ]
+    },
+    "expected_causal_result": {
+      "¬CaBl": true
+    }
+  },
+  "analysis": {
+    "case_text": "O banco recebeu alerta de fraude no cartão do correntista (AlFr).\nO banco não bloqueou o cartão (¬CaBl).\nO bloqueio teria barrado as transações seguintes (TrBa).\nO correntista sofreu prejuízo com compras fraudulentas (PrCo).\nPergunta-se: a falta de bloqueio do cartão (¬CaBl) foi causa do prejuízo (PrCo)?",
+    "knowledge_base": {
+      "premises": [
+        "AlFr",
+        "¬CaBl",
+        "TrBa"
+      ],
+      "potential_causes": [
+        "¬CaBl"
+      ],
+      "target_conclusion": "PrCo"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: AlFr AND ¬CaBl => PrCo",
+        "r1: CaBl => TrBa"
+      ],
+      "undercutter_rules": [
+        "r2: TrBa => ¬r0"
+      ],
+      "preferences": {
+        "r0": 0.7,
+        "r1": 0.8,
+        "r2": 0.9
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "AlFr",
+          "¬CaBl",
+          "TrBa"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: AlFr AND ¬CaBl => PrCo",
+            "r1: CaBl => TrBa"
+          ],
+          "undercutters": [
+            "r2: TrBa => ¬r0"
+          ]
+        },
+        "preferences": {
+          "r0": 0.7,
+          "r1": 0.8,
+          "r2": 0.9
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "AlFr",
+            "¬CaBl"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "PrCo",
+          "strength": 0.7
+        },
+        {
+          "id": "A3",
+          "premises": [
+            "TrBa"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r2"
+          ],
+          "conclusion": "¬r0",
+          "strength": 0.9
+        }
+      ],
+      "attacks": [
+        {
+          "attacker": "A3",
+          "target": "A1",
+          "type": "undercut",
+          "rule": "r0",
+          "succeeds": true
+        }
+      ],
+      "defeats": [
+        {
+          "defeater": "A3",
+          "defeated": "A1",
+          "type": "undercut",
+          "explanation": "Argumento A3 (força 0.9) derrota A1 (força 0.7) via undercutter r2"
+        }
+      ]
+    },
+    "base_grounded": [
+      "A1",
+      "A4",
+      "A0",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A1": "TrBa",
+      "A4": "¬r0",
+      "A0": "¬CaBl",
+      "A2": "AlFr"
+    },
+    "base_explanations": {
+      "A1": [
+        "A1"
+      ],
+      "A4": [
+        "A1",
+        "A4"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A2"
+      ]
+    },
+    "causal_results": {
+      "¬CaBl": {
+        "is_cause": false,
+        "explanation": "1. **Tipo de Causa**: Identificada como \"omissão\". A falha do banco em realizar o bloqueio (`¬CaBl`) é a condição necessária que permitiu a concretização do prejuízo (`PrCo`).\n2. **Regras Críticas**: A regra `¬CaBl & AlFr => PrCo` é a regra central afetada. Ao assumir `CaBl` (bloqueio realizado), a premissa `¬CaBl` torna-se falsa, invalidando a cadeia causal que leva ao prejuízo.\n3. **Argumentos Derrotados**: O argumento que sustenta o prejuízo é derrotado porque, no cenário contrafactual, o bloqueio teria barrado as transações (`TrBa`), impedindo a conclusão `PrCo`.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, se a negação da omissão (ou seja, a ação de bloquear) resulta na ausência do efeito danoso, a omissão é considerada causa-em-fato. O banco tinha o dever de agir (alerta de fraude) e sua inércia foi o fator determinante para o dano.\n5. **Conclusão**: A falta de bloqueio é causa-em-fato, pois sem ela, o prejuízo não teria ocorrido.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "PrCo",
+          "base_has_target": false,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": false,
+      "expected": {
+        "premises": [
+          "AlFr",
+          "¬CaBl"
+        ],
+        "potential_causes": [
+          "¬CaBl"
+        ],
+        "target_conclusion": "PrCo"
+      },
+      "got": {
+        "premises": [
+          "AlFr",
+          "¬CaBl",
+          "TrBa"
+        ],
+        "potential_causes": [
+          "¬CaBl"
+        ],
+        "target_conclusion": "PrCo"
+      }
+    },
+    "causal_model": {
+      "matches": false,
+      "expected": {
+        "defeasible_rules": [
+          "r0: AlFr => PrCo",
+          "r1: CaBl => TrBa"
+        ],
+        "undercutter_rules": [
+          "r2: TrBa => ¬r0"
+        ]
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: AlFr AND ¬CaBl => PrCo",
+          "r1: CaBl => TrBa"
+        ],
+        "undercutter_rules": [
+          "r2: TrBa => ¬r0"
+        ],
+        "preferences": {
+          "r0": 0.7,
+          "r1": 0.8,
+          "r2": 0.9
+        }
+      }
+    },
+    "causal_results": {
+      "matches": false,
+      "expected": {
+        "¬CaBl": true
+      },
+      "got": {
+        "¬CaBl": {
+          "is_cause": false,
+          "explanation": "1. **Tipo de Causa**: Identificada como \"omissão\". A falha do banco em realizar o bloqueio (`¬CaBl`) é a condição necessária que permitiu a concretização do prejuízo (`PrCo`).\n2. **Regras Críticas**: A regra `¬CaBl & AlFr => PrCo` é a regra central afetada. Ao assumir `CaBl` (bloqueio realizado), a premissa `¬CaBl` torna-se falsa, invalidando a cadeia causal que leva ao prejuízo.\n3. **Argumentos Derrotados**: O argumento que sustenta o prejuízo é derrotado porque, no cenário contrafactual, o bloqueio teria barrado as transações (`TrBa`), impedindo a conclusão `PrCo`.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, se a negação da omissão (ou seja, a ação de bloquear) resulta na ausência do efeito danoso, a omissão é considerada causa-em-fato. O banco tinha o dever de agir (alerta de fraude) e sua inércia foi o fator determinante para o dano.\n5. **Conclusão**: A falta de bloqueio é causa-em-fato, pois sem ela, o prejuízo não teria ocorrido.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "PrCo",
+            "base_has_target": false,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

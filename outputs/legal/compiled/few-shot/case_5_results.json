@@ -1,0 +1,244 @@
+{
+  "case": {
+    "id": 5,
+    "name": "Dois Venenos (Sobredeterminação)",
+    "case_text": "\n        Dois agressores, agindo de forma independente, colocaram veneno no café da vítima.\n        A dose do primeiro agressor (VeA) e a dose do segundo agressor (VeB) eram, cada uma,\n        suficientes para matar. A vítima bebeu o café e morreu.\n        Pergunta-se: a dose do primeiro agressor (VeA) e a dose do segundo agressor (VeB)\n        foram causas da morte da vítima (MoVe)?\n        ",
+    "expected_knowledge_base": {
+      "premises": [
+        "VeA",
+        "VeB"
+      ],
+      "potential_causes": [
+        "VeA",
+        "VeB"
+      ],
+      "target_conclusion": "MoVe"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: VeA => MoVe",
+        "r1: VeB => MoVe"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "VeA": {
+        "is_cause": false,
+        "explanation": "Sobredeterminação: negando VeA, MoVe continua derivável por VeB, então o teste but-for da Definição 4.3 falha. Limitação conhecida do critério sine qua non."
+      },
+      "VeB": {
+        "is_cause": false,
+        "explanation": "Simétrico a VeA: cada dose sozinha era suficiente, logo nenhuma é condição necessária sob o teste but-for estrito."
+      }
+    }
+  },
+  "analysis": {
+    "case_text": "\n        Dois agressores, agindo de forma independente, colocaram veneno no café da vítima.\n        A dose do primeiro agressor (VeA) e a dose do segundo agressor (VeB) eram, cada uma,\n        suficientes para matar. A vítima bebeu o café e morreu.\n        Pergunta-se: a dose do primeiro agressor (VeA) e a dose do segundo agressor (VeB)\n        foram causas da morte da vítima (MoVe)?\n        ",
+    "knowledge_base": {
+      "premises": [
+        "VeA",
+        "VeB"
+      ],
+      "potential_causes": [
+        "VeA",
+        "VeB"
+      ],
+      "target_conclusion": "MoVe"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: VeA => MoVe",
+        "r1: VeB => MoVe"
+      ],
+      "undercutter_rules": [],
+      "preferences": {
+        "r0": 0.5,
+        "r1": 0.5
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "VeA",
+          "VeB"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: VeA => MoVe",
+            "r1: VeB => MoVe"
+          ],
+          "undercutters": []
+        },
+        "preferences": {
+          "r0": 0.5,
+          "r1": 0.5
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "VeA"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "MoVe",
+          "strength": 0.5
+        },
+        {
+          "id": "A2",
+          "premises": [
+            "VeB"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r1"
+          ],
+          "conclusion": "MoVe",
+          "strength": 0.5
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A0",
+      "A2",
+      "A3",
+      "A1"
+    ],
+    "base_grounded_conclusions": {
+      "A0": "VeA",
+      "A2": "MoVe",
+      "A3": "MoVe",
+      "A1": "VeB"
+    },
+    "base_explanations": {
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A2",
+        "A0"
+      ],
+      "A3": [
+        "A3",
+        "A1"
+      ],
+      "A1": [
+        "A1"
+      ]
+    },
+    "causal_results": {
+      "VeA": {
+        "is_cause": false,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois o veneno `VeA` é um fator que, por si só, produz o resultado morte.\n2. **Regras Críticas**: A regra `VeA => MoVe` é a regra de produção. Ela é redundante no sistema devido à existência de `VeB => MoVe`.\n3. **Argumentos Derrotados**: Nenhum argumento que sustenta a morte é derrotado pela negação de `VeA`, pois o sistema possui redundância causal.\n4. **Justificativa Jurídica**: Em casos de sobredeterminação (onde dois fatores são independentemente suficientes), a aplicação estrita do teste contrafactual falharia. No entanto, sob a Definição 4.3, reconhecemos que `VeA` é causa-in-fact porque ele é um fator que contribuiu ativamente para a produção do dano, sendo cada agressor responsável pelo resultado final.\n5. **Conclusão**: `VeA` é causa-in-fact porque, embora não seja uma condição *sine qua non* (devido à presença de `VeB`), ele é um fator causal que produziu o dano.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "MoVe",
+          "base_has_target": true,
+          "test_has_target": true
+        }
+      },
+      "VeB": {
+        "is_cause": false,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois o veneno `VeB` é um agente que, por si só, produz o resultado morte.\n2. **Regras Críticas**: A regra `VeB => MoVe` é a regra de produção. Ela é redundante no cenário original, mas sua existência confirma a capacidade causal do agente.\n3. **Argumentos Derrotados**: Nenhum argumento que sustenta a morte é derrotado pela negação de `VeB`, o que caracteriza a sobredeterminação causal.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, em casos de sobredeterminação (onde dois fatores são independentemente suficientes), ambos são considerados causas-in-fact. A falha do teste contrafactual simples é superada pela regra de que cada conduta que contribui para o dano é causalmente relevante.\n5. **Conclusão**: `VeB` é causa-in-fact porque, embora não seja estritamente necessária (devido à presença de `VeA`), ela é uma causa suficiente que efetivamente contribuiu para o resultado danoso.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "MoVe",
+          "base_has_target": true,
+          "test_has_target": true
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "VeA",
+          "VeB"
+        ],
+        "potential_causes": [
+          "VeA",
+          "VeB"
+        ],
+        "target_conclusion": "MoVe"
+      },
+      "got": {
+        "premises": [
+          "VeA",
+          "VeB"
+        ],
+        "potential_causes": [
+          "VeA",
+          "VeB"
+        ],
+        "target_conclusion": "MoVe"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: VeA => MoVe",
+          "r1: VeB => MoVe"
+        ],
+        "undercutter_rules": []
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: VeA => MoVe",
+          "r1: VeB => MoVe"
+        ],
+        "undercutter_rules": [],
+        "preferences": {
+          "r0": 0.5,
+          "r1": 0.5
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "VeA": {
+          "is_cause": false,
+          "explanation": "Sobredeterminação: negando VeA, MoVe continua derivável por VeB, então o teste but-for da Definição 4.3 falha. Limitação conhecida do critério sine qua non."
+        },
+        "VeB": {
+          "is_cause": false,
+          "explanation": "Simétrico a VeA: cada dose sozinha era suficiente, logo nenhuma é condição necessária sob o teste but-for estrito."
+        }
+      },
+      "got": {
+        "VeA": {
+          "is_cause": false,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois o veneno `VeA` é um fator que, por si só, produz o resultado morte.\n2. **Regras Críticas**: A regra `VeA => MoVe` é a regra de produção. Ela é redundante no sistema devido à existência de `VeB => MoVe`.\n3. **Argumentos Derrotados**: Nenhum argumento que sustenta a morte é derrotado pela negação de `VeA`, pois o sistema possui redundância causal.\n4. **Justificativa Jurídica**: Em casos de sobredeterminação (onde dois fatores são independentemente suficientes), a aplicação estrita do teste contrafactual falharia. No entanto, sob a Definição 4.3, reconhecemos que `VeA` é causa-in-fact porque ele é um fator que contribuiu ativamente para a produção do dano, sendo cada agressor responsável pelo resultado final.\n5. **Conclusão**: `VeA` é causa-in-fact porque, embora não seja uma condição *sine qua non* (devido à presença de `VeB`), ele é um fator causal que produziu o dano.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "MoVe",
+            "base_has_target": true,
+            "test_has_target": true
+          }
+        },
+        "VeB": {
+          "is_cause": false,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois o veneno `VeB` é um agente que, por si só, produz o resultado morte.\n2. **Regras Críticas**: A regra `VeB => MoVe` é a regra de produção. Ela é redundante no cenário original, mas sua existência confirma a capacidade causal do agente.\n3. **Argumentos Derrotados**: Nenhum argumento que sustenta a morte é derrotado pela negação de `VeB`, o que caracteriza a sobredeterminação causal.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, em casos de sobredeterminação (onde dois fatores são independentemente suficientes), ambos são considerados causas-in-fact. A falha do teste contrafactual simples é superada pela regra de que cada conduta que contribui para o dano é causalmente relevante.\n5. **Conclusão**: `VeB` é causa-in-fact porque, embora não seja estritamente necessária (devido à presença de `VeA`), ela é uma causa suficiente que efetivamente contribuiu para o resultado danoso.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "MoVe",
+            "base_has_target": true,
+            "test_has_target": true
+          }
+        }
+      }
+    }
+  }
+}

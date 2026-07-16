@@ -1,0 +1,225 @@
+{
+  "case": {
+    "id": 17,
+    "name": "Corrosão na Passarela (Cadeia de Dois Passos)",
+    "pattern": "cadeia",
+    "case_text": "A concessionária deixou de tratar a corrosão nos cabos da passarela (CoNt).\nOs cabos se romperam e a estrutura cedeu (EsCe), causando a queda de pedestres que a atravessavam (PeQu).\nPergunta-se: a corrosão não tratada (CoNt) foi causa da queda dos pedestres (PeQu)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "CoNt"
+      ],
+      "potential_causes": [
+        "CoNt"
+      ],
+      "target_conclusion": "PeQu"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: CoNt => EsCe",
+        "r1: EsCe => PeQu"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "CoNt": true
+    }
+  },
+  "analysis": {
+    "case_text": "A concessionária deixou de tratar a corrosão nos cabos da passarela (CoNt).\nOs cabos se romperam e a estrutura cedeu (EsCe), causando a queda de pedestres que a atravessavam (PeQu).\nPergunta-se: a corrosão não tratada (CoNt) foi causa da queda dos pedestres (PeQu)?",
+    "knowledge_base": {
+      "premises": [
+        "CoNt",
+        "EsCe"
+      ],
+      "potential_causes": [
+        "CoNt"
+      ],
+      "target_conclusion": "PeQu"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: CoNt => EsCe",
+        "r1: EsCe => PeQu"
+      ],
+      "undercutter_rules": [],
+      "preferences": {
+        "r0": 0.9,
+        "r1": 0.9
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "CoNt",
+          "EsCe"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: CoNt => EsCe",
+            "r1: EsCe => PeQu"
+          ],
+          "undercutters": []
+        },
+        "preferences": {
+          "r0": 0.9,
+          "r1": 0.9
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "CoNt"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "EsCe",
+          "strength": 0.9
+        },
+        {
+          "id": "A2",
+          "premises": [
+            "EsCe"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r1"
+          ],
+          "conclusion": "PeQu",
+          "strength": 0.9
+        },
+        {
+          "id": "A3",
+          "premises": [
+            "CoNt"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0",
+            "r1"
+          ],
+          "conclusion": "PeQu",
+          "strength": 0.9
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A4",
+      "A0",
+      "A1",
+      "A3",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A4": "PeQu",
+      "A0": "CoNt",
+      "A1": "EsCe",
+      "A3": "PeQu",
+      "A2": "EsCe"
+    },
+    "base_explanations": {
+      "A4": [
+        "A4",
+        "A0",
+        "A2"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A1": [
+        "A1"
+      ],
+      "A3": [
+        "A1",
+        "A3"
+      ],
+      "A2": [
+        "A0",
+        "A2"
+      ]
+    },
+    "causal_results": {
+      "CoNt": {
+        "is_cause": false,
+        "explanation": "1. **Tipo de Causa**: Omissão. A falha da concessionária em realizar a manutenção preventiva (`CoNt`) é a causa jurídica da queda dos pedestres.\n2. **Regras Críticas**: A regra que conecta a falta de tratamento à falha estrutural (`EsCe`) e, consequentemente, à queda (`PeQu`).\n3. **Argumentos Derrotados**: O argumento que sustenta a queda como resultado da omissão é o foco da análise. A negação da omissão (realização do tratamento) é o ponto de controle para verificar a causalidade.\n4. **Justificativa Jurídica**: A concessionária possui o dever de garantir a segurança da estrutura. A omissão em tratar a corrosão é uma causa-in-fact, pois, \"but-for\" a omissão, a manutenção teria sido realizada, prevenindo o rompimento dos cabos e a queda dos pedestres.\n5. **Conclusão**: A omissão é a causa determinante, pois a ausência de tratamento é o elo que permite a progressão do dano.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "PeQu",
+          "base_has_target": true,
+          "test_has_target": true
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": false,
+      "expected": {
+        "premises": [
+          "CoNt"
+        ],
+        "potential_causes": [
+          "CoNt"
+        ],
+        "target_conclusion": "PeQu"
+      },
+      "got": {
+        "premises": [
+          "CoNt",
+          "EsCe"
+        ],
+        "potential_causes": [
+          "CoNt"
+        ],
+        "target_conclusion": "PeQu"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: CoNt => EsCe",
+          "r1: EsCe => PeQu"
+        ],
+        "undercutter_rules": []
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: CoNt => EsCe",
+          "r1: EsCe => PeQu"
+        ],
+        "undercutter_rules": [],
+        "preferences": {
+          "r0": 0.9,
+          "r1": 0.9
+        }
+      }
+    },
+    "causal_results": {
+      "matches": false,
+      "expected": {
+        "CoNt": true
+      },
+      "got": {
+        "CoNt": {
+          "is_cause": false,
+          "explanation": "1. **Tipo de Causa**: Omissão. A falha da concessionária em realizar a manutenção preventiva (`CoNt`) é a causa jurídica da queda dos pedestres.\n2. **Regras Críticas**: A regra que conecta a falta de tratamento à falha estrutural (`EsCe`) e, consequentemente, à queda (`PeQu`).\n3. **Argumentos Derrotados**: O argumento que sustenta a queda como resultado da omissão é o foco da análise. A negação da omissão (realização do tratamento) é o ponto de controle para verificar a causalidade.\n4. **Justificativa Jurídica**: A concessionária possui o dever de garantir a segurança da estrutura. A omissão em tratar a corrosão é uma causa-in-fact, pois, \"but-for\" a omissão, a manutenção teria sido realizada, prevenindo o rompimento dos cabos e a queda dos pedestres.\n5. **Conclusão**: A omissão é a causa determinante, pois a ausência de tratamento é o elo que permite a progressão do dano.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "PeQu",
+            "base_has_target": true,
+            "test_has_target": true
+          }
+        }
+      }
+    }
+  }
+}

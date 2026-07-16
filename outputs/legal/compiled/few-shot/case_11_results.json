@@ -1,0 +1,171 @@
+{
+  "case": {
+    "id": 11,
+    "name": "Derramamento de Óleo (Produção Simples)",
+    "pattern": "producao",
+    "case_text": "Um navio derramou óleo na baía durante a operação de carga (DeOl).\nAs praias da região ficaram contaminadas, configurando dano ambiental (DaAm).\nPergunta-se: o derramamento de óleo (DeOl) foi causa do dano ambiental (DaAm)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "DeOl"
+      ],
+      "potential_causes": [
+        "DeOl"
+      ],
+      "target_conclusion": "DaAm"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: DeOl => DaAm"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "DeOl": true
+    }
+  },
+  "analysis": {
+    "case_text": "Um navio derramou óleo na baía durante a operação de carga (DeOl).\nAs praias da região ficaram contaminadas, configurando dano ambiental (DaAm).\nPergunta-se: o derramamento de óleo (DeOl) foi causa do dano ambiental (DaAm)?",
+    "knowledge_base": {
+      "premises": [
+        "DeOl"
+      ],
+      "potential_causes": [
+        "DeOl"
+      ],
+      "target_conclusion": "DaAm"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: DeOl => DaAm"
+      ],
+      "undercutter_rules": [],
+      "preferences": {
+        "r0": 0.5
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "DeOl"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: DeOl => DaAm"
+          ],
+          "undercutters": []
+        },
+        "preferences": {
+          "r0": 0.5
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "DeOl"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "DaAm",
+          "strength": 0.5
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A0",
+      "A1"
+    ],
+    "base_grounded_conclusions": {
+      "A0": "DeOl",
+      "A1": "DaAm"
+    },
+    "base_explanations": {
+      "A0": [
+        "A0"
+      ],
+      "A1": [
+        "A0",
+        "A1"
+      ]
+    },
+    "causal_results": {
+      "DeOl": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois o evento `DeOl` é o fator determinante que, através de uma regra de inferência direta, resulta no evento `DaAm`.\n2. **Regras Críticas**: A regra `DeOl => DaAm` é a regra crítica. Ao negar `DeOl`, a regra perde sua premissa de ativação.\n3. **Argumentos Derrotados**: O argumento `A1`, que sustentava a conclusão `DaAm`, torna-se inoperante no AF modificado, pois sua base factual foi removida.\n4. **Justificativa Jurídica**: De acordo com a Definição 4.3, se a negação de φ (DeOl) resulta na ausência de ψ (DaAm) no grounded extension, φ é causa-in-fact. O teste contrafactual confirma que, sem o derramamento de óleo, o dano ambiental não teria sido alcançado pela cadeia causal analisada.\n5. **Conclusão**: A relação é de causalidade direta, onde a conduta de derramar óleo é condição necessária para o resultado danoso.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "DaAm",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "DeOl"
+        ],
+        "potential_causes": [
+          "DeOl"
+        ],
+        "target_conclusion": "DaAm"
+      },
+      "got": {
+        "premises": [
+          "DeOl"
+        ],
+        "potential_causes": [
+          "DeOl"
+        ],
+        "target_conclusion": "DaAm"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: DeOl => DaAm"
+        ],
+        "undercutter_rules": []
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: DeOl => DaAm"
+        ],
+        "undercutter_rules": [],
+        "preferences": {
+          "r0": 0.5
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "DeOl": true
+      },
+      "got": {
+        "DeOl": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois o evento `DeOl` é o fator determinante que, através de uma regra de inferência direta, resulta no evento `DaAm`.\n2. **Regras Críticas**: A regra `DeOl => DaAm` é a regra crítica. Ao negar `DeOl`, a regra perde sua premissa de ativação.\n3. **Argumentos Derrotados**: O argumento `A1`, que sustentava a conclusão `DaAm`, torna-se inoperante no AF modificado, pois sua base factual foi removida.\n4. **Justificativa Jurídica**: De acordo com a Definição 4.3, se a negação de φ (DeOl) resulta na ausência de ψ (DaAm) no grounded extension, φ é causa-in-fact. O teste contrafactual confirma que, sem o derramamento de óleo, o dano ambiental não teria sido alcançado pela cadeia causal analisada.\n5. **Conclusão**: A relação é de causalidade direta, onde a conduta de derramar óleo é condição necessária para o resultado danoso.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "DaAm",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

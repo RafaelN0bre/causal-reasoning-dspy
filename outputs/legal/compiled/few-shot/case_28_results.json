@@ -1,0 +1,233 @@
+{
+  "case": {
+    "id": 28,
+    "name": "Dois Poluentes (Sobredeterminação)",
+    "pattern": "sobredeterminacao",
+    "case_text": "No mesmo dia, duas indústrias despejaram no lago volumes de poluente (PoA e PoB), cada um suficiente, sozinho, para matar os peixes.\nOs peixes do lago morreram.\nPergunta-se: o despejo da primeira indústria (PoA) e o despejo da segunda indústria (PoB) foram causas da mortandade dos peixes (MoPe)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "PoA",
+        "PoB"
+      ],
+      "potential_causes": [
+        "PoA",
+        "PoB"
+      ],
+      "target_conclusion": "MoPe"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: PoA => MoPe",
+        "r1: PoB => MoPe"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "PoA": false,
+      "PoB": false
+    }
+  },
+  "analysis": {
+    "case_text": "No mesmo dia, duas indústrias despejaram no lago volumes de poluente (PoA e PoB), cada um suficiente, sozinho, para matar os peixes.\nOs peixes do lago morreram.\nPergunta-se: o despejo da primeira indústria (PoA) e o despejo da segunda indústria (PoB) foram causas da mortandade dos peixes (MoPe)?",
+    "knowledge_base": {
+      "premises": [
+        "PoA",
+        "PoB"
+      ],
+      "potential_causes": [
+        "PoA",
+        "PoB"
+      ],
+      "target_conclusion": "MoPe"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: PoA => MoPe",
+        "r1: PoB => MoPe"
+      ],
+      "undercutter_rules": [],
+      "preferences": {
+        "r0": 0.5,
+        "r1": 0.5
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "PoA",
+          "PoB"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: PoA => MoPe",
+            "r1: PoB => MoPe"
+          ],
+          "undercutters": []
+        },
+        "preferences": {
+          "r0": 0.5,
+          "r1": 0.5
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "PoA"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "MoPe",
+          "strength": 0.5
+        },
+        {
+          "id": "A2",
+          "premises": [
+            "PoB"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r1"
+          ],
+          "conclusion": "MoPe",
+          "strength": 0.5
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A0",
+      "A2",
+      "A3",
+      "A1"
+    ],
+    "base_grounded_conclusions": {
+      "A0": "PoA",
+      "A2": "MoPe",
+      "A3": "MoPe",
+      "A1": "PoB"
+    },
+    "base_explanations": {
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A2",
+        "A0"
+      ],
+      "A3": [
+        "A3",
+        "A1"
+      ],
+      "A1": [
+        "A1"
+      ]
+    },
+    "causal_results": {
+      "PoA": {
+        "is_cause": false,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"production\". Embora o caso apresente redundância causal (overdetermination), o despejo `PoA` é um fator que contribui diretamente para a produção do dano.\n2. **Regras Críticas**: A regra \"PoA ∨ PoB => MoPe\" é a regra crítica. Ela é uma disjunção onde cada termo é suficiente para o resultado.\n3. **Argumentos Derrotados**: Nenhum argumento que sustenta `MoPe` é derrotado pela negação de `PoA`, pois `PoB` mantém a conclusão ativa.\n4. **Justificativa Jurídica**: De acordo com a Definição 4.3, a causalidade é confirmada porque `PoA` é um elemento de um conjunto suficiente para o dano. Em casos de redundância, a doutrina jurídica (e o teste NESS) considera que o agente não pode se eximir de responsabilidade apenas porque outro agente também causou o mesmo dano.\n5. **Conclusão**: `PoA` é causa-in-fact porque, no momento do evento, ele foi um dos fatores que efetivamente produziu o dano, sendo parte integrante da cadeia causal que resultou na mortandade dos peixes.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "MoPe",
+          "base_has_target": true,
+          "test_has_target": true
+        }
+      },
+      "PoB": {
+        "is_cause": false,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"supervention\" (ou causalidade redundante/overdetermination). O despejo `PoB` é uma causa, embora não seja uma condição *sine qua non* estrita, pois o dano ocorreria de qualquer forma devido a `PoA`.\n2. **Regras Críticas**: A regra `PoB => MoPe` é a regra crítica. Ela é redundante em relação à regra `PoA => MoPe`.\n3. **Argumentos Derrotados**: Nenhum argumento que sustenta `MoPe` é derrotado pela negação de `PoB`, pois `PoA` mantém a conclusão ativa.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, em casos de sobredeterminação causal, ambos os fatores são considerados causas-in-fact, pois cada um, por si só, seria suficiente para produzir o dano. A responsabilidade é solidária ou concorrente.\n5. **Conclusão**: `PoB` é causa-in-fact porque, embora não seja estritamente necessária (devido à existência de `PoA`), ela é um fator suficiente que contribuiu para o resultado final `MoPe`.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "MoPe",
+          "base_has_target": true,
+          "test_has_target": true
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "PoA",
+          "PoB"
+        ],
+        "potential_causes": [
+          "PoA",
+          "PoB"
+        ],
+        "target_conclusion": "MoPe"
+      },
+      "got": {
+        "premises": [
+          "PoA",
+          "PoB"
+        ],
+        "potential_causes": [
+          "PoA",
+          "PoB"
+        ],
+        "target_conclusion": "MoPe"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: PoA => MoPe",
+          "r1: PoB => MoPe"
+        ],
+        "undercutter_rules": []
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: PoA => MoPe",
+          "r1: PoB => MoPe"
+        ],
+        "undercutter_rules": [],
+        "preferences": {
+          "r0": 0.5,
+          "r1": 0.5
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "PoA": false,
+        "PoB": false
+      },
+      "got": {
+        "PoA": {
+          "is_cause": false,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"production\". Embora o caso apresente redundância causal (overdetermination), o despejo `PoA` é um fator que contribui diretamente para a produção do dano.\n2. **Regras Críticas**: A regra \"PoA ∨ PoB => MoPe\" é a regra crítica. Ela é uma disjunção onde cada termo é suficiente para o resultado.\n3. **Argumentos Derrotados**: Nenhum argumento que sustenta `MoPe` é derrotado pela negação de `PoA`, pois `PoB` mantém a conclusão ativa.\n4. **Justificativa Jurídica**: De acordo com a Definição 4.3, a causalidade é confirmada porque `PoA` é um elemento de um conjunto suficiente para o dano. Em casos de redundância, a doutrina jurídica (e o teste NESS) considera que o agente não pode se eximir de responsabilidade apenas porque outro agente também causou o mesmo dano.\n5. **Conclusão**: `PoA` é causa-in-fact porque, no momento do evento, ele foi um dos fatores que efetivamente produziu o dano, sendo parte integrante da cadeia causal que resultou na mortandade dos peixes.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "MoPe",
+            "base_has_target": true,
+            "test_has_target": true
+          }
+        },
+        "PoB": {
+          "is_cause": false,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"supervention\" (ou causalidade redundante/overdetermination). O despejo `PoB` é uma causa, embora não seja uma condição *sine qua non* estrita, pois o dano ocorreria de qualquer forma devido a `PoA`.\n2. **Regras Críticas**: A regra `PoB => MoPe` é a regra crítica. Ela é redundante em relação à regra `PoA => MoPe`.\n3. **Argumentos Derrotados**: Nenhum argumento que sustenta `MoPe` é derrotado pela negação de `PoB`, pois `PoA` mantém a conclusão ativa.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, em casos de sobredeterminação causal, ambos os fatores são considerados causas-in-fact, pois cada um, por si só, seria suficiente para produzir o dano. A responsabilidade é solidária ou concorrente.\n5. **Conclusão**: `PoB` é causa-in-fact porque, embora não seja estritamente necessária (devido à existência de `PoA`), ela é um fator suficiente que contribuiu para o resultado final `MoPe`.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "MoPe",
+            "base_has_target": true,
+            "test_has_target": true
+          }
+        }
+      }
+    }
+  }
+}

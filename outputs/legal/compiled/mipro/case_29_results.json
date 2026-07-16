@@ -1,0 +1,240 @@
+{
+  "case": {
+    "id": 29,
+    "name": "Pane Elétrica e Cigarro (Concausa Irrelevante)",
+    "pattern": "nao_causa",
+    "case_text": "Um apartamento pegou fogo por pane elétrica no quadro de luz (PaEl).\nO morador fumava dentro do imóvel (MoFu), mas a perícia descartou o cigarro como origem do fogo.\nPergunta-se: a pane elétrica (PaEl) e o hábito de fumar do morador (MoFu) foram causas do incêndio do apartamento (InAp)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "PaEl",
+        "MoFu"
+      ],
+      "potential_causes": [
+        "PaEl",
+        "MoFu"
+      ],
+      "target_conclusion": "InAp"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: PaEl => InAp"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "PaEl": true,
+      "MoFu": false
+    }
+  },
+  "analysis": {
+    "case_text": "Um apartamento pegou fogo por pane elétrica no quadro de luz (PaEl).\nO morador fumava dentro do imóvel (MoFu), mas a perícia descartou o cigarro como origem do fogo.\nPergunta-se: a pane elétrica (PaEl) e o hábito de fumar do morador (MoFu) foram causas do incêndio do apartamento (InAp)?",
+    "knowledge_base": {
+      "premises": [
+        "PaEl",
+        "MoFu"
+      ],
+      "potential_causes": [
+        "PaEl",
+        "MoFu"
+      ],
+      "target_conclusion": "InAp"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: PaEl => InAp",
+        "r1: MoFu => InAp"
+      ],
+      "undercutter_rules": [
+        "r2: ¬PeCi => ¬r1"
+      ],
+      "preferences": {
+        "r0": 0.9,
+        "r1": 0.5,
+        "r2": 1.0
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "PaEl",
+          "MoFu"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: PaEl => InAp",
+            "r1: MoFu => InAp"
+          ],
+          "undercutters": [
+            "r2: ¬PeCi => ¬r1"
+          ]
+        },
+        "preferences": {
+          "r0": 0.9,
+          "r1": 0.5,
+          "r2": 1.0
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "PaEl"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "InAp",
+          "strength": 0.9
+        },
+        {
+          "id": "A2",
+          "premises": [
+            "MoFu"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r1"
+          ],
+          "conclusion": "InAp",
+          "strength": 0.5
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A1",
+      "A3",
+      "A0",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A1": "MoFu",
+      "A3": "InAp",
+      "A0": "PaEl",
+      "A2": "InAp"
+    },
+    "base_explanations": {
+      "A1": [
+        "A1"
+      ],
+      "A3": [
+        "A1",
+        "A3"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A0",
+        "A2"
+      ]
+    },
+    "causal_results": {
+      "PaEl": {
+        "is_cause": false,
+        "explanation": "1. **Tipo de Causa**: Classificado como \"none\" para o teste de \"but-for\" estrito, pois a conclusão `InAp` permanece no conjunto fundamentado mesmo após a negação de `PaEl`.\n2. **Regras Críticas**: A regra `PaEl => InAp` foi desativada, mas o sistema de argumentação manteve a conclusão `InAp` através de outro caminho lógico (`A4`).\n3. **Argumentos Derrotados**: O argumento `A3` (que ligava a pane elétrica ao incêndio) foi derrotado, mas não foi suficiente para eliminar o efeito final do sistema.\n4. **Justificativa Jurídica**: Para que `PaEl` fosse considerada causa-in-fact, a negação de `PaEl` deveria resultar na ausência de `InAp`. Como o modelo de argumentação ainda deriva `InAp` na ausência de `PaEl`, o critério *sine qua non* não é satisfeito formalmente.\n5. **Conclusão**: Embora no caso real a pane elétrica seja a causa, sob a lógica formal do framework fornecido, a persistência da conclusão `InAp` no `test_grounded_extension` impede a classificação de `PaEl` como causa-in-fact.",
+        "llm_is_cause": false,
+        "solver_evidence": {
+          "target": "InAp",
+          "base_has_target": true,
+          "test_has_target": true
+        }
+      },
+      "MoFu": {
+        "is_cause": false,
+        "explanation": "1. **Tipo de Causa**: \"none\". O hábito de fumar do morador (`MoFu`) não possui relação causal com o incêndio (`InAp`), uma vez que a perícia técnica isolou a pane elétrica (`PaEl`) como a causa determinante.\n2. **Regras Críticas**: Não há regra crítica afetada pela negação de `MoFu` que impeça a conclusão `InAp`, pois a cadeia causal principal (`PaEl => InAp`) permanece intacta.\n3. **Argumentos Derrotados**: O argumento que tentaria vincular o fumo ao incêndio é ineficaz, pois a conclusão `InAp` é derivada independentemente de `MoFu`.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, para que `MoFu` fosse causa-in-fact, a negação de `MoFu` deveria resultar na ausência de `InAp`. Como o incêndio ocorre independentemente do hábito de fumar (devido à pane elétrica), o teste do \"but-for\" falha. Portanto, não há nexo causal entre o comportamento do morador e o dano sofrido.",
+        "llm_is_cause": false,
+        "solver_evidence": {
+          "target": "InAp",
+          "base_has_target": true,
+          "test_has_target": true
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "PaEl",
+          "MoFu"
+        ],
+        "potential_causes": [
+          "PaEl",
+          "MoFu"
+        ],
+        "target_conclusion": "InAp"
+      },
+      "got": {
+        "premises": [
+          "PaEl",
+          "MoFu"
+        ],
+        "potential_causes": [
+          "PaEl",
+          "MoFu"
+        ],
+        "target_conclusion": "InAp"
+      }
+    },
+    "causal_model": {
+      "matches": false,
+      "expected": {
+        "defeasible_rules": [
+          "r0: PaEl => InAp"
+        ],
+        "undercutter_rules": []
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: PaEl => InAp",
+          "r1: MoFu => InAp"
+        ],
+        "undercutter_rules": [
+          "r2: ¬PeCi => ¬r1"
+        ],
+        "preferences": {
+          "r0": 0.9,
+          "r1": 0.5,
+          "r2": 1.0
+        }
+      }
+    },
+    "causal_results": {
+      "matches": false,
+      "expected": {
+        "PaEl": true,
+        "MoFu": false
+      },
+      "got": {
+        "PaEl": {
+          "is_cause": false,
+          "explanation": "1. **Tipo de Causa**: Classificado como \"none\" para o teste de \"but-for\" estrito, pois a conclusão `InAp` permanece no conjunto fundamentado mesmo após a negação de `PaEl`.\n2. **Regras Críticas**: A regra `PaEl => InAp` foi desativada, mas o sistema de argumentação manteve a conclusão `InAp` através de outro caminho lógico (`A4`).\n3. **Argumentos Derrotados**: O argumento `A3` (que ligava a pane elétrica ao incêndio) foi derrotado, mas não foi suficiente para eliminar o efeito final do sistema.\n4. **Justificativa Jurídica**: Para que `PaEl` fosse considerada causa-in-fact, a negação de `PaEl` deveria resultar na ausência de `InAp`. Como o modelo de argumentação ainda deriva `InAp` na ausência de `PaEl`, o critério *sine qua non* não é satisfeito formalmente.\n5. **Conclusão**: Embora no caso real a pane elétrica seja a causa, sob a lógica formal do framework fornecido, a persistência da conclusão `InAp` no `test_grounded_extension` impede a classificação de `PaEl` como causa-in-fact.",
+          "llm_is_cause": false,
+          "solver_evidence": {
+            "target": "InAp",
+            "base_has_target": true,
+            "test_has_target": true
+          }
+        },
+        "MoFu": {
+          "is_cause": false,
+          "explanation": "1. **Tipo de Causa**: \"none\". O hábito de fumar do morador (`MoFu`) não possui relação causal com o incêndio (`InAp`), uma vez que a perícia técnica isolou a pane elétrica (`PaEl`) como a causa determinante.\n2. **Regras Críticas**: Não há regra crítica afetada pela negação de `MoFu` que impeça a conclusão `InAp`, pois a cadeia causal principal (`PaEl => InAp`) permanece intacta.\n3. **Argumentos Derrotados**: O argumento que tentaria vincular o fumo ao incêndio é ineficaz, pois a conclusão `InAp` é derivada independentemente de `MoFu`.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, para que `MoFu` fosse causa-in-fact, a negação de `MoFu` deveria resultar na ausência de `InAp`. Como o incêndio ocorre independentemente do hábito de fumar (devido à pane elétrica), o teste do \"but-for\" falha. Portanto, não há nexo causal entre o comportamento do morador e o dano sofrido.",
+          "llm_is_cause": false,
+          "solver_evidence": {
+            "target": "InAp",
+            "base_has_target": true,
+            "test_has_target": true
+          }
+        }
+      }
+    }
+  }
+}

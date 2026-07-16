@@ -1,0 +1,283 @@
+{
+  "case": {
+    "id": 24,
+    "name": "Vacinas Estragadas (Preempção)",
+    "pattern": "preempcao",
+    "case_text": "A transportadora quebrou a cadeia de refrigeração e as vacinas chegaram estragadas ao destino (FaRe).\nNo dia seguinte houve queda de energia na câmara fria do posto (QuEn), mas as doses já estavam inutilizadas (DoIn).\nPergunta-se: a falha de refrigeração no transporte (FaRe) e a queda de energia (QuEn) foram causas da perda das vacinas (VaPe)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "FaRe",
+        "QuEn",
+        "DoIn"
+      ],
+      "potential_causes": [
+        "FaRe",
+        "QuEn"
+      ],
+      "target_conclusion": "VaPe"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: FaRe => VaPe",
+        "r1: QuEn => VaPe"
+      ],
+      "undercutter_rules": [
+        "r2: DoIn => ¬r1"
+      ]
+    },
+    "expected_causal_result": {
+      "FaRe": true,
+      "QuEn": false
+    }
+  },
+  "analysis": {
+    "case_text": "A transportadora quebrou a cadeia de refrigeração e as vacinas chegaram estragadas ao destino (FaRe).\nNo dia seguinte houve queda de energia na câmara fria do posto (QuEn), mas as doses já estavam inutilizadas (DoIn).\nPergunta-se: a falha de refrigeração no transporte (FaRe) e a queda de energia (QuEn) foram causas da perda das vacinas (VaPe)?",
+    "knowledge_base": {
+      "premises": [
+        "FaRe",
+        "QuEn",
+        "DoIn"
+      ],
+      "potential_causes": [
+        "FaRe",
+        "QuEn"
+      ],
+      "target_conclusion": "VaPe"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: FaRe => VaPe",
+        "r1: QuEn => VaPe"
+      ],
+      "undercutter_rules": [
+        "r2: DoIn => ¬r1"
+      ],
+      "preferences": {
+        "r0": 0.8,
+        "r1": 0.7,
+        "r2": 0.9
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "FaRe",
+          "QuEn",
+          "DoIn"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: FaRe => VaPe",
+            "r1: QuEn => VaPe"
+          ],
+          "undercutters": [
+            "r2: DoIn => ¬r1"
+          ]
+        },
+        "preferences": {
+          "r0": 0.8,
+          "r1": 0.7,
+          "r2": 0.9
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "FaRe"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "VaPe",
+          "strength": 0.8
+        },
+        {
+          "id": "A2",
+          "premises": [
+            "QuEn"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r1"
+          ],
+          "conclusion": "VaPe",
+          "strength": 0.7
+        },
+        {
+          "id": "A3",
+          "premises": [
+            "DoIn"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r2"
+          ],
+          "conclusion": "¬r1",
+          "strength": 0.9
+        }
+      ],
+      "attacks": [
+        {
+          "attacker": "A3",
+          "target": "A2",
+          "type": "undercut",
+          "rule": "r1",
+          "succeeds": true
+        }
+      ],
+      "defeats": [
+        {
+          "defeater": "A3",
+          "defeated": "A2",
+          "type": "undercut",
+          "explanation": "Argumento A3 (força 0.9) derrota A2 (força 0.7) via undercutter na regra r1"
+        }
+      ]
+    },
+    "base_grounded": [
+      "A3",
+      "A1",
+      "A0",
+      "A5",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A3": "VaPe",
+      "A1": "FaRe",
+      "A0": "DoIn",
+      "A5": "¬r1",
+      "A2": "QuEn"
+    },
+    "base_explanations": {
+      "A3": [
+        "A1",
+        "A3"
+      ],
+      "A1": [
+        "A1"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A5": [
+        "A0",
+        "A5"
+      ],
+      "A2": [
+        "A2"
+      ]
+    },
+    "causal_results": {
+      "FaRe": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Identificada como \"production\", pois a falha de refrigeração (FaRe) é o evento que desencadeia diretamente a inutilização das vacinas (VaPe).\n2. **Regras Críticas**: A regra \"FaRe => VaPe\" é a regra central afetada. Ao negar FaRe, a cadeia causal que sustenta a conclusão de dano é quebrada.\n3. **Argumentos Derrotados**: O argumento que sustenta a perda das vacinas via transporte é derrotado pela ausência da premissa FaRe. Como a extensão fundamentada do sistema modificado não contém mais VaPe, conclui-se que FaRe é uma condição necessária (sine qua non).\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, FaRe é causa-in-fact porque a sua remoção do conjunto de fatos resulta na ausência do efeito (VaPe) na extensão fundamentada. A queda de energia (QuEn) é um evento subsequente que não altera o fato de que o dano já havia se concretizado, não sendo, portanto, causa da perda das vacinas.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "VaPe",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      },
+      "QuEn": {
+        "is_cause": false,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"none\", pois a queda de energia (QuEn) não é uma causa-in-fact da perda das vacinas (VaPe).\n2. **Regras Críticas**: Não há regras críticas ligando QuEn a VaPe que sejam essenciais para a conclusão, visto que a falha de refrigeração (FaRe) já havia inutilizado as doses (DoIn) antes do evento de queda de energia.\n3. **Argumentos Derrotados**: Nenhum argumento que sustenta a conclusão VaPe foi derrotado pela negação de QuEn. Pelo contrário, o grounded extension do AF modificado mostra que VaPe continua sendo uma conclusão válida (argumento A4) mesmo sem QuEn.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, para que φ seja causa de ψ, a negação de φ deve resultar na ausência de ψ no grounded extension. Como VaPe persiste na ausência de QuEn, esta não preenche o requisito de causalidade necessária.\n5. **Conclusão**: A queda de energia é um evento posterior à inutilização das vacinas, configurando um evento irrelevante para o dano já consolidado pela falha no transporte.",
+        "llm_is_cause": false,
+        "solver_evidence": {
+          "target": "VaPe",
+          "base_has_target": true,
+          "test_has_target": true
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "FaRe",
+          "QuEn",
+          "DoIn"
+        ],
+        "potential_causes": [
+          "FaRe",
+          "QuEn"
+        ],
+        "target_conclusion": "VaPe"
+      },
+      "got": {
+        "premises": [
+          "FaRe",
+          "QuEn",
+          "DoIn"
+        ],
+        "potential_causes": [
+          "FaRe",
+          "QuEn"
+        ],
+        "target_conclusion": "VaPe"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: FaRe => VaPe",
+          "r1: QuEn => VaPe"
+        ],
+        "undercutter_rules": [
+          "r2: DoIn => ¬r1"
+        ]
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: FaRe => VaPe",
+          "r1: QuEn => VaPe"
+        ],
+        "undercutter_rules": [
+          "r2: DoIn => ¬r1"
+        ],
+        "preferences": {
+          "r0": 0.8,
+          "r1": 0.7,
+          "r2": 0.9
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "FaRe": true,
+        "QuEn": false
+      },
+      "got": {
+        "FaRe": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Identificada como \"production\", pois a falha de refrigeração (FaRe) é o evento que desencadeia diretamente a inutilização das vacinas (VaPe).\n2. **Regras Críticas**: A regra \"FaRe => VaPe\" é a regra central afetada. Ao negar FaRe, a cadeia causal que sustenta a conclusão de dano é quebrada.\n3. **Argumentos Derrotados**: O argumento que sustenta a perda das vacinas via transporte é derrotado pela ausência da premissa FaRe. Como a extensão fundamentada do sistema modificado não contém mais VaPe, conclui-se que FaRe é uma condição necessária (sine qua non).\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, FaRe é causa-in-fact porque a sua remoção do conjunto de fatos resulta na ausência do efeito (VaPe) na extensão fundamentada. A queda de energia (QuEn) é um evento subsequente que não altera o fato de que o dano já havia se concretizado, não sendo, portanto, causa da perda das vacinas.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "VaPe",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        },
+        "QuEn": {
+          "is_cause": false,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"none\", pois a queda de energia (QuEn) não é uma causa-in-fact da perda das vacinas (VaPe).\n2. **Regras Críticas**: Não há regras críticas ligando QuEn a VaPe que sejam essenciais para a conclusão, visto que a falha de refrigeração (FaRe) já havia inutilizado as doses (DoIn) antes do evento de queda de energia.\n3. **Argumentos Derrotados**: Nenhum argumento que sustenta a conclusão VaPe foi derrotado pela negação de QuEn. Pelo contrário, o grounded extension do AF modificado mostra que VaPe continua sendo uma conclusão válida (argumento A4) mesmo sem QuEn.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, para que φ seja causa de ψ, a negação de φ deve resultar na ausência de ψ no grounded extension. Como VaPe persiste na ausência de QuEn, esta não preenche o requisito de causalidade necessária.\n5. **Conclusão**: A queda de energia é um evento posterior à inutilização das vacinas, configurando um evento irrelevante para o dano já consolidado pela falha no transporte.",
+          "llm_is_cause": false,
+          "solver_evidence": {
+            "target": "VaPe",
+            "base_has_target": true,
+            "test_has_target": true
+          }
+        }
+      }
+    }
+  }
+}

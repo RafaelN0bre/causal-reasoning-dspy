@@ -1,0 +1,171 @@
+{
+  "case": {
+    "id": 12,
+    "name": "Agressão na Boate (Produção Simples)",
+    "pattern": "producao",
+    "case_text": "Um segurança de boate agrediu um cliente com socos (SeAg).\nO cliente sofreu lesão corporal grave (LeCo).\nPergunta-se: a agressão do segurança (SeAg) foi causa da lesão corporal (LeCo)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "SeAg"
+      ],
+      "potential_causes": [
+        "SeAg"
+      ],
+      "target_conclusion": "LeCo"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: SeAg => LeCo"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "SeAg": true
+    }
+  },
+  "analysis": {
+    "case_text": "Um segurança de boate agrediu um cliente com socos (SeAg).\nO cliente sofreu lesão corporal grave (LeCo).\nPergunta-se: a agressão do segurança (SeAg) foi causa da lesão corporal (LeCo)?",
+    "knowledge_base": {
+      "premises": [
+        "SeAg"
+      ],
+      "potential_causes": [
+        "SeAg"
+      ],
+      "target_conclusion": "LeCo"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: SeAg => LeCo"
+      ],
+      "undercutter_rules": [],
+      "preferences": {
+        "r0": 0.5
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "SeAg"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: SeAg => LeCo"
+          ],
+          "undercutters": []
+        },
+        "preferences": {
+          "r0": 0.5
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "SeAg"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "LeCo",
+          "strength": 0.5
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A1",
+      "A0"
+    ],
+    "base_grounded_conclusions": {
+      "A1": "LeCo",
+      "A0": "SeAg"
+    },
+    "base_explanations": {
+      "A1": [
+        "A1",
+        "A0"
+      ],
+      "A0": [
+        "A0"
+      ]
+    },
+    "causal_results": {
+      "SeAg": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois a ação do segurança (SeAg) é o fator direto que desencadeia a lesão corporal (LeCo).\n2. **Regras Críticas**: A regra \"SeAg => LeCo\" é a espinha dorsal da cadeia causal. Ao remover SeAg, a regra perde seu antecedente, tornando impossível a derivação de LeCo.\n3. **Argumentos Derrotados**: O argumento A1, que conectava a agressão à lesão, deixa de ser sustentável no grounded extension quando a premissa SeAg é removida.\n4. **Justificativa Jurídica**: De acordo com a Definição 4.3, SeAg é causa-in-fact porque, na ausência do fato (¬SeAg), a conclusão (LeCo) não é mais derivada pelo sistema. O teste contrafactual confirma que a agressão foi o evento determinante para o resultado lesivo.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "LeCo",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "SeAg"
+        ],
+        "potential_causes": [
+          "SeAg"
+        ],
+        "target_conclusion": "LeCo"
+      },
+      "got": {
+        "premises": [
+          "SeAg"
+        ],
+        "potential_causes": [
+          "SeAg"
+        ],
+        "target_conclusion": "LeCo"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: SeAg => LeCo"
+        ],
+        "undercutter_rules": []
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: SeAg => LeCo"
+        ],
+        "undercutter_rules": [],
+        "preferences": {
+          "r0": 0.5
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "SeAg": true
+      },
+      "got": {
+        "SeAg": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois a ação do segurança (SeAg) é o fator direto que desencadeia a lesão corporal (LeCo).\n2. **Regras Críticas**: A regra \"SeAg => LeCo\" é a espinha dorsal da cadeia causal. Ao remover SeAg, a regra perde seu antecedente, tornando impossível a derivação de LeCo.\n3. **Argumentos Derrotados**: O argumento A1, que conectava a agressão à lesão, deixa de ser sustentável no grounded extension quando a premissa SeAg é removida.\n4. **Justificativa Jurídica**: De acordo com a Definição 4.3, SeAg é causa-in-fact porque, na ausência do fato (¬SeAg), a conclusão (LeCo) não é mais derivada pelo sistema. O teste contrafactual confirma que a agressão foi o evento determinante para o resultado lesivo.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "LeCo",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

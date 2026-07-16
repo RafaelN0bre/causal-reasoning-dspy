@@ -1,0 +1,275 @@
+{
+  "case": {
+    "id": 6,
+    "name": "Prensa Sem Proteção (Excludente Afastada)",
+    "case_text": "\n        Um trabalhador operava uma prensa sem a proteção de segurança obrigatória (SePr)\n        e sofreu amputação da mão. O empregador alega que o próprio trabalhador removeu\n        a proteção (TrRe), mas as câmeras mostraram que a máquina foi entregue pela\n        fábrica já sem a proteção (MaSp).\n        Pergunta-se: a operação sem proteção obrigatória (SePr) foi causa da\n        responsabilização do empregador (EmRe)?\n        ",
+    "expected_knowledge_base": {
+      "premises": [
+        "SePr",
+        "TrRe",
+        "MaSp"
+      ],
+      "potential_causes": [
+        "SePr"
+      ],
+      "target_conclusion": "EmRe"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: SePr => EmRe",
+        "r1: TrRe => ¬EmRe"
+      ],
+      "undercutter_rules": [
+        "r2: MaSp => ¬r1"
+      ]
+    },
+    "expected_causal_result": {
+      "SePr": {
+        "is_cause": true,
+        "explanation": "A alegação de culpa do trabalhador (TrRe) é undercuttada pela prova das câmeras (MaSp); negando SePr, EmRe deixa de ser derivável."
+      }
+    }
+  },
+  "analysis": {
+    "case_text": "\n        Um trabalhador operava uma prensa sem a proteção de segurança obrigatória (SePr)\n        e sofreu amputação da mão. O empregador alega que o próprio trabalhador removeu\n        a proteção (TrRe), mas as câmeras mostraram que a máquina foi entregue pela\n        fábrica já sem a proteção (MaSp).\n        Pergunta-se: a operação sem proteção obrigatória (SePr) foi causa da\n        responsabilização do empregador (EmRe)?\n        ",
+    "knowledge_base": {
+      "premises": [
+        "SePr",
+        "TrRe",
+        "MaSp"
+      ],
+      "potential_causes": [
+        "SePr"
+      ],
+      "target_conclusion": "EmRe"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: SePr => EmRe",
+        "r1: TrRe => ¬EmRe"
+      ],
+      "undercutter_rules": [
+        "r2: MaSp => ¬r1"
+      ],
+      "preferences": {
+        "r0": 0.8,
+        "r1": 0.7,
+        "r2": 0.9
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "SePr",
+          "TrRe",
+          "MaSp"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: SePr => EmRe",
+            "r1: TrRe => ¬EmRe"
+          ],
+          "undercutters": [
+            "r2: MaSp => ¬r1"
+          ]
+        },
+        "preferences": {
+          "r0": 0.8,
+          "r1": 0.7,
+          "r2": 0.9
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "SePr"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "EmRe",
+          "strength": 0.8
+        },
+        {
+          "id": "A2",
+          "premises": [
+            "TrRe"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r1"
+          ],
+          "conclusion": "¬EmRe",
+          "strength": 0.7
+        },
+        {
+          "id": "A3",
+          "premises": [
+            "MaSp"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r2"
+          ],
+          "conclusion": "¬r1",
+          "strength": 0.9
+        }
+      ],
+      "attacks": [
+        {
+          "attacker": "A1",
+          "target": "A2",
+          "type": "rebuttal",
+          "rule": "r0",
+          "succeeds": true
+        },
+        {
+          "attacker": "A3",
+          "target": "A2",
+          "type": "undercut",
+          "rule": "r1",
+          "succeeds": true
+        }
+      ],
+      "defeats": [
+        {
+          "defeater": "A1",
+          "defeated": "A2",
+          "type": "rebuttal",
+          "explanation": "Argumento A1 (força 0.8) derrota A2 (força 0.7) por conclusão contraditória."
+        },
+        {
+          "defeater": "A3",
+          "defeated": "A2",
+          "type": "undercut",
+          "explanation": "Argumento A3 (força 0.9) derrota A2 (força 0.7) via undercut na regra r1."
+        }
+      ]
+    },
+    "base_grounded": [
+      "A0",
+      "A1",
+      "A3",
+      "A5",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A0": "MaSp",
+      "A1": "TrRe",
+      "A3": "EmRe",
+      "A5": "¬r1",
+      "A2": "SePr"
+    },
+    "base_explanations": {
+      "A0": [
+        "A0"
+      ],
+      "A1": [
+        "A1"
+      ],
+      "A3": [
+        "A3",
+        "A2"
+      ],
+      "A5": [
+        "A0",
+        "A5"
+      ],
+      "A2": [
+        "A2"
+      ]
+    },
+    "causal_results": {
+      "SePr": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Identificada como \"production\". A operação da máquina sem a proteção obrigatória (`SePr`) é o fator que, em conjunto com a falha de fabricação (`MaSp`), produz o resultado jurídico de responsabilização do empregador (`EmRe`).\n2. **Regras Críticas**: A regra `MaSp ∧ SePr => EmRe` é a regra central que vincula a condição de perigo à responsabilidade.\n3. **Argumentos Derrotados**: O argumento `A5` (que sustenta a responsabilidade) é derrotado no AF modificado, pois a premissa `SePr` foi removida, tornando a regra `r1` inoperante.\n4. **Justificativa Jurídica**: Sob a Definição 4.3, `SePr` é causa-in-fact porque, \"but-for\" a operação sem proteção, a responsabilização do empregador não teria ocorrido (ou não seria derivada pelo sistema). A prova de que a máquina já veio sem proteção (`MaSp`) reforça que a omissão de segurança é o elo causal direto.\n5. **Conclusão**: A operação sem proteção é a causa direta da responsabilização, uma vez que a sua ausência (no teste contrafactual) elimina o dano jurídico (responsabilidade).",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "EmRe",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "SePr",
+          "TrRe",
+          "MaSp"
+        ],
+        "potential_causes": [
+          "SePr"
+        ],
+        "target_conclusion": "EmRe"
+      },
+      "got": {
+        "premises": [
+          "SePr",
+          "TrRe",
+          "MaSp"
+        ],
+        "potential_causes": [
+          "SePr"
+        ],
+        "target_conclusion": "EmRe"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: SePr => EmRe",
+          "r1: TrRe => ¬EmRe"
+        ],
+        "undercutter_rules": [
+          "r2: MaSp => ¬r1"
+        ]
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: SePr => EmRe",
+          "r1: TrRe => ¬EmRe"
+        ],
+        "undercutter_rules": [
+          "r2: MaSp => ¬r1"
+        ],
+        "preferences": {
+          "r0": 0.8,
+          "r1": 0.7,
+          "r2": 0.9
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "SePr": {
+          "is_cause": true,
+          "explanation": "A alegação de culpa do trabalhador (TrRe) é undercuttada pela prova das câmeras (MaSp); negando SePr, EmRe deixa de ser derivável."
+        }
+      },
+      "got": {
+        "SePr": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Identificada como \"production\". A operação da máquina sem a proteção obrigatória (`SePr`) é o fator que, em conjunto com a falha de fabricação (`MaSp`), produz o resultado jurídico de responsabilização do empregador (`EmRe`).\n2. **Regras Críticas**: A regra `MaSp ∧ SePr => EmRe` é a regra central que vincula a condição de perigo à responsabilidade.\n3. **Argumentos Derrotados**: O argumento `A5` (que sustenta a responsabilidade) é derrotado no AF modificado, pois a premissa `SePr` foi removida, tornando a regra `r1` inoperante.\n4. **Justificativa Jurídica**: Sob a Definição 4.3, `SePr` é causa-in-fact porque, \"but-for\" a operação sem proteção, a responsabilização do empregador não teria ocorrido (ou não seria derivada pelo sistema). A prova de que a máquina já veio sem proteção (`MaSp`) reforça que a omissão de segurança é o elo causal direto.\n5. **Conclusão**: A operação sem proteção é a causa direta da responsabilização, uma vez que a sua ausência (no teste contrafactual) elimina o dano jurídico (responsabilidade).",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "EmRe",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

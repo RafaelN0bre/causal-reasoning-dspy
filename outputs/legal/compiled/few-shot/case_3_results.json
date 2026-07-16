@@ -1,0 +1,311 @@
+{
+  "case": {
+    "id": 3,
+    "name": "Celular à Prova D'água (Consumer Law)",
+    "case_text": "\n        Um celular anunciado como à prova d'água (PhWp) caiu na piscina (PoFa) e parou de funcionar.\n        A empresa alega mau uso (MiUs), mas cair na piscina é um uso normal para um celular à prova d'água (NoUs).\n        Pergunta-se: a propaganda de resistência à água (PhWp) e a queda na piscina (PoFa) foram causas da\n        responsabilização do fornecedor pelo produto (PrLi)?\n        ",
+    "expected_knowledge_base": {
+      "premises": [
+        "PhWp",
+        "PoFa",
+        "MiUs",
+        "NoUs"
+      ],
+      "potential_causes": [
+        "PhWp",
+        "PoFa"
+      ],
+      "target_conclusion": "PrLi"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r1: PhWp AND PoFa => PrLi",
+        "r2: MiUs => ¬PrLi"
+      ],
+      "undercutter_rules": [
+        "r3: NoUs => ¬r2"
+      ]
+    },
+    "expected_causal_result": {
+      "PhWp": {
+        "is_cause": true,
+        "explanation": "A característica à prova d'água (PhWp) é causa da responsabilidade pois criou a expectativa de funcionamento na água."
+      }
+    }
+  },
+  "analysis": {
+    "case_text": "\n        Um celular anunciado como à prova d'água (PhWp) caiu na piscina (PoFa) e parou de funcionar.\n        A empresa alega mau uso (MiUs), mas cair na piscina é um uso normal para um celular à prova d'água (NoUs).\n        Pergunta-se: a propaganda de resistência à água (PhWp) e a queda na piscina (PoFa) foram causas da\n        responsabilização do fornecedor pelo produto (PrLi)?\n        ",
+    "knowledge_base": {
+      "premises": [
+        "PhWp",
+        "PoFa",
+        "MiUs",
+        "NoUs"
+      ],
+      "potential_causes": [
+        "PhWp",
+        "PoFa"
+      ],
+      "target_conclusion": "PrLi"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: PhWp AND PoFa => PrLi",
+        "r1: MiUs => ¬PrLi"
+      ],
+      "undercutter_rules": [
+        "r2: NoUs => ¬r1"
+      ],
+      "preferences": {
+        "r0": 0.7,
+        "r1": 0.8,
+        "r2": 0.9
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "PhWp",
+          "PoFa",
+          "MiUs",
+          "NoUs"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: PhWp AND PoFa => PrLi",
+            "r1: MiUs => ¬PrLi"
+          ],
+          "undercutters": [
+            "r2: NoUs => ¬r1"
+          ]
+        },
+        "preferences": {
+          "r0": 0.7,
+          "r1": 0.8,
+          "r2": 0.9
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "PhWp",
+            "PoFa"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "PrLi",
+          "strength": 0.7
+        },
+        {
+          "id": "A2",
+          "premises": [
+            "MiUs"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r1"
+          ],
+          "conclusion": "¬PrLi",
+          "strength": 0.8
+        },
+        {
+          "id": "A3",
+          "premises": [
+            "NoUs"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r2"
+          ],
+          "conclusion": "¬r1",
+          "strength": 0.9
+        }
+      ],
+      "attacks": [
+        {
+          "attacker": "A2",
+          "target": "A1",
+          "type": "rebuttal",
+          "rule": "r1",
+          "succeeds": true
+        },
+        {
+          "attacker": "A3",
+          "target": "A2",
+          "type": "undercut",
+          "rule": "r2",
+          "succeeds": true
+        }
+      ],
+      "defeats": [
+        {
+          "defeater": "A2",
+          "defeated": "A1",
+          "type": "rebuttal",
+          "explanation": "A2 (0.8) derrota A1 (0.7)"
+        },
+        {
+          "defeater": "A3",
+          "defeated": "A2",
+          "type": "undercut",
+          "explanation": "A3 (0.9) derrota A2 (0.8)"
+        }
+      ]
+    },
+    "base_grounded": [
+      "A6",
+      "A2",
+      "A1",
+      "A0",
+      "A4",
+      "A3"
+    ],
+    "base_grounded_conclusions": {
+      "A6": "¬r1",
+      "A2": "PhWp",
+      "A1": "MiUs",
+      "A0": "PoFa",
+      "A4": "PrLi",
+      "A3": "NoUs"
+    },
+    "base_explanations": {
+      "A6": [
+        "A3",
+        "A6"
+      ],
+      "A2": [
+        "A2"
+      ],
+      "A1": [
+        "A1"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A4": [
+        "A2",
+        "A4",
+        "A0"
+      ],
+      "A3": [
+        "A3"
+      ]
+    },
+    "causal_results": {
+      "PhWp": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois a propaganda `PhWp` é o fator que produz a obrigação jurídica de responsabilidade (`PrLi`) ao definir o escopo de uso normal do produto.\n2. **Regras Críticas**: A regra `PhWp, PoFa => PrLi` é a regra crítica. Ao negar `PhWp`, a premissa necessária para a responsabilização do fornecedor deixa de existir.\n3. **Argumentos Derrotados**: O argumento `A6`, que sustentava a conclusão `PrLi`, é derrotado no cenário hipotético, pois a base factual (a propaganda) foi removida.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, `PhWp` é causa-in-fact porque, na ausência dessa propaganda, a conclusão `PrLi` não é mais derivada pela extensão fundamentada do sistema. O evento é uma condição necessária para a configuração da responsabilidade civil do fornecedor.\n5. **Conclusão**: A propaganda de resistência à água foi o fator determinante que vinculou o fornecedor ao dano, configurando a relação causal necessária para a responsabilização.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "PrLi",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      },
+      "PoFa": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois a queda na piscina (`PoFa`) é o evento que, ao interagir com a característica de resistência à água (`PhWp`), produz o dano que gera a responsabilidade (`PrLi`).\n2. **Regras Críticas**: A regra `PhWp ∧ PoFa ∧ NoUs => PrLi` é a regra crítica. A negação de `PoFa` remove uma das premissas essenciais para a ativação desta regra.\n3. **Argumentos Derrotados**: O argumento `A6`, que sustentava a conclusão `PrLi`, torna-se inoperante no AF modificado, pois a base factual necessária para sua conclusão foi removida.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, `PoFa` é causa-in-fact porque, na ausência deste evento, o resultado `PrLi` não é alcançado. O fato de o uso ser considerado normal (`NoUs`) reforça que a queda não configura mau uso, mantendo a responsabilidade do fornecedor pela falha do produto.\n5. **Conclusão**: A queda na piscina é a causa direta do dano que, por sua vez, fundamenta a responsabilidade do fornecedor, dado que o produto foi anunciado como resistente a esse tipo de evento.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "PrLi",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "PhWp",
+          "PoFa",
+          "MiUs",
+          "NoUs"
+        ],
+        "potential_causes": [
+          "PhWp",
+          "PoFa"
+        ],
+        "target_conclusion": "PrLi"
+      },
+      "got": {
+        "premises": [
+          "PhWp",
+          "PoFa",
+          "MiUs",
+          "NoUs"
+        ],
+        "potential_causes": [
+          "PhWp",
+          "PoFa"
+        ],
+        "target_conclusion": "PrLi"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r1: PhWp AND PoFa => PrLi",
+          "r2: MiUs => ¬PrLi"
+        ],
+        "undercutter_rules": [
+          "r3: NoUs => ¬r2"
+        ]
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: PhWp AND PoFa => PrLi",
+          "r1: MiUs => ¬PrLi"
+        ],
+        "undercutter_rules": [
+          "r2: NoUs => ¬r1"
+        ],
+        "preferences": {
+          "r0": 0.7,
+          "r1": 0.8,
+          "r2": 0.9
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "PhWp": {
+          "is_cause": true,
+          "explanation": "A característica à prova d'água (PhWp) é causa da responsabilidade pois criou a expectativa de funcionamento na água."
+        }
+      },
+      "got": {
+        "PhWp": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois a propaganda `PhWp` é o fator que produz a obrigação jurídica de responsabilidade (`PrLi`) ao definir o escopo de uso normal do produto.\n2. **Regras Críticas**: A regra `PhWp, PoFa => PrLi` é a regra crítica. Ao negar `PhWp`, a premissa necessária para a responsabilização do fornecedor deixa de existir.\n3. **Argumentos Derrotados**: O argumento `A6`, que sustentava a conclusão `PrLi`, é derrotado no cenário hipotético, pois a base factual (a propaganda) foi removida.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, `PhWp` é causa-in-fact porque, na ausência dessa propaganda, a conclusão `PrLi` não é mais derivada pela extensão fundamentada do sistema. O evento é uma condição necessária para a configuração da responsabilidade civil do fornecedor.\n5. **Conclusão**: A propaganda de resistência à água foi o fator determinante que vinculou o fornecedor ao dano, configurando a relação causal necessária para a responsabilização.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "PrLi",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        },
+        "PoFa": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois a queda na piscina (`PoFa`) é o evento que, ao interagir com a característica de resistência à água (`PhWp`), produz o dano que gera a responsabilidade (`PrLi`).\n2. **Regras Críticas**: A regra `PhWp ∧ PoFa ∧ NoUs => PrLi` é a regra crítica. A negação de `PoFa` remove uma das premissas essenciais para a ativação desta regra.\n3. **Argumentos Derrotados**: O argumento `A6`, que sustentava a conclusão `PrLi`, torna-se inoperante no AF modificado, pois a base factual necessária para sua conclusão foi removida.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, `PoFa` é causa-in-fact porque, na ausência deste evento, o resultado `PrLi` não é alcançado. O fato de o uso ser considerado normal (`NoUs`) reforça que a queda não configura mau uso, mantendo a responsabilidade do fornecedor pela falha do produto.\n5. **Conclusão**: A queda na piscina é a causa direta do dano que, por sua vez, fundamenta a responsabilidade do fornecedor, dado que o produto foi anunciado como resistente a esse tipo de evento.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "PrLi",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,202 @@
+{
+  "case": {
+    "id": 19,
+    "name": "Portão Destrancado (Omissão)",
+    "pattern": "omissao",
+    "case_text": "Uma criança pequena estava sob a guarda da escola (CrEs).\nA escola não trancou o portão da frente (¬PoTr).\nO portão trancado teria impedido a saída (SaIm).\nA criança saiu para a rua e foi atropelada (CrAt).\nPergunta-se: o portão destrancado (¬PoTr) foi causa do atropelamento da criança (CrAt)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "CrEs",
+        "¬PoTr"
+      ],
+      "potential_causes": [
+        "¬PoTr"
+      ],
+      "target_conclusion": "CrAt"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: CrEs => CrAt",
+        "r1: PoTr => SaIm"
+      ],
+      "undercutter_rules": [
+        "r2: SaIm => ¬r0"
+      ]
+    },
+    "expected_causal_result": {
+      "¬PoTr": true
+    }
+  },
+  "analysis": {
+    "case_text": "Uma criança pequena estava sob a guarda da escola (CrEs).\nA escola não trancou o portão da frente (¬PoTr).\nO portão trancado teria impedido a saída (SaIm).\nA criança saiu para a rua e foi atropelada (CrAt).\nPergunta-se: o portão destrancado (¬PoTr) foi causa do atropelamento da criança (CrAt)?",
+    "knowledge_base": {
+      "premises": [
+        "CrEs",
+        "¬PoTr"
+      ],
+      "potential_causes": [
+        "¬PoTr"
+      ],
+      "target_conclusion": "CrAt"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: CrEs => CrAt",
+        "r1: PoTr => SaIm"
+      ],
+      "undercutter_rules": [
+        "r2: SaIm => ¬r0"
+      ],
+      "preferences": {
+        "r0": 0.8,
+        "r1": 0.8,
+        "r2": 0.9
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "CrEs",
+          "¬PoTr"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: CrEs => CrAt",
+            "r1: PoTr => SaIm"
+          ],
+          "undercutters": [
+            "r2: SaIm => ¬r0"
+          ]
+        },
+        "preferences": {
+          "r0": 0.8,
+          "r1": 0.8,
+          "r2": 0.9
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "CrEs"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "CrAt",
+          "strength": 0.8
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A1",
+      "A0",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A1": "CrEs",
+      "A0": "¬PoTr",
+      "A2": "CrAt"
+    },
+    "base_explanations": {
+      "A1": [
+        "A1"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A1",
+        "A2"
+      ]
+    },
+    "causal_results": {
+      "¬PoTr": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Trata-se de uma relação de \"omissão\". A falha da escola em trancar o portão (`¬PoTr`) é a condição necessária que permitiu que a criança saísse e fosse atropelada (`CrAt`).\n2. **Regras Críticas**: A regra `CrEs ∧ ¬PoTr => CrAt` é a regra central. Quando `¬PoTr` é substituído por `PoTr` (portão trancado), a regra de impedimento `PoTr => SaIm` é ativada, bloqueando a progressão para o atropelamento.\n3. **Argumentos Derrotados**: O argumento que sustenta o atropelamento (`CrAt`) é derrotado porque a segurança do portão (`PoTr`) impede a saída da criança.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, se a negação da omissão (ou seja, a ação de trancar o portão) resulta na ausência do efeito (atropelamento), a omissão é considerada causa-in-fact. A escola tinha o dever de vigilância, e sua omissão foi o elo determinante para o resultado danoso.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "CrAt",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "CrEs",
+          "¬PoTr"
+        ],
+        "potential_causes": [
+          "¬PoTr"
+        ],
+        "target_conclusion": "CrAt"
+      },
+      "got": {
+        "premises": [
+          "CrEs",
+          "¬PoTr"
+        ],
+        "potential_causes": [
+          "¬PoTr"
+        ],
+        "target_conclusion": "CrAt"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: CrEs => CrAt",
+          "r1: PoTr => SaIm"
+        ],
+        "undercutter_rules": [
+          "r2: SaIm => ¬r0"
+        ]
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: CrEs => CrAt",
+          "r1: PoTr => SaIm"
+        ],
+        "undercutter_rules": [
+          "r2: SaIm => ¬r0"
+        ],
+        "preferences": {
+          "r0": 0.8,
+          "r1": 0.8,
+          "r2": 0.9
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "¬PoTr": true
+      },
+      "got": {
+        "¬PoTr": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Trata-se de uma relação de \"omissão\". A falha da escola em trancar o portão (`¬PoTr`) é a condição necessária que permitiu que a criança saísse e fosse atropelada (`CrAt`).\n2. **Regras Críticas**: A regra `CrEs ∧ ¬PoTr => CrAt` é a regra central. Quando `¬PoTr` é substituído por `PoTr` (portão trancado), a regra de impedimento `PoTr => SaIm` é ativada, bloqueando a progressão para o atropelamento.\n3. **Argumentos Derrotados**: O argumento que sustenta o atropelamento (`CrAt`) é derrotado porque a segurança do portão (`PoTr`) impede a saída da criança.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, se a negação da omissão (ou seja, a ação de trancar o portão) resulta na ausência do efeito (atropelamento), a omissão é considerada causa-in-fact. A escola tinha o dever de vigilância, e sua omissão foi o elo determinante para o resultado danoso.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "CrAt",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

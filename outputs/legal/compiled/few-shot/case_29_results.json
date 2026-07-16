@@ -1,0 +1,240 @@
+{
+  "case": {
+    "id": 29,
+    "name": "Pane Elétrica e Cigarro (Concausa Irrelevante)",
+    "pattern": "nao_causa",
+    "case_text": "Um apartamento pegou fogo por pane elétrica no quadro de luz (PaEl).\nO morador fumava dentro do imóvel (MoFu), mas a perícia descartou o cigarro como origem do fogo.\nPergunta-se: a pane elétrica (PaEl) e o hábito de fumar do morador (MoFu) foram causas do incêndio do apartamento (InAp)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "PaEl",
+        "MoFu"
+      ],
+      "potential_causes": [
+        "PaEl",
+        "MoFu"
+      ],
+      "target_conclusion": "InAp"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: PaEl => InAp"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "PaEl": true,
+      "MoFu": false
+    }
+  },
+  "analysis": {
+    "case_text": "Um apartamento pegou fogo por pane elétrica no quadro de luz (PaEl).\nO morador fumava dentro do imóvel (MoFu), mas a perícia descartou o cigarro como origem do fogo.\nPergunta-se: a pane elétrica (PaEl) e o hábito de fumar do morador (MoFu) foram causas do incêndio do apartamento (InAp)?",
+    "knowledge_base": {
+      "premises": [
+        "PaEl",
+        "MoFu"
+      ],
+      "potential_causes": [
+        "PaEl",
+        "MoFu"
+      ],
+      "target_conclusion": "InAp"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: PaEl => InAp",
+        "r1: MoFu => InAp"
+      ],
+      "undercutter_rules": [
+        "r2: PeDe => ¬r1"
+      ],
+      "preferences": {
+        "r0": 0.8,
+        "r1": 0.7,
+        "r2": 0.9
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "PaEl",
+          "MoFu"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: PaEl => InAp",
+            "r1: MoFu => InAp"
+          ],
+          "undercutters": [
+            "r2: PeDe => ¬r1"
+          ]
+        },
+        "preferences": {
+          "r0": 0.8,
+          "r1": 0.7,
+          "r2": 0.9
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "PaEl"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "InAp",
+          "strength": 0.8
+        },
+        {
+          "id": "A2",
+          "premises": [
+            "MoFu"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r1"
+          ],
+          "conclusion": "InAp",
+          "strength": 0.7
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A0",
+      "A2",
+      "A3",
+      "A1"
+    ],
+    "base_grounded_conclusions": {
+      "A0": "MoFu",
+      "A2": "InAp",
+      "A3": "InAp",
+      "A1": "PaEl"
+    },
+    "base_explanations": {
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A2",
+        "A1"
+      ],
+      "A3": [
+        "A0",
+        "A3"
+      ],
+      "A1": [
+        "A1"
+      ]
+    },
+    "causal_results": {
+      "PaEl": {
+        "is_cause": false,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois a pane elétrica (PaEl) é o evento que, segundo a perícia, produziu diretamente o incêndio (InAp).\n2. **Regras Críticas**: A regra \"PaEl => InAp\" é a regra crítica. A negação de `PaEl` remove a premissa necessária para que o incêndio seja atribuído a essa causa.\n3. **Argumentos Derrotados**: O argumento `A2`, que vinculava a pane elétrica ao incêndio, é derrotado no cenário contrafactual, pois sua base factual foi removida.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, `PaEl` é causa-in-fact porque, na ausência deste evento, o incêndio não teria ocorrido (conforme a perícia técnica). O hábito de fumar (`MoFu`) não é causa, pois não possui regra de inferência válida que o conecte ao dano (`InAp`) no sistema.\n5. **Conclusão**: A pane elétrica é a causa direta e necessária do incêndio, enquanto o hábito de fumar é um fator irrelevante para a cadeia causal do dano.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "InAp",
+          "base_has_target": true,
+          "test_has_target": true
+        }
+      },
+      "MoFu": {
+        "is_cause": false,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"none\". O hábito de fumar do morador (`MoFu`) não possui relação causal com o incêndio (`InAp`), uma vez que a perícia técnica estabeleceu a pane elétrica (`PaEl`) como a causa exclusiva.\n2. **Regras Críticas**: Não há regra crítica ligando `MoFu` a `InAp` que sobreviva à análise de fatos. A regra que conecta `PaEl` a `InAp` é a única que sustenta a conclusão no sistema.\n3. **Argumentos Derrotados**: Nenhum argumento causal relevante foi derrotado pela negação de `MoFu`, pois o dano `InAp` persiste mesmo na ausência desse fator.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, para que `MoFu` fosse causa-in-fact, a sua negação deveria resultar na ausência de `InAp`. Como o incêndio ocorre independentemente do hábito de fumar do morador, este não é causa-in-fact.\n5. **Conclusão**: O hábito de fumar é um evento concomitante, mas não causal. A responsabilidade pelo incêndio recai sobre a causa efetiva, que é a pane elétrica.",
+        "llm_is_cause": false,
+        "solver_evidence": {
+          "target": "InAp",
+          "base_has_target": true,
+          "test_has_target": true
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "PaEl",
+          "MoFu"
+        ],
+        "potential_causes": [
+          "PaEl",
+          "MoFu"
+        ],
+        "target_conclusion": "InAp"
+      },
+      "got": {
+        "premises": [
+          "PaEl",
+          "MoFu"
+        ],
+        "potential_causes": [
+          "PaEl",
+          "MoFu"
+        ],
+        "target_conclusion": "InAp"
+      }
+    },
+    "causal_model": {
+      "matches": false,
+      "expected": {
+        "defeasible_rules": [
+          "r0: PaEl => InAp"
+        ],
+        "undercutter_rules": []
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: PaEl => InAp",
+          "r1: MoFu => InAp"
+        ],
+        "undercutter_rules": [
+          "r2: PeDe => ¬r1"
+        ],
+        "preferences": {
+          "r0": 0.8,
+          "r1": 0.7,
+          "r2": 0.9
+        }
+      }
+    },
+    "causal_results": {
+      "matches": false,
+      "expected": {
+        "PaEl": true,
+        "MoFu": false
+      },
+      "got": {
+        "PaEl": {
+          "is_cause": false,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois a pane elétrica (PaEl) é o evento que, segundo a perícia, produziu diretamente o incêndio (InAp).\n2. **Regras Críticas**: A regra \"PaEl => InAp\" é a regra crítica. A negação de `PaEl` remove a premissa necessária para que o incêndio seja atribuído a essa causa.\n3. **Argumentos Derrotados**: O argumento `A2`, que vinculava a pane elétrica ao incêndio, é derrotado no cenário contrafactual, pois sua base factual foi removida.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, `PaEl` é causa-in-fact porque, na ausência deste evento, o incêndio não teria ocorrido (conforme a perícia técnica). O hábito de fumar (`MoFu`) não é causa, pois não possui regra de inferência válida que o conecte ao dano (`InAp`) no sistema.\n5. **Conclusão**: A pane elétrica é a causa direta e necessária do incêndio, enquanto o hábito de fumar é um fator irrelevante para a cadeia causal do dano.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "InAp",
+            "base_has_target": true,
+            "test_has_target": true
+          }
+        },
+        "MoFu": {
+          "is_cause": false,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"none\". O hábito de fumar do morador (`MoFu`) não possui relação causal com o incêndio (`InAp`), uma vez que a perícia técnica estabeleceu a pane elétrica (`PaEl`) como a causa exclusiva.\n2. **Regras Críticas**: Não há regra crítica ligando `MoFu` a `InAp` que sobreviva à análise de fatos. A regra que conecta `PaEl` a `InAp` é a única que sustenta a conclusão no sistema.\n3. **Argumentos Derrotados**: Nenhum argumento causal relevante foi derrotado pela negação de `MoFu`, pois o dano `InAp` persiste mesmo na ausência desse fator.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, para que `MoFu` fosse causa-in-fact, a sua negação deveria resultar na ausência de `InAp`. Como o incêndio ocorre independentemente do hábito de fumar do morador, este não é causa-in-fact.\n5. **Conclusão**: O hábito de fumar é um evento concomitante, mas não causal. A responsabilidade pelo incêndio recai sobre a causa efetiva, que é a pane elétrica.",
+          "llm_is_cause": false,
+          "solver_evidence": {
+            "target": "InAp",
+            "base_has_target": true,
+            "test_has_target": true
+          }
+        }
+      }
+    }
+  }
+}

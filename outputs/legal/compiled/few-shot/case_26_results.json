@@ -1,0 +1,270 @@
+{
+  "case": {
+    "id": 26,
+    "name": "Bagagem Extraviada (Excludente Afastada)",
+    "pattern": "excludente",
+    "case_text": "Uma companhia aérea extraviou a bagagem despachada do passageiro (BaEx).\nA companhia alega força maior por tempestade (FoMa), mas o extravio ocorreu no manuseio em solo, em dia de céu limpo (CeLi).\nPergunta-se: o extravio da bagagem (BaEx) foi causa do dever de indenizar da companhia (InDe)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "BaEx",
+        "FoMa",
+        "CeLi"
+      ],
+      "potential_causes": [
+        "BaEx"
+      ],
+      "target_conclusion": "InDe"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: BaEx => InDe",
+        "r1: FoMa => ¬InDe"
+      ],
+      "undercutter_rules": [
+        "r2: CeLi => ¬r1"
+      ]
+    },
+    "expected_causal_result": {
+      "BaEx": true
+    }
+  },
+  "analysis": {
+    "case_text": "Uma companhia aérea extraviou a bagagem despachada do passageiro (BaEx).\nA companhia alega força maior por tempestade (FoMa), mas o extravio ocorreu no manuseio em solo, em dia de céu limpo (CeLi).\nPergunta-se: o extravio da bagagem (BaEx) foi causa do dever de indenizar da companhia (InDe)?",
+    "knowledge_base": {
+      "premises": [
+        "BaEx",
+        "FoMa",
+        "CeLi"
+      ],
+      "potential_causes": [
+        "BaEx"
+      ],
+      "target_conclusion": "InDe"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: BaEx => InDe",
+        "r1: FoMa => ¬InDe"
+      ],
+      "undercutter_rules": [
+        "r2: CeLi => ¬r1"
+      ],
+      "preferences": {
+        "r0": 0.7,
+        "r1": 0.8,
+        "r2": 0.9
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "BaEx",
+          "FoMa",
+          "CeLi"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: BaEx => InDe",
+            "r1: FoMa => ¬InDe"
+          ],
+          "undercutters": [
+            "r2: CeLi => ¬r1"
+          ]
+        },
+        "preferences": {
+          "r0": 0.7,
+          "r1": 0.8,
+          "r2": 0.9
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "BaEx"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "InDe",
+          "strength": 0.7
+        },
+        {
+          "id": "A2",
+          "premises": [
+            "FoMa"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r1"
+          ],
+          "conclusion": "¬InDe",
+          "strength": 0.8
+        },
+        {
+          "id": "A3",
+          "premises": [
+            "CeLi"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r2"
+          ],
+          "conclusion": "¬r1",
+          "strength": 0.9
+        }
+      ],
+      "attacks": [
+        {
+          "attacker": "A2",
+          "target": "A1",
+          "type": "rebuttal",
+          "rule": "r1",
+          "succeeds": true
+        },
+        {
+          "attacker": "A3",
+          "target": "A2",
+          "type": "undercut",
+          "rule": "r2",
+          "succeeds": true
+        }
+      ],
+      "defeats": [
+        {
+          "defeater": "A2",
+          "defeated": "A1",
+          "type": "rebuttal",
+          "explanation": "A2 (0.8) derrota A1 (0.7)"
+        },
+        {
+          "defeater": "A3",
+          "defeated": "A2",
+          "type": "undercut",
+          "explanation": "A3 (0.9) derrota A2 (0.8) via undercut na regra r1"
+        }
+      ]
+    },
+    "base_grounded": [
+      "A2",
+      "A5",
+      "A1",
+      "A0",
+      "A3"
+    ],
+    "base_grounded_conclusions": {
+      "A2": "CeLi",
+      "A5": "¬r1",
+      "A1": "FoMa",
+      "A0": "BaEx",
+      "A3": "InDe"
+    },
+    "base_explanations": {
+      "A2": [
+        "A2"
+      ],
+      "A5": [
+        "A2",
+        "A5"
+      ],
+      "A1": [
+        "A1"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A3": [
+        "A0",
+        "A3"
+      ]
+    },
+    "causal_results": {
+      "BaEx": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois o extravio da bagagem (`BaEx`) é o evento que produz diretamente o dever de indenizar (`InDe`).\n2. **Regras Críticas**: A regra `BaEx => InDe` é a regra crítica. A negação de `BaEx` impede que esta regra seja disparada.\n3. **Argumentos Derrotados**: O argumento `A5`, que sustentava a conclusão `InDe`, torna-se inoperante no AF modificado, pois sua base factual foi removida.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, `BaEx` é causa-in-fact porque, na ausência do extravio, o dever de indenizar não seria gerado. O fato de o extravio ter ocorrido em condições de céu limpo (`CeLi`) afasta a excludente de força maior (`FoMa`), consolidando a responsabilidade da companhia.\n5. **Conclusão**: A relação é de causalidade direta, onde o extravio é a condição necessária para a configuração do dano indenizável.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "InDe",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "BaEx",
+          "FoMa",
+          "CeLi"
+        ],
+        "potential_causes": [
+          "BaEx"
+        ],
+        "target_conclusion": "InDe"
+      },
+      "got": {
+        "premises": [
+          "BaEx",
+          "FoMa",
+          "CeLi"
+        ],
+        "potential_causes": [
+          "BaEx"
+        ],
+        "target_conclusion": "InDe"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: BaEx => InDe",
+          "r1: FoMa => ¬InDe"
+        ],
+        "undercutter_rules": [
+          "r2: CeLi => ¬r1"
+        ]
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: BaEx => InDe",
+          "r1: FoMa => ¬InDe"
+        ],
+        "undercutter_rules": [
+          "r2: CeLi => ¬r1"
+        ],
+        "preferences": {
+          "r0": 0.7,
+          "r1": 0.8,
+          "r2": 0.9
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "BaEx": true
+      },
+      "got": {
+        "BaEx": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois o extravio da bagagem (`BaEx`) é o evento que produz diretamente o dever de indenizar (`InDe`).\n2. **Regras Críticas**: A regra `BaEx => InDe` é a regra crítica. A negação de `BaEx` impede que esta regra seja disparada.\n3. **Argumentos Derrotados**: O argumento `A5`, que sustentava a conclusão `InDe`, torna-se inoperante no AF modificado, pois sua base factual foi removida.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, `BaEx` é causa-in-fact porque, na ausência do extravio, o dever de indenizar não seria gerado. O fato de o extravio ter ocorrido em condições de céu limpo (`CeLi`) afasta a excludente de força maior (`FoMa`), consolidando a responsabilidade da companhia.\n5. **Conclusão**: A relação é de causalidade direta, onde o extravio é a condição necessária para a configuração do dano indenizável.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "InDe",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

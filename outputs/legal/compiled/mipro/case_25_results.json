@@ -1,0 +1,270 @@
+{
+  "case": {
+    "id": 25,
+    "name": "Cirurgia com Erro Grosseiro (Excludente Afastada)",
+    "pattern": "excludente",
+    "case_text": "Um cirurgião operou o paciente em estado de embriaguez (CiEm) e o paciente saiu da cirurgia com lesão permanente.\nA defesa alega complicação imprevisível (CoIm), mas o laudo pericial apontou erro técnico grosseiro incompatível com essa tese (ErTe).\nPergunta-se: a atuação embriagada do cirurgião (CiEm) foi causa da responsabilização do médico (MeRe)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "CiEm",
+        "CoIm",
+        "ErTe"
+      ],
+      "potential_causes": [
+        "CiEm"
+      ],
+      "target_conclusion": "MeRe"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: CiEm => MeRe",
+        "r1: CoIm => ¬MeRe"
+      ],
+      "undercutter_rules": [
+        "r2: ErTe => ¬r1"
+      ]
+    },
+    "expected_causal_result": {
+      "CiEm": true
+    }
+  },
+  "analysis": {
+    "case_text": "Um cirurgião operou o paciente em estado de embriaguez (CiEm) e o paciente saiu da cirurgia com lesão permanente.\nA defesa alega complicação imprevisível (CoIm), mas o laudo pericial apontou erro técnico grosseiro incompatível com essa tese (ErTe).\nPergunta-se: a atuação embriagada do cirurgião (CiEm) foi causa da responsabilização do médico (MeRe)?",
+    "knowledge_base": {
+      "premises": [
+        "CiEm",
+        "CoIm",
+        "ErTe"
+      ],
+      "potential_causes": [
+        "CiEm"
+      ],
+      "target_conclusion": "MeRe"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: CiEm => MeRe",
+        "r1: CoIm => ¬MeRe"
+      ],
+      "undercutter_rules": [
+        "r2: ErTe => ¬r1"
+      ],
+      "preferences": {
+        "r0": 0.9,
+        "r1": 0.7,
+        "r2": 0.95
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "CiEm",
+          "CoIm",
+          "ErTe"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: CiEm => MeRe",
+            "r1: CoIm => ¬MeRe"
+          ],
+          "undercutters": [
+            "r2: ErTe => ¬r1"
+          ]
+        },
+        "preferences": {
+          "r0": 0.9,
+          "r1": 0.7,
+          "r2": 0.95
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "CiEm"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "MeRe",
+          "strength": 0.9
+        },
+        {
+          "id": "A2",
+          "premises": [
+            "CoIm"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r1"
+          ],
+          "conclusion": "¬MeRe",
+          "strength": 0.7
+        },
+        {
+          "id": "A3",
+          "premises": [
+            "ErTe"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r2"
+          ],
+          "conclusion": "¬r1",
+          "strength": 0.95
+        }
+      ],
+      "attacks": [
+        {
+          "attacker": "A1",
+          "target": "A2",
+          "type": "rebuttal",
+          "rule": "r0",
+          "succeeds": true
+        },
+        {
+          "attacker": "A3",
+          "target": "A2",
+          "type": "undercut",
+          "rule": "r1",
+          "succeeds": true
+        }
+      ],
+      "defeats": [
+        {
+          "defeater": "A1",
+          "defeated": "A2",
+          "type": "rebuttal",
+          "explanation": "Argumento A1 (força 0.9) derrota A2 (força 0.7) por conclusão contraditória."
+        },
+        {
+          "defeater": "A3",
+          "defeated": "A2",
+          "type": "undercut",
+          "explanation": "Argumento A3 (força 0.95) derrota A2 (força 0.7) via undercut na regra r1."
+        }
+      ]
+    },
+    "base_grounded": [
+      "A0",
+      "A1",
+      "A3",
+      "A5",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A0": "ErTe",
+      "A1": "CoIm",
+      "A3": "MeRe",
+      "A5": "¬r1",
+      "A2": "CiEm"
+    },
+    "base_explanations": {
+      "A0": [
+        "A0"
+      ],
+      "A1": [
+        "A1"
+      ],
+      "A3": [
+        "A3",
+        "A2"
+      ],
+      "A5": [
+        "A0",
+        "A5"
+      ],
+      "A2": [
+        "A2"
+      ]
+    },
+    "causal_results": {
+      "CiEm": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: \"Production\". A atuação do cirurgião sob efeito de álcool (`CiEm`) foi um fator ativo que, em conjunto com o erro técnico (`ErTe`), produziu o resultado de responsabilização (`MeRe`).\n2. **Regras Críticas**: A regra `CiEm ∧ ErTe => MeRe` foi desativada. A negação de `CiEm` impede que o sistema derive a responsabilidade médica, demonstrando que a embriaguez foi um fator determinante.\n3. **Argumentos Derrotados**: O argumento que sustentava a responsabilidade (`MeRe`) foi derrotado, pois a premissa `CiEm` foi substituída por `¬CiEm` no framework de teste.\n4. **Justificativa Jurídica**: A embriaguez do cirurgião é causa-in-fact porque, sem ela, a cadeia causal que leva à responsabilização (considerando o erro técnico como agravante) não se completa. O teste *but-for* é satisfeito: \"não fosse a embriaguez, o resultado de responsabilização, tal como estruturado, não teria ocorrido\".\n5. **Conclusão**: A conduta do cirurgião é causa direta do dano jurídico (responsabilização), configurando uma relação causal de produção.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "MeRe",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "CiEm",
+          "CoIm",
+          "ErTe"
+        ],
+        "potential_causes": [
+          "CiEm"
+        ],
+        "target_conclusion": "MeRe"
+      },
+      "got": {
+        "premises": [
+          "CiEm",
+          "CoIm",
+          "ErTe"
+        ],
+        "potential_causes": [
+          "CiEm"
+        ],
+        "target_conclusion": "MeRe"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: CiEm => MeRe",
+          "r1: CoIm => ¬MeRe"
+        ],
+        "undercutter_rules": [
+          "r2: ErTe => ¬r1"
+        ]
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: CiEm => MeRe",
+          "r1: CoIm => ¬MeRe"
+        ],
+        "undercutter_rules": [
+          "r2: ErTe => ¬r1"
+        ],
+        "preferences": {
+          "r0": 0.9,
+          "r1": 0.7,
+          "r2": 0.95
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "CiEm": true
+      },
+      "got": {
+        "CiEm": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: \"Production\". A atuação do cirurgião sob efeito de álcool (`CiEm`) foi um fator ativo que, em conjunto com o erro técnico (`ErTe`), produziu o resultado de responsabilização (`MeRe`).\n2. **Regras Críticas**: A regra `CiEm ∧ ErTe => MeRe` foi desativada. A negação de `CiEm` impede que o sistema derive a responsabilidade médica, demonstrando que a embriaguez foi um fator determinante.\n3. **Argumentos Derrotados**: O argumento que sustentava a responsabilidade (`MeRe`) foi derrotado, pois a premissa `CiEm` foi substituída por `¬CiEm` no framework de teste.\n4. **Justificativa Jurídica**: A embriaguez do cirurgião é causa-in-fact porque, sem ela, a cadeia causal que leva à responsabilização (considerando o erro técnico como agravante) não se completa. O teste *but-for* é satisfeito: \"não fosse a embriaguez, o resultado de responsabilização, tal como estruturado, não teria ocorrido\".\n5. **Conclusão**: A conduta do cirurgião é causa direta do dano jurídico (responsabilização), configurando uma relação causal de produção.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "MeRe",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

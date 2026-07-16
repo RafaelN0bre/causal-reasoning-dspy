@@ -1,0 +1,202 @@
+{
+  "case": {
+    "id": 18,
+    "name": "Elevador Sem Conserto (Omissão)",
+    "pattern": "omissao",
+    "case_text": "O elevador do condomínio tinha defeito conhecido no freio (DeFr).\nO condomínio não realizou o conserto (¬CoRe).\nO conserto teria eliminado o defeito (DeEl).\nA cabine despencou com um morador dentro (CaDe).\nPergunta-se: a falta de conserto (¬CoRe) foi causa da queda da cabine (CaDe)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "DeFr",
+        "¬CoRe"
+      ],
+      "potential_causes": [
+        "¬CoRe"
+      ],
+      "target_conclusion": "CaDe"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: DeFr => CaDe",
+        "r1: CoRe => DeEl"
+      ],
+      "undercutter_rules": [
+        "r2: DeEl => ¬r0"
+      ]
+    },
+    "expected_causal_result": {
+      "¬CoRe": true
+    }
+  },
+  "analysis": {
+    "case_text": "O elevador do condomínio tinha defeito conhecido no freio (DeFr).\nO condomínio não realizou o conserto (¬CoRe).\nO conserto teria eliminado o defeito (DeEl).\nA cabine despencou com um morador dentro (CaDe).\nPergunta-se: a falta de conserto (¬CoRe) foi causa da queda da cabine (CaDe)?",
+    "knowledge_base": {
+      "premises": [
+        "DeFr",
+        "¬CoRe"
+      ],
+      "potential_causes": [
+        "¬CoRe"
+      ],
+      "target_conclusion": "CaDe"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: DeFr => CaDe",
+        "r1: CoRe => DeEl"
+      ],
+      "undercutter_rules": [
+        "r2: DeEl => ¬r0"
+      ],
+      "preferences": {
+        "r0": 0.7,
+        "r1": 0.8,
+        "r2": 0.9
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "DeFr",
+          "¬CoRe"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: DeFr => CaDe",
+            "r1: CoRe => DeEl"
+          ],
+          "undercutters": [
+            "r2: DeEl => ¬r0"
+          ]
+        },
+        "preferences": {
+          "r0": 0.7,
+          "r1": 0.8,
+          "r2": 0.9
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "DeFr"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "CaDe",
+          "strength": 0.7
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A1",
+      "A0",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A1": "¬CoRe",
+      "A0": "DeFr",
+      "A2": "CaDe"
+    },
+    "base_explanations": {
+      "A1": [
+        "A1"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A2",
+        "A0"
+      ]
+    },
+    "causal_results": {
+      "¬CoRe": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Identificada como \"omission\". A falha do condomínio em realizar o conserto (`¬CoRe`) é a omissão que permitiu que o defeito preexistente (`DeFr`) culminasse no evento danoso (`CaDe`).\n2. **Regras Críticas**: A regra `DeFr & ¬CoRe => CaDe` é a regra central. Ao testar a negação da causa (`CoRe`), a premissa `¬CoRe` torna-se falsa, impedindo a ativação da regra.\n3. **Argumentos Derrotados**: O argumento que sustentava a conclusão `CaDe` foi derrotado porque a premissa `¬CoRe` foi substituída por `CoRe`, que, por sua vez, ativa a regra `CoRe => DeEl` (conserto elimina defeito), tornando a queda da cabine impossível no modelo.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, `¬CoRe` é causa-in-fact de `CaDe` porque, no mundo contrafactual onde o conserto é realizado (`CoRe`), a cadeia causal que leva à queda é interrompida. A omissão é, portanto, uma condição necessária para o resultado danoso.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "CaDe",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "DeFr",
+          "¬CoRe"
+        ],
+        "potential_causes": [
+          "¬CoRe"
+        ],
+        "target_conclusion": "CaDe"
+      },
+      "got": {
+        "premises": [
+          "DeFr",
+          "¬CoRe"
+        ],
+        "potential_causes": [
+          "¬CoRe"
+        ],
+        "target_conclusion": "CaDe"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: DeFr => CaDe",
+          "r1: CoRe => DeEl"
+        ],
+        "undercutter_rules": [
+          "r2: DeEl => ¬r0"
+        ]
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: DeFr => CaDe",
+          "r1: CoRe => DeEl"
+        ],
+        "undercutter_rules": [
+          "r2: DeEl => ¬r0"
+        ],
+        "preferences": {
+          "r0": 0.7,
+          "r1": 0.8,
+          "r2": 0.9
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "¬CoRe": true
+      },
+      "got": {
+        "¬CoRe": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Identificada como \"omission\". A falha do condomínio em realizar o conserto (`¬CoRe`) é a omissão que permitiu que o defeito preexistente (`DeFr`) culminasse no evento danoso (`CaDe`).\n2. **Regras Críticas**: A regra `DeFr & ¬CoRe => CaDe` é a regra central. Ao testar a negação da causa (`CoRe`), a premissa `¬CoRe` torna-se falsa, impedindo a ativação da regra.\n3. **Argumentos Derrotados**: O argumento que sustentava a conclusão `CaDe` foi derrotado porque a premissa `¬CoRe` foi substituída por `CoRe`, que, por sua vez, ativa a regra `CoRe => DeEl` (conserto elimina defeito), tornando a queda da cabine impossível no modelo.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, `¬CoRe` é causa-in-fact de `CaDe` porque, no mundo contrafactual onde o conserto é realizado (`CoRe`), a cadeia causal que leva à queda é interrompida. A omissão é, portanto, uma condição necessária para o resultado danoso.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "CaDe",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

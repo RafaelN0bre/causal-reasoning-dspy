@@ -1,0 +1,294 @@
+{
+  "case": {
+    "id": 7,
+    "name": "Rejeitos e Esgoto (Preempção Ambiental)",
+    "case_text": "\n        Uma fábrica despejou rejeitos tóxicos no rio e a mancha alcançou o criadouro de\n        peixes (FaDe). Horas depois houve um vazamento de esgoto rio acima (EsVa), mas,\n        quando o esgoto chegou ao criadouro, os peixes já estavam mortos (PeJa).\n        Pergunta-se: o despejo da fábrica (FaDe) e o vazamento de esgoto (EsVa) foram\n        causas da morte dos peixes (PeMo)?\n        ",
+    "expected_knowledge_base": {
+      "premises": [
+        "FaDe",
+        "EsVa",
+        "PeJa"
+      ],
+      "potential_causes": [
+        "FaDe",
+        "EsVa"
+      ],
+      "target_conclusion": "PeMo"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: FaDe => PeMo",
+        "r1: EsVa => PeMo"
+      ],
+      "undercutter_rules": [
+        "r2: PeJa => ¬r1"
+      ]
+    },
+    "expected_causal_result": {
+      "FaDe": {
+        "is_cause": true,
+        "explanation": "Negando FaDe, PeMo deixa de ser derivável: a regra do esgoto segue undercuttada por PeJa (intermediário congelado), como na preempção clássica."
+      },
+      "EsVa": {
+        "is_cause": false,
+        "explanation": "O esgoto chegou tarde demais: PeMo persiste via FaDe quando EsVa é negado."
+      }
+    }
+  },
+  "analysis": {
+    "case_text": "\n        Uma fábrica despejou rejeitos tóxicos no rio e a mancha alcançou o criadouro de\n        peixes (FaDe). Horas depois houve um vazamento de esgoto rio acima (EsVa), mas,\n        quando o esgoto chegou ao criadouro, os peixes já estavam mortos (PeJa).\n        Pergunta-se: o despejo da fábrica (FaDe) e o vazamento de esgoto (EsVa) foram\n        causas da morte dos peixes (PeMo)?\n        ",
+    "knowledge_base": {
+      "premises": [
+        "FaDe",
+        "EsVa",
+        "PeJa"
+      ],
+      "potential_causes": [
+        "FaDe",
+        "EsVa"
+      ],
+      "target_conclusion": "PeMo"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: FaDe => PeMo",
+        "r1: EsVa => PeMo"
+      ],
+      "undercutter_rules": [
+        "r2: PeJa => ¬r1"
+      ],
+      "preferences": {
+        "r0": 0.8,
+        "r1": 0.7,
+        "r2": 0.9
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "FaDe",
+          "EsVa",
+          "PeJa"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: FaDe => PeMo",
+            "r1: EsVa => PeMo"
+          ],
+          "undercutters": [
+            "r2: PeJa => ¬r1"
+          ]
+        },
+        "preferences": {
+          "r0": 0.8,
+          "r1": 0.7,
+          "r2": 0.9
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "FaDe"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "PeMo",
+          "strength": 0.8
+        },
+        {
+          "id": "A2",
+          "premises": [
+            "EsVa"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r1"
+          ],
+          "conclusion": "PeMo",
+          "strength": 0.7
+        },
+        {
+          "id": "A3",
+          "premises": [
+            "PeJa"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r2"
+          ],
+          "conclusion": "¬r1",
+          "strength": 0.9
+        }
+      ],
+      "attacks": [
+        {
+          "attacker": "A3",
+          "target": "A2",
+          "type": "undercut",
+          "rule": "r1",
+          "succeeds": true
+        }
+      ],
+      "defeats": [
+        {
+          "defeater": "A3",
+          "defeated": "A2",
+          "type": "undercut",
+          "explanation": "Argumento A3 (força 0.9) derrota A2 (força 0.7) via undercut na regra r1"
+        }
+      ]
+    },
+    "base_grounded": [
+      "A2",
+      "A5",
+      "A1",
+      "A0",
+      "A3"
+    ],
+    "base_grounded_conclusions": {
+      "A2": "EsVa",
+      "A5": "¬r1",
+      "A1": "FaDe",
+      "A0": "PeJa",
+      "A3": "PeMo"
+    },
+    "base_explanations": {
+      "A2": [
+        "A2"
+      ],
+      "A5": [
+        "A0",
+        "A5"
+      ],
+      "A1": [
+        "A1"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A3": [
+        "A3",
+        "A1"
+      ]
+    },
+    "causal_results": {
+      "FaDe": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"preemption\" (preempção). O despejo da fábrica (`FaDe`) agiu como causa efetiva ao matar os peixes antes que o vazamento de esgoto (`EsVa`) pudesse fazê-lo.\n2. **Regras Críticas**: A regra que conecta `FaDe` à morte dos peixes (`PeJa`) é a regra crítica. Ao negar `FaDe`, essa cadeia específica é interrompida.\n3. **Argumentos Derrotados**: O argumento `A5` (que vincula o despejo da fábrica ao dano) é invalidado pela negação de `FaDe`. No entanto, o sistema jurídico reconhece a responsabilidade porque o agente antecipou o resultado que ocorreria de qualquer forma.\n4. **Justificativa Jurídica**: Sob a Definição 4.3, embora o teste contrafactual puro possa falhar devido à redundância (o esgoto mataria os peixes de qualquer forma), a doutrina da preempção estabelece que o agente que causa o dano primeiro é responsável, pois ele \"preemptou\" a cadeia causal natural ou alternativa.\n5. **Conclusão**: `FaDe` é causa-in-fact porque, no mundo real, foi o fator determinante que produziu o dano `PeMo` no tempo `t`, impedindo que o segundo fator causal (esgoto) fosse o responsável pela morte.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "PeMo",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      },
+      "EsVa": {
+        "is_cause": false,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"preemption\" (preempção). O despejo da fábrica (`FaDe`) é a causa efetiva, pois produziu o dano antes que a causa alternativa (`EsVa`) pudesse agir.\n2. **Regras Críticas**: A regra `FaDe => PeMo` é a regra crítica. Embora a negação de `FaDe` não impeça o resultado `PeMo` (devido à redundância de `EsVa`), a fábrica é responsável por ter antecipado o dano.\n3. **Argumentos Derrotados**: O argumento `A5` (fábrica) é o que sustenta a causalidade no mundo real. O argumento relacionado ao esgoto (`EsVa`) é ineficaz como causa, pois o dano já estava consumado (`PeJa`).\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, a fábrica é causa-in-fact porque, no mundo real, foi o fator que produziu o dano. A preempção ocorre quando um agente causa o dano antes que uma segunda causa (que também seria suficiente) possa fazê-lo.\n5. **Conclusão**: O despejo da fábrica é a causa jurídica da morte dos peixes, enquanto o vazamento de esgoto é uma causa preemptada, não sendo causa-in-fact do dano ocorrido.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "PeMo",
+          "base_has_target": true,
+          "test_has_target": true
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "FaDe",
+          "EsVa",
+          "PeJa"
+        ],
+        "potential_causes": [
+          "FaDe",
+          "EsVa"
+        ],
+        "target_conclusion": "PeMo"
+      },
+      "got": {
+        "premises": [
+          "FaDe",
+          "EsVa",
+          "PeJa"
+        ],
+        "potential_causes": [
+          "FaDe",
+          "EsVa"
+        ],
+        "target_conclusion": "PeMo"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: FaDe => PeMo",
+          "r1: EsVa => PeMo"
+        ],
+        "undercutter_rules": [
+          "r2: PeJa => ¬r1"
+        ]
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: FaDe => PeMo",
+          "r1: EsVa => PeMo"
+        ],
+        "undercutter_rules": [
+          "r2: PeJa => ¬r1"
+        ],
+        "preferences": {
+          "r0": 0.8,
+          "r1": 0.7,
+          "r2": 0.9
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "FaDe": {
+          "is_cause": true,
+          "explanation": "Negando FaDe, PeMo deixa de ser derivável: a regra do esgoto segue undercuttada por PeJa (intermediário congelado), como na preempção clássica."
+        },
+        "EsVa": {
+          "is_cause": false,
+          "explanation": "O esgoto chegou tarde demais: PeMo persiste via FaDe quando EsVa é negado."
+        }
+      },
+      "got": {
+        "FaDe": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"preemption\" (preempção). O despejo da fábrica (`FaDe`) agiu como causa efetiva ao matar os peixes antes que o vazamento de esgoto (`EsVa`) pudesse fazê-lo.\n2. **Regras Críticas**: A regra que conecta `FaDe` à morte dos peixes (`PeJa`) é a regra crítica. Ao negar `FaDe`, essa cadeia específica é interrompida.\n3. **Argumentos Derrotados**: O argumento `A5` (que vincula o despejo da fábrica ao dano) é invalidado pela negação de `FaDe`. No entanto, o sistema jurídico reconhece a responsabilidade porque o agente antecipou o resultado que ocorreria de qualquer forma.\n4. **Justificativa Jurídica**: Sob a Definição 4.3, embora o teste contrafactual puro possa falhar devido à redundância (o esgoto mataria os peixes de qualquer forma), a doutrina da preempção estabelece que o agente que causa o dano primeiro é responsável, pois ele \"preemptou\" a cadeia causal natural ou alternativa.\n5. **Conclusão**: `FaDe` é causa-in-fact porque, no mundo real, foi o fator determinante que produziu o dano `PeMo` no tempo `t`, impedindo que o segundo fator causal (esgoto) fosse o responsável pela morte.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "PeMo",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        },
+        "EsVa": {
+          "is_cause": false,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"preemption\" (preempção). O despejo da fábrica (`FaDe`) é a causa efetiva, pois produziu o dano antes que a causa alternativa (`EsVa`) pudesse agir.\n2. **Regras Críticas**: A regra `FaDe => PeMo` é a regra crítica. Embora a negação de `FaDe` não impeça o resultado `PeMo` (devido à redundância de `EsVa`), a fábrica é responsável por ter antecipado o dano.\n3. **Argumentos Derrotados**: O argumento `A5` (fábrica) é o que sustenta a causalidade no mundo real. O argumento relacionado ao esgoto (`EsVa`) é ineficaz como causa, pois o dano já estava consumado (`PeJa`).\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, a fábrica é causa-in-fact porque, no mundo real, foi o fator que produziu o dano. A preempção ocorre quando um agente causa o dano antes que uma segunda causa (que também seria suficiente) possa fazê-lo.\n5. **Conclusão**: O despejo da fábrica é a causa jurídica da morte dos peixes, enquanto o vazamento de esgoto é uma causa preemptada, não sendo causa-in-fact do dano ocorrido.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "PeMo",
+            "base_has_target": true,
+            "test_has_target": true
+          }
+        }
+      }
+    }
+  }
+}

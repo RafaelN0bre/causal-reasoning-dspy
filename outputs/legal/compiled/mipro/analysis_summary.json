@@ -1,0 +1,2383 @@
+{
+  "total_cases": 30,
+  "successful_cases": 21,
+  "case_results": [
+    {
+      "case_id": 1,
+      "name": "Caso da Leucemia (Omissão)",
+      "validation": {
+        "knowledge_base": {
+          "matches": true,
+          "expected": {
+            "premises": [
+              "ChLe",
+              "¬PaCo"
+            ],
+            "potential_causes": [
+              "¬PaCo"
+            ],
+            "target_conclusion": "ChDi",
+            "axioms": []
+          },
+          "got": {
+            "premises": [
+              "ChLe",
+              "¬PaCo"
+            ],
+            "potential_causes": [
+              "¬PaCo"
+            ],
+            "target_conclusion": "ChDi"
+          }
+        },
+        "causal_model": {
+          "matches": false,
+          "expected": {
+            "defeasible_rules": [
+              "r0: ChLe => ChDi",
+              "r1: PaCo => Chem"
+            ],
+            "undercutter_rules": [
+              "r2: Chem => ¬r0"
+            ]
+          },
+          "got": {
+            "strict_rules": [],
+            "defeasible_rules": [
+              "r0: ChLe AND ¬Chem => ChDi",
+              "r1: Chem => ¬ChDi",
+              "r2: ¬PaCo => ¬Chem"
+            ],
+            "undercutter_rules": [
+              "r3: Chem => ¬r0"
+            ],
+            "preferences": {
+              "r0": 0.8,
+              "r1": 0.9,
+              "r2": 0.9,
+              "r3": 0.95
+            }
+          }
+        },
+        "causal_results": {
+          "matches": true,
+          "expected": {
+            "¬PaCo": {
+              "is_cause": true,
+              "explanation": "A omissão do consentimento (¬PaCo) é uma causa da morte (ChDi). Se uma intervenção fosse feita adicionando 'PaCo'[cite: 343], um novo argumento justificado 'Chem' seria criado (via r1), que por sua vez ativaria a regra 'r2' para derrotar 'r0'[cite: 344, 345]. Isso bloquearia a conclusão 'ChDi', provando que '¬PaCo' era causal."
+            }
+          },
+          "got": {
+            "¬PaCo": {
+              "is_cause": true,
+              "explanation": "1. **Tipo de Causa**: Omissão. A recusa dos pais em consentir com o tratamento médico necessário (`¬PaCo`) é a omissão que permitiu que a doença (`ChLe`) evoluísse para o óbito (`ChDi`).\n2. **Regras Críticas**: A regra `ChLe ∧ ¬PaCo => ChDi` é a regra central que conecta a condição da criança e a omissão dos pais ao resultado fatal.\n3. **Argumentos Derrotados**: O argumento `A3`, que sustentava a conclusão de óbito, foi derrotado no cenário contrafactual, pois a premissa `¬PaCo` foi substituída por `PaCo`, invalidando a regra de óbito.\n4. **Justificativa Jurídica**: A recusa dos pais é causa-in-fact sob o teste \"but-for\": mas pela recusa dos pais, o tratamento teria ocorrido e o óbito, segundo a lógica do caso, teria sido evitado. A omissão é, portanto, o fator determinante para a concretização do dano.\n5. **Conceito**: A análise confirma que a omissão de um dever de agir (consentir para tratamento vital) é causalmente relevante quando sua ausência altera o resultado final.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "ChDi",
+                "base_has_target": true,
+                "test_has_target": false
+              }
+            }
+          }
+        }
+      },
+      "output_path": "outputs/legal/compiled/mipro/case_1_results.json"
+    },
+    {
+      "case_id": 2,
+      "name": "Dlugash Case (Preemption)",
+      "validation": {
+        "knowledge_base": {
+          "matches": true,
+          "expected": {
+            "premises": [
+              "DlKi",
+              "BuKi",
+              "ViAD"
+            ],
+            "potential_causes": [
+              "DlKi",
+              "BuKi"
+            ],
+            "target_conclusion": "ViDe"
+          },
+          "got": {
+            "premises": [
+              "DlKi",
+              "BuKi",
+              "ViAD"
+            ],
+            "potential_causes": [
+              "DlKi",
+              "BuKi"
+            ],
+            "target_conclusion": "ViDe"
+          }
+        },
+        "causal_model": {
+          "matches": true,
+          "expected": {
+            "defeasible_rules": [
+              "r1: DlKi => ViDe",
+              "r2: BuKi => ViDe"
+            ],
+            "undercutter_rules": [
+              "r3: ViAD => ¬r1"
+            ]
+          },
+          "got": {
+            "strict_rules": [],
+            "defeasible_rules": [
+              "r0: BuKi => ViDe",
+              "r1: DlKi => ViDe"
+            ],
+            "undercutter_rules": [
+              "r2: ViAD => ¬r1"
+            ],
+            "preferences": {
+              "r0": 0.9,
+              "r1": 0.5,
+              "r2": 1.0
+            }
+          }
+        },
+        "causal_results": {
+          "matches": true,
+          "expected": {
+            "BuKi": {
+              "is_cause": true,
+              "explanation": "O tiro de Bush (BuKi) é causa da morte: no AF base, ViDe é derivado por r2 (r1 está undercuttada por r3, já que a vítima já estava morta ao disparo de Dlugash). Com ¬BuKi como axioma, r2 perde a premissa e r1 segue undercuttada por ViAD (intermediário congelado), removendo ViDe da extensão grounded."
+            },
+            "DlKi": {
+              "is_cause": false,
+              "explanation": "O tiro de Dlugash (DlKi) não é causa da morte: com ¬DlKi como axioma, ViDe continua derivável por r2 (BuKi), logo permanece na extensão grounded."
+            }
+          },
+          "got": {
+            "DlKi": {
+              "is_cause": false,
+              "explanation": "1. **Tipo de Causa**: \"none\". O disparo de Dlugash (`DlKi`) não é causa-in-fact porque a vítima já estava morta (`ViAD`) devido ao disparo anterior de Bush (`BuKi`).\n2. **Regras Críticas**: A regra que ligaria `DlKi` a `ViDe` é ineficaz (undercut) pela condição de que a vítima já estava morta no momento do disparo.\n3. **Argumentos Derrotados**: O argumento que tentaria atribuir a morte a Dlugash é derrotado pela evidência de que o resultado já havia ocorrido.\n4. **Justificativa Jurídica**: O teste \"but-for\" falha: \"But for\" o disparo de Dlugash, a vítima estaria morta de qualquer maneira devido ao disparo de Bush. Portanto, Dlugash não é causa-in-fact da morte.\n5. **Conceito**: Este é um caso de causalidade ineficaz (ou tentativa impossível de causar um dano já consumado), onde a ação do agente não possui nexo causal com o resultado final.",
+              "llm_is_cause": false,
+              "solver_evidence": {
+                "target": "ViDe",
+                "base_has_target": true,
+                "test_has_target": true
+              }
+            },
+            "BuKi": {
+              "is_cause": true,
+              "explanation": "1. **Tipo de Causa**: Identificada como \"preemption\" (preempção). O disparo de Bush (`BuKi`) causou a morte da vítima antes que o disparo de Dlugash (`DlKi`) pudesse ocorrer.\n2. **Regras Críticas**: A regra `BuKi => ViDe` é a cadeia causal que conecta o disparo de Bush ao resultado morte.\n3. **Argumentos Derrotados**: Ao remover `BuKi`, o argumento que sustenta a morte via Bush é invalidado, mas a conclusão `ViDe` persiste no sistema devido à redundância causal (o disparo de Dlugash).\n4. **Justificativa Jurídica**: Embora o teste contrafactual puro falhe (pois a vítima morreria de qualquer forma pelo disparo de Dlugash), Bush é causa-in-fact porque seu ato foi o que efetivamente produziu o resultado no tempo e espaço, sobrepondo-se à causa alternativa.\n5. **Conceito da Definição 4.3**: A análise confirma que, em casos de preempção, a causa potencial é considerada causa-in-fact porque ela é a causa ativa que \"venceu\" a corrida causal, mesmo que a ausência da causa não impedisse o resultado final.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "ViDe",
+                "base_has_target": true,
+                "test_has_target": false
+              }
+            }
+          }
+        }
+      },
+      "output_path": "outputs/legal/compiled/mipro/case_2_results.json"
+    },
+    {
+      "case_id": 3,
+      "name": "Celular à Prova D'água (Consumer Law)",
+      "validation": {
+        "knowledge_base": {
+          "matches": true,
+          "expected": {
+            "premises": [
+              "PhWp",
+              "PoFa",
+              "MiUs",
+              "NoUs"
+            ],
+            "potential_causes": [
+              "PhWp",
+              "PoFa"
+            ],
+            "target_conclusion": "PrLi"
+          },
+          "got": {
+            "premises": [
+              "PhWp",
+              "PoFa",
+              "MiUs",
+              "NoUs"
+            ],
+            "potential_causes": [
+              "PhWp",
+              "PoFa"
+            ],
+            "target_conclusion": "PrLi"
+          }
+        },
+        "causal_model": {
+          "matches": true,
+          "expected": {
+            "defeasible_rules": [
+              "r1: PhWp AND PoFa => PrLi",
+              "r2: MiUs => ¬PrLi"
+            ],
+            "undercutter_rules": [
+              "r3: NoUs => ¬r2"
+            ]
+          },
+          "got": {
+            "strict_rules": [],
+            "defeasible_rules": [
+              "r0: PhWp AND PoFa => PrLi",
+              "r1: MiUs => ¬PrLi"
+            ],
+            "undercutter_rules": [
+              "r2: NoUs => ¬r1"
+            ],
+            "preferences": {
+              "r0": 0.9,
+              "r1": 0.7,
+              "r2": 0.95
+            }
+          }
+        },
+        "causal_results": {
+          "matches": true,
+          "expected": {
+            "PhWp": {
+              "is_cause": true,
+              "explanation": "A característica à prova d'água (PhWp) é causa da responsabilidade pois criou a expectativa de funcionamento na água."
+            }
+          },
+          "got": {
+            "PhWp": {
+              "is_cause": true,
+              "explanation": "1. **Tipo de Causa**: Identificada como \"production\". A propaganda de resistência à água (`PhWp`) é um fator ativo que, ao ser frustrado pela queda na piscina (`PoFa`), produz diretamente a responsabilidade do fornecedor (`PrLi`).\n2. **Regras Críticas**: A regra `PhWp ∧ PoFa => PrLi` é a regra central que conecta a publicidade enganosa (ou a quebra de expectativa) ao dano jurídico.\n3. **Argumentos Derrotados**: O argumento `A4`, que sustenta a responsabilidade, colapsa porque a premissa `PhWp` é essencial para a validade da regra de responsabilidade.\n4. **Justificativa Jurídica**: Sob a Definição 4.3, `PhWp` é causa-in-fact porque, \"but-for\" a propaganda de resistência à água, o consumidor não teria a expectativa de proteção, e a falha do produto não geraria a responsabilidade específica por vício de informação/propaganda. A ausência de `PhWp` altera o status jurídico do evento, removendo a responsabilidade do fornecedor.\n5. **Conclusão**: A propaganda foi o elemento que transformou um evento comum (queda na piscina) em um evento gerador de responsabilidade civil.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "PrLi",
+                "base_has_target": true,
+                "test_has_target": false
+              }
+            },
+            "PoFa": {
+              "is_cause": true,
+              "explanation": "1. **Tipo de Causa**: Identificada como \"production\". A queda na piscina (`PoFa`) é o evento que, em conjunto com a promessa de resistência (`PhWp`), produz o dano que gera a responsabilidade do fornecedor (`PrLi`).\n2. **Regras Críticas**: A regra de responsabilidade `PhWp ∧ PoFa ∧ NoUs => PrLi` foi desativada pela ausência da premissa `PoFa`.\n3. **Argumentos Derrotados**: O argumento `A4`, que sustentava a responsabilidade do fornecedor, foi derrotado no AF modificado, pois a premissa `PoFa` é essencial para a aplicação da regra.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, `PoFa` é causa-in-fact porque, sem a queda na piscina, o dano não ocorreria e, consequentemente, a responsabilidade (`PrLi`) não seria imputada ao fornecedor. O evento `PoFa` é um elo indispensável na cadeia causal que liga a conduta do fornecedor (propaganda) ao resultado danoso.\n5. **Conclusão**: A queda na piscina é causa direta da responsabilização, pois o dano só se materializa quando o produto é submetido à condição para a qual foi prometido ser resistente.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "PrLi",
+                "base_has_target": true,
+                "test_has_target": false
+              }
+            }
+          }
+        }
+      },
+      "output_path": "outputs/legal/compiled/mipro/case_3_results.json"
+    },
+    {
+      "case_id": 4,
+      "name": "Eletrocardiograma Não Solicitado (Omissão)",
+      "validation": {
+        "knowledge_base": {
+          "matches": true,
+          "expected": {
+            "premises": [
+              "DoTo",
+              "¬EcSo"
+            ],
+            "potential_causes": [
+              "¬EcSo"
+            ],
+            "target_conclusion": "PaFa"
+          },
+          "got": {
+            "premises": [
+              "DoTo",
+              "¬EcSo"
+            ],
+            "potential_causes": [
+              "¬EcSo"
+            ],
+            "target_conclusion": "PaFa"
+          }
+        },
+        "causal_model": {
+          "matches": true,
+          "expected": {
+            "defeasible_rules": [
+              "r0: DoTo => PaFa",
+              "r1: EcSo => TrIm"
+            ],
+            "undercutter_rules": [
+              "r2: TrIm => ¬r0"
+            ]
+          },
+          "got": {
+            "strict_rules": [],
+            "defeasible_rules": [
+              "r0: DoTo => PaFa",
+              "r1: EcSo => TrIm"
+            ],
+            "undercutter_rules": [
+              "r2: TrIm => ¬r0"
+            ],
+            "preferences": {
+              "r0": 0.7,
+              "r1": 0.8,
+              "r2": 0.9
+            }
+          }
+        },
+        "causal_results": {
+          "matches": true,
+          "expected": {
+            "¬EcSo": {
+              "is_cause": true,
+              "explanation": "No mundo contrafactual em que o exame é solicitado (EcSo), o tratamento imediato (TrIm) undercutta a regra que deriva a morte, removendo PaFa da extensão."
+            }
+          },
+          "got": {
+            "¬EcSo": {
+              "is_cause": true,
+              "explanation": "1. **Tipo de Causa**: Omissão. A falha do médico em solicitar o exame (`¬EcSo`) foi a omissão que permitiu a progressão do infarto para o óbito.\n2. **Regras Críticas**: A regra `DoTo ∧ ¬EcSo => PaFa` foi desativada. A introdução de `EcSo` no framework de teste permitiu a derivação de `TrIm` (tratamento imediato), que logicamente impede a conclusão de óbito.\n3. **Argumentos Derrotados**: O argumento que sustentava o óbito foi derrotado pela nova evidência de que o tratamento teria sido realizado, interrompendo a cadeia causal.\n4. **Justificativa Jurídica**: O teste \"but-for\" é satisfeito: \"Mas por não ter solicitado o exame, o paciente não teria falecido\". A omissão de um dever profissional (solicitar o exame em caso de dor torácica) é a causa jurídica do dano, pois a ação esperada teria evitado o resultado.\n5. **Conceito**: A análise confirma que a omissão é causa-in-fact, pois a negação da omissão (realizar o exame) altera o resultado final do sistema de argumentação.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "PaFa",
+                "base_has_target": true,
+                "test_has_target": false
+              }
+            }
+          }
+        }
+      },
+      "output_path": "outputs/legal/compiled/mipro/case_4_results.json"
+    },
+    {
+      "case_id": 5,
+      "name": "Dois Venenos (Sobredeterminação)",
+      "validation": {
+        "knowledge_base": {
+          "matches": true,
+          "expected": {
+            "premises": [
+              "VeA",
+              "VeB"
+            ],
+            "potential_causes": [
+              "VeA",
+              "VeB"
+            ],
+            "target_conclusion": "MoVe"
+          },
+          "got": {
+            "premises": [
+              "VeA",
+              "VeB"
+            ],
+            "potential_causes": [
+              "VeA",
+              "VeB"
+            ],
+            "target_conclusion": "MoVe"
+          }
+        },
+        "causal_model": {
+          "matches": true,
+          "expected": {
+            "defeasible_rules": [
+              "r0: VeA => MoVe",
+              "r1: VeB => MoVe"
+            ],
+            "undercutter_rules": []
+          },
+          "got": {
+            "strict_rules": [],
+            "defeasible_rules": [
+              "r0: VeA => MoVe",
+              "r1: VeB => MoVe"
+            ],
+            "undercutter_rules": [],
+            "preferences": {
+              "r0": 0.5,
+              "r1": 0.5
+            }
+          }
+        },
+        "causal_results": {
+          "matches": true,
+          "expected": {
+            "VeA": {
+              "is_cause": false,
+              "explanation": "Sobredeterminação: negando VeA, MoVe continua derivável por VeB, então o teste but-for da Definição 4.3 falha. Limitação conhecida do critério sine qua non."
+            },
+            "VeB": {
+              "is_cause": false,
+              "explanation": "Simétrico a VeA: cada dose sozinha era suficiente, logo nenhuma é condição necessária sob o teste but-for estrito."
+            }
+          },
+          "got": {
+            "VeA": {
+              "is_cause": false,
+              "explanation": "1. **Tipo de Causa**: Identificada como \"production\". `VeA` é um evento que, isoladamente, possui força causal suficiente para produzir o dano (`MoVe`).\n2. **Regras Críticas**: A regra `VeA => MoVe` é a cadeia causal direta que conecta a ação do agressor A ao resultado.\n3. **Argumentos Derrotados**: A negação de `VeA` invalida o argumento `A3`, mas não altera o status da conclusão `MoVe` no sistema, pois a presença de `VeB` garante a manutenção do efeito.\n4. **Justificativa Jurídica**: Embora o teste contrafactual puro (conditio sine qua non) não seja satisfeito devido à redundância (a morte ocorreria de qualquer forma por `VeB`), a Definição 4.3 reconhece a \"produção\" como critério de causalidade. Em casos de redundância causal, cada fator que é, por si só, suficiente para causar o dano é considerado causa-in-fact.\n5. **Conceito**: Trata-se de um caso de causalidade cumulativa/redundante, onde a contribuição ativa de `VeA` é suficiente para a atribuição de responsabilidade causal, independentemente da ação concorrente de `VeB`.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "MoVe",
+                "base_has_target": true,
+                "test_has_target": true
+              }
+            },
+            "VeB": {
+              "is_cause": false,
+              "explanation": "1. **Tipo de Causa**: Identificada como \"production\". `VeB` é um evento que, isoladamente, possui capacidade causal suficiente para produzir o dano (`MoVe`).\n2. **Regras Críticas**: A regra `VeB => MoVe` representa a cadeia causal direta.\n3. **Argumentos Derrotados**: A negação de `VeB` invalida o argumento específico que o utiliza, mas não altera o status da conclusão `MoVe`, que é sustentada pela redundância de `VeA`.\n4. **Justificativa Jurídica**: Embora o teste *but-for* falhe devido à redundância (a morte ocorreria mesmo sem `VeB`), a doutrina jurídica e a Definição 4.3 reconhecem que, em casos de causas suficientes concorrentes, cada agente que contribuiu com um fator suficiente para o dano é considerado causa-in-fact.\n5. **Conceito**: Trata-se de um caso de causalidade cumulativa/redundante. A ação de `VeB` é uma causa ativa e suficiente, sendo, portanto, juridicamente responsável pelo resultado, independentemente da ação de `VeA`.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "MoVe",
+                "base_has_target": true,
+                "test_has_target": true
+              }
+            }
+          }
+        }
+      },
+      "output_path": "outputs/legal/compiled/mipro/case_5_results.json"
+    },
+    {
+      "case_id": 6,
+      "name": "Prensa Sem Proteção (Excludente Afastada)",
+      "validation": {
+        "knowledge_base": {
+          "matches": true,
+          "expected": {
+            "premises": [
+              "SePr",
+              "TrRe",
+              "MaSp"
+            ],
+            "potential_causes": [
+              "SePr"
+            ],
+            "target_conclusion": "EmRe"
+          },
+          "got": {
+            "premises": [
+              "SePr",
+              "TrRe",
+              "MaSp"
+            ],
+            "potential_causes": [
+              "SePr"
+            ],
+            "target_conclusion": "EmRe"
+          }
+        },
+        "causal_model": {
+          "matches": true,
+          "expected": {
+            "defeasible_rules": [
+              "r0: SePr => EmRe",
+              "r1: TrRe => ¬EmRe"
+            ],
+            "undercutter_rules": [
+              "r2: MaSp => ¬r1"
+            ]
+          },
+          "got": {
+            "strict_rules": [],
+            "defeasible_rules": [
+              "r0: SePr => EmRe",
+              "r1: TrRe => ¬EmRe"
+            ],
+            "undercutter_rules": [
+              "r2: MaSp => ¬r1"
+            ],
+            "preferences": {
+              "r0": 0.8,
+              "r1": 0.7,
+              "r2": 0.9
+            }
+          }
+        },
+        "causal_results": {
+          "matches": true,
+          "expected": {
+            "SePr": {
+              "is_cause": true,
+              "explanation": "A alegação de culpa do trabalhador (TrRe) é undercuttada pela prova das câmeras (MaSp); negando SePr, EmRe deixa de ser derivável."
+            }
+          },
+          "got": {
+            "SePr": {
+              "is_cause": true,
+              "explanation": "1. **Tipo de Causa**: Identificada como \"production\". A operação da máquina sem a proteção obrigatória (`SePr`) é o fator que, em conjunto com a falha de fabricação (`MaSp`), produz o resultado jurídico de responsabilização do empregador (`EmRe`).\n2. **Regras Críticas**: A regra `MaSp ∧ SePr => EmRe` é a regra central que vincula a condição de perigo à responsabilidade.\n3. **Argumentos Derrotados**: O argumento `A5` (que sustenta a responsabilidade) é derrotado no AF modificado, pois a premissa `SePr` foi removida, tornando a regra `r1` inoperante.\n4. **Justificativa Jurídica**: Sob a Definição 4.3, `SePr` é causa-in-fact porque, \"but-for\" a operação sem proteção, a responsabilização do empregador não teria ocorrido (ou não seria derivada pelo sistema). A prova de que a máquina já veio sem proteção (`MaSp`) reforça que a omissão de segurança é o elo causal direto.\n5. **Conclusão**: A operação sem proteção é a causa direta da responsabilização, uma vez que a sua ausência (no teste contrafactual) elimina o dano jurídico (responsabilidade).",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "EmRe",
+                "base_has_target": true,
+                "test_has_target": false
+              }
+            }
+          }
+        }
+      },
+      "output_path": "outputs/legal/compiled/mipro/case_6_results.json"
+    },
+    {
+      "case_id": 7,
+      "name": "Rejeitos e Esgoto (Preempção Ambiental)",
+      "validation": {
+        "knowledge_base": {
+          "matches": true,
+          "expected": {
+            "premises": [
+              "FaDe",
+              "EsVa",
+              "PeJa"
+            ],
+            "potential_causes": [
+              "FaDe",
+              "EsVa"
+            ],
+            "target_conclusion": "PeMo"
+          },
+          "got": {
+            "premises": [
+              "FaDe",
+              "EsVa",
+              "PeJa"
+            ],
+            "potential_causes": [
+              "FaDe",
+              "EsVa"
+            ],
+            "target_conclusion": "PeMo"
+          }
+        },
+        "causal_model": {
+          "matches": true,
+          "expected": {
+            "defeasible_rules": [
+              "r0: FaDe => PeMo",
+              "r1: EsVa => PeMo"
+            ],
+            "undercutter_rules": [
+              "r2: PeJa => ¬r1"
+            ]
+          },
+          "got": {
+            "strict_rules": [],
+            "defeasible_rules": [
+              "r0: FaDe => PeMo",
+              "r1: EsVa => PeMo"
+            ],
+            "undercutter_rules": [
+              "r2: PeJa => ¬r1"
+            ],
+            "preferences": {
+              "r0": 0.9,
+              "r1": 0.7,
+              "r2": 0.95
+            }
+          }
+        },
+        "causal_results": {
+          "matches": true,
+          "expected": {
+            "FaDe": {
+              "is_cause": true,
+              "explanation": "Negando FaDe, PeMo deixa de ser derivável: a regra do esgoto segue undercuttada por PeJa (intermediário congelado), como na preempção clássica."
+            },
+            "EsVa": {
+              "is_cause": false,
+              "explanation": "O esgoto chegou tarde demais: PeMo persiste via FaDe quando EsVa é negado."
+            }
+          },
+          "got": {
+            "FaDe": {
+              "is_cause": true,
+              "explanation": "1. **Tipo de Causa**: Identificada como \"preemption\" (preempção). O despejo da fábrica (`FaDe`) causou a morte dos peixes antes que o vazamento de esgoto (`EsVa`) pudesse fazê-lo.\n2. **Regras Críticas**: A regra `FaDe => PeMo` é a cadeia principal no cenário original. A existência de `EsVa` cria uma cadeia causal redundante que garante o mesmo resultado.\n3. **Argumentos Derrotados**: Ao remover `FaDe`, o argumento `A1` é derrotado, mas a conclusão `PeMo` persiste através da cadeia alternativa iniciada por `EsVa`.\n4. **Justificativa Jurídica**: Embora `FaDe` não seja uma condição *sine qua non* (pois os peixes morreriam de qualquer forma pelo esgoto), ele é classificado como causa-in-fact sob a ótica da preempção, pois a fábrica efetivamente causou o dano antes que a causa alternativa pudesse se concretizar.\n5. **Conceito da Definição 4.3**: A análise demonstra que, embora a negação de `FaDe` não impeça `PeMo` (devido à redundância), a ação da fábrica foi o evento que efetivamente produziu o resultado no mundo real, sobrepondo-se à causa subsequente.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "PeMo",
+                "base_has_target": true,
+                "test_has_target": false
+              }
+            },
+            "EsVa": {
+              "is_cause": false,
+              "explanation": "1. **Tipo de Causa**: Classificado como \"none\" para `EsVa`. Embora o esgoto seja tóxico, ele não foi a causa da morte dos peixes, pois o dano já havia ocorrido devido ao despejo da fábrica (`FaDe`).\n2. **Regras Críticas**: A regra `EsVa => PeMo` é ineficaz no cenário, pois o estado `PeJa` (peixes já mortos) atua como um bloqueador lógico para a cadeia causal do esgoto.\n3. **Argumentos Derrotados**: O argumento baseado em `EsVa` não é necessário para a conclusão `PeMo`. A negação de `EsVa` não altera o status de `PeMo` na extensão fundamentada.\n4. **Justificativa Jurídica**: Sob o teste \"but-for\", `EsVa` não é causa-in-fact. A morte dos peixes teria ocorrido da mesma forma devido à ação da fábrica. Como o esgoto chegou após o dano já estar consumado, ele não possui nexo causal com o resultado `PeMo`.\n5. **Conceito**: A análise confirma que, para ser causa-in-fact, a premissa deve ser necessária para a conclusão. Como `PeMo` permanece presente no `test_grounded_extension` mesmo sem `EsVa`, a causalidade é negada para este fator específico.",
+              "llm_is_cause": false,
+              "solver_evidence": {
+                "target": "PeMo",
+                "base_has_target": true,
+                "test_has_target": true
+              }
+            }
+          }
+        }
+      },
+      "output_path": "outputs/legal/compiled/mipro/case_7_results.json"
+    },
+    {
+      "case_id": 8,
+      "name": "Freios Sem Manutenção (Cadeia de Dois Passos)",
+      "validation": {
+        "knowledge_base": {
+          "matches": false,
+          "expected": {
+            "premises": [
+              "FrSm"
+            ],
+            "potential_causes": [
+              "FrSm"
+            ],
+            "target_conclusion": "MoFa"
+          },
+          "got": {
+            "premises": [
+              "FrSm",
+              "CoVe"
+            ],
+            "potential_causes": [
+              "FrSm"
+            ],
+            "target_conclusion": "MoFa"
+          }
+        },
+        "causal_model": {
+          "matches": false,
+          "expected": {
+            "defeasible_rules": [
+              "r0: FrSm => CoVe",
+              "r1: CoVe => MoFa"
+            ],
+            "undercutter_rules": []
+          },
+          "got": {
+            "strict_rules": [],
+            "defeasible_rules": [
+              "r0: FrSm AND CoVe => MoFa"
+            ],
+            "undercutter_rules": [],
+            "preferences": {
+              "r0": 0.9
+            }
+          }
+        },
+        "causal_results": {
+          "matches": true,
+          "expected": {
+            "FrSm": {
+              "is_cause": true,
+              "explanation": "Cadeia de dois passos: FrSm deriva CoVe, que deriva MoFa; negando FrSm a cadeia inteira cai. A colisão (CoVe) é elo intermediário, não premissa."
+            }
+          },
+          "got": {
+            "FrSm": {
+              "is_cause": true,
+              "explanation": "1. **Tipo de Causa**: Identificado como \"production\". A falta de manutenção dos freios (`FrSm`) é o evento ativo que desencadeou a sequência causal culminando na morte do motorista.\n2. **Regras Críticas**: A regra que conecta a falha mecânica à colisão e, subsequentemente, ao óbito, foi desativada pela negação da premissa `FrSm`.\n3. **Argumentos Derrotados**: O argumento `A2`, que estabelecia a relação causal entre a falta de manutenção e a morte, perdeu sua validade no AF modificado, pois a premissa necessária (`FrSm`) foi substituída por sua negação.\n4. **Justificativa Jurídica**: De acordo com a Definição 4.3, `FrSm` é causa-in-fact porque, \"but-for\" a falta de manutenção, o acidente e a morte não teriam ocorrido. A omissão na manutenção é a causa direta do dano.\n5. **Conclusão**: A falta de manutenção dos freios é a causa determinante do óbito, configurando uma relação de produção causal direta.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "MoFa",
+                "base_has_target": true,
+                "test_has_target": false
+              }
+            }
+          }
+        }
+      },
+      "output_path": "outputs/legal/compiled/mipro/case_8_results.json"
+    },
+    {
+      "case_id": 9,
+      "name": "Ciclista Sem Capacete (Concausa Irrelevante)",
+      "validation": {
+        "knowledge_base": {
+          "matches": true,
+          "expected": {
+            "premises": [
+              "CaAt",
+              "¬CaUs"
+            ],
+            "potential_causes": [
+              "CaAt",
+              "¬CaUs"
+            ],
+            "target_conclusion": "FrPe"
+          },
+          "got": {
+            "premises": [
+              "CaAt",
+              "¬CaUs"
+            ],
+            "potential_causes": [
+              "CaAt",
+              "¬CaUs"
+            ],
+            "target_conclusion": "FrPe"
+          }
+        },
+        "causal_model": {
+          "matches": false,
+          "expected": {
+            "defeasible_rules": [
+              "r0: CaAt => FrPe"
+            ],
+            "undercutter_rules": []
+          },
+          "got": {
+            "strict_rules": [],
+            "defeasible_rules": [
+              "r0: CaAt => FrPe",
+              "r1: CaUs => ¬FrPe"
+            ],
+            "undercutter_rules": [
+              "r2: ¬CaUs => ¬r1"
+            ],
+            "preferences": {
+              "r0": 0.9,
+              "r1": 0.5,
+              "r2": 0.95
+            }
+          }
+        },
+        "causal_results": {
+          "matches": true,
+          "expected": {
+            "CaAt": {
+              "is_cause": true,
+              "explanation": "Negando CaAt, FrPe deixa de ser derivável."
+            },
+            "¬CaUs": {
+              "is_cause": false,
+              "explanation": "A falta de capacete não participa de nenhuma cadeia até FrPe (a perícia a excluiu), então negá-la não altera a extensão grounded."
+            }
+          },
+          "got": {
+            "CaAt": {
+              "is_cause": true,
+              "explanation": "1. **Tipo de Causa**: Identificado como \"production\". O atropelamento (`CaAt`) é o evento ativo que produz diretamente a lesão (`FrPe`).\n2. **Regras Críticas**: A regra `CaAt => FrPe` foi desativada pela negação da premissa `CaAt`.\n3. **Argumentos Derrotados**: O argumento `A3`, que sustentava a conclusão da fratura, foi derrotado no AF modificado.\n4. **Justificativa Jurídica**: O atropelamento é causa-in-fact sob o teste *but-for* (sine qua non), pois, na ausência do atropelamento, a fratura na perna não teria ocorrido. A falta de capacete (`¬CaUs`), embora seja um fato presente, não é causa da fratura na perna, pois a perícia confirmou que o uso do equipamento não teria evitado esse dano específico, não havendo nexo causal entre a omissão do capacete e a fratura.\n5. **Conclusão**: O atropelamento é a causa direta e necessária da fratura, enquanto a falta de capacete é irrelevante para o nexo causal deste dano específico.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "FrPe",
+                "base_has_target": true,
+                "test_has_target": false
+              }
+            },
+            "¬CaUs": {
+              "is_cause": false,
+              "explanation": "1. **Tipo de Causa**: \"none\". A falta de capacete (¬CaUs) não possui relação causal com a fratura na perna (FrPe).\n2. **Regras Críticas**: A regra que conecta o atropelamento (CaAt) à fratura (FrPe) é a única regra ativa que sustenta a conclusão. A premissa ¬CaUs é irrelevante para a derivação de FrPe.\n3. **Argumentos Derrotados**: Nenhum argumento relevante para a conclusão FrPe foi derrotado pela introdução de CaUs. A conclusão FrPe persiste inalterada no `test_grounded_extension`.\n4. **Justificativa Jurídica**: O teste *but-for* falha, pois, mesmo que o ciclista estivesse usando capacete, a fratura na perna teria ocorrido da mesma forma devido ao atropelamento. A falta de capacete é um fato concomitante, mas não é uma causa-in-fact do dano específico (fratura na perna).\n5. **Conceito**: A análise confirma que a omissão (não usar capacete) não é causa do dano, pois não há nexo causal lógico ou factual entre o uso do equipamento de proteção craniana e a integridade física dos membros inferiores.",
+              "llm_is_cause": false,
+              "solver_evidence": {
+                "target": "FrPe",
+                "base_has_target": true,
+                "test_has_target": true
+              }
+            }
+          }
+        }
+      },
+      "output_path": "outputs/legal/compiled/mipro/case_9_results.json"
+    },
+    {
+      "case_id": 10,
+      "name": "Aço Fora de Especificação (Produção Simples)",
+      "validation": {
+        "knowledge_base": {
+          "matches": true,
+          "expected": {
+            "premises": [
+              "AcIn"
+            ],
+            "potential_causes": [
+              "AcIn"
+            ],
+            "target_conclusion": "LaDe"
+          },
+          "got": {
+            "premises": [
+              "AcIn"
+            ],
+            "potential_causes": [
+              "AcIn"
+            ],
+            "target_conclusion": "LaDe"
+          }
+        },
+        "causal_model": {
+          "matches": true,
+          "expected": {
+            "defeasible_rules": [
+              "r0: AcIn => LaDe"
+            ],
+            "undercutter_rules": []
+          },
+          "got": {
+            "strict_rules": [],
+            "defeasible_rules": [
+              "r0: AcIn => LaDe"
+            ],
+            "undercutter_rules": [],
+            "preferences": {
+              "r0": 0.9
+            }
+          }
+        },
+        "causal_results": {
+          "matches": true,
+          "expected": {
+            "AcIn": true
+          },
+          "got": {
+            "AcIn": {
+              "is_cause": true,
+              "explanation": "1. **Tipo de Causa**: Identificado como \"production\". A aprovação do aço fora de especificação (`AcIn`) é o fator causal direto que, ao ser integrado à estrutura da laje, produz o desabamento (`LaDe`).\n2. **Regras Críticas**: A regra `AcIn => LaDe` é a regra crítica. A sua desativação ocorre pela remoção da premissa `AcIn` no cenário contrafactual.\n3. **Argumentos Derrotados**: O argumento que sustenta o desabamento foi derrotado porque a condição necessária (o aço inadequado) foi substituída por uma condição segura (aço conforme a especificação).\n4. **Justificativa Jurídica**: A causalidade é estabelecida pelo teste \"but-for\": mas não fosse a aprovação do aço fora de especificação, o desabamento não teria ocorrido. A conduta do engenheiro é, portanto, causa-in-fact do dano.\n5. **Conceito**: A análise confirma que `AcIn` é uma condição necessária para o resultado, enquadrando-se perfeitamente na definição de causa-in-fact por produção.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "LaDe",
+                "base_has_target": true,
+                "test_has_target": false
+              }
+            }
+          }
+        }
+      },
+      "output_path": "outputs/legal/compiled/mipro/case_10_results.json"
+    },
+    {
+      "case_id": 11,
+      "name": "Derramamento de Óleo (Produção Simples)",
+      "validation": {
+        "knowledge_base": {
+          "matches": true,
+          "expected": {
+            "premises": [
+              "DeOl"
+            ],
+            "potential_causes": [
+              "DeOl"
+            ],
+            "target_conclusion": "DaAm"
+          },
+          "got": {
+            "premises": [
+              "DeOl"
+            ],
+            "potential_causes": [
+              "DeOl"
+            ],
+            "target_conclusion": "DaAm"
+          }
+        },
+        "causal_model": {
+          "matches": true,
+          "expected": {
+            "defeasible_rules": [
+              "r0: DeOl => DaAm"
+            ],
+            "undercutter_rules": []
+          },
+          "got": {
+            "strict_rules": [],
+            "defeasible_rules": [
+              "r0: DeOl => DaAm"
+            ],
+            "undercutter_rules": [],
+            "preferences": {
+              "r0": 1.0
+            }
+          }
+        },
+        "causal_results": {
+          "matches": true,
+          "expected": {
+            "DeOl": true
+          },
+          "got": {
+            "DeOl": {
+              "is_cause": true,
+              "explanation": "1. **Tipo de Causa**: Identificada como \"production\". O derramamento de óleo é o evento ativo que gera diretamente a contaminação das praias.\n2. **Regras Críticas**: A regra `DeOl => DaAm` é a conexão causal direta. A negação de `DeOl` interrompe esta regra.\n3. **Argumentos Derrotados**: O argumento que sustenta o dano ambiental (`DaAm`) foi derrotado pela ausência da premissa necessária (`DeOl`).\n4. **Justificativa Jurídica**: O teste *but-for* (sine qua non) é satisfeito: \"Mas por não ter ocorrido o derramamento de óleo, o dano ambiental não teria ocorrido\". A relação causal é direta e inequívoca.\n5. **Conceito**: A análise confirma que `DeOl` é a causa-in-fact, pois a cadeia causal que leva ao dano depende inteiramente da ocorrência do derramamento.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "DaAm",
+                "base_has_target": true,
+                "test_has_target": false
+              }
+            }
+          }
+        }
+      },
+      "output_path": "outputs/legal/compiled/mipro/case_11_results.json"
+    },
+    {
+      "case_id": 12,
+      "name": "Agressão na Boate (Produção Simples)",
+      "validation": {
+        "knowledge_base": {
+          "matches": true,
+          "expected": {
+            "premises": [
+              "SeAg"
+            ],
+            "potential_causes": [
+              "SeAg"
+            ],
+            "target_conclusion": "LeCo"
+          },
+          "got": {
+            "premises": [
+              "SeAg"
+            ],
+            "potential_causes": [
+              "SeAg"
+            ],
+            "target_conclusion": "LeCo"
+          }
+        },
+        "causal_model": {
+          "matches": true,
+          "expected": {
+            "defeasible_rules": [
+              "r0: SeAg => LeCo"
+            ],
+            "undercutter_rules": []
+          },
+          "got": {
+            "strict_rules": [],
+            "defeasible_rules": [
+              "r0: SeAg => LeCo"
+            ],
+            "undercutter_rules": [],
+            "preferences": {
+              "r0": 1.0
+            }
+          }
+        },
+        "causal_results": {
+          "matches": true,
+          "expected": {
+            "SeAg": true
+          },
+          "got": {
+            "SeAg": {
+              "is_cause": true,
+              "explanation": "1. **Tipo de Causa**: Identificado como \"production\". A agressão física (`SeAg`) é o ato que diretamente produz o dano (`LeCo`).\n2. **Regras Críticas**: A regra `SeAg => LeCo` foi desativada pela negação da premissa `SeAg`.\n3. **Argumentos Derrotados**: O argumento que sustentava a conclusão de lesão corporal foi derrotado, pois a ausência da agressão remove o suporte lógico para a existência da lesão no modelo.\n4. **Justificativa Jurídica**: De acordo com o teste *but-for* (sine qua non), a agressão é causa-in-fact porque, na ausência do ato do segurança, o resultado (lesão) não teria ocorrido. A relação causal é direta e necessária para a configuração do dano.\n5. **Conclusão**: A agressão do segurança é a causa direta da lesão corporal sofrida pelo cliente, satisfazendo os critérios de causalidade factual.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "LeCo",
+                "base_has_target": true,
+                "test_has_target": false
+              }
+            }
+          }
+        }
+      },
+      "output_path": "outputs/legal/compiled/mipro/case_12_results.json"
+    },
+    {
+      "case_id": 13,
+      "name": "Medicamento Vencido (Produção com Conjunção)",
+      "validation": {
+        "knowledge_base": {
+          "matches": true,
+          "expected": {
+            "premises": [
+              "MeVe",
+              "PaIg"
+            ],
+            "potential_causes": [
+              "MeVe"
+            ],
+            "target_conclusion": "ReAd"
+          },
+          "got": {
+            "premises": [
+              "MeVe",
+              "PaIg"
+            ],
+            "potential_causes": [
+              "MeVe"
+            ],
+            "target_conclusion": "ReAd"
+          }
+        },
+        "causal_model": {
+          "matches": true,
+          "expected": {
+            "defeasible_rules": [
+              "r0: MeVe AND PaIg => ReAd"
+            ],
+            "undercutter_rules": []
+          },
+          "got": {
+            "strict_rules": [],
+            "defeasible_rules": [
+              "r0: MeVe AND PaIg => ReAd"
+            ],
+            "undercutter_rules": [],
+            "preferences": {
+              "r0": 0.9
+            }
+          }
+        },
+        "causal_results": {
+          "matches": true,
+          "expected": {
+            "MeVe": true
+          },
+          "got": {
+            "MeVe": {
+              "is_cause": true,
+              "explanation": "1. **Tipo de Causa**: Identificado como \"production\". A venda do medicamento vencido (`MeVe`) é o fator ativo que, combinado com a ingestão (`PaIg`), produz o dano (`ReAd`).\n2. **Regras Críticas**: A regra `MeVe ∧ PaIg => ReAd` foi a regra crítica afetada. A negação de `MeVe` impede que esta regra seja disparada.\n3. **Argumentos Derrotados**: O argumento `A2`, que sustentava a conclusão de reação adversa, foi derrotado pela ausência da premissa `MeVe` no conjunto de fatos do sistema modificado.\n4. **Justificativa Jurídica**: De acordo com a Definição 4.3, `MeVe` é causa-in-fact porque, \"but-for\" a venda do medicamento vencido, a reação adversa não teria ocorrido. A venda do produto em desconformidade com as normas sanitárias é o elo causal direto para o dano sofrido pelo paciente.\n5. **Conclusão**: A relação causal é de produção, onde a conduta da farmácia (venda de produto vencido) é a causa determinante do resultado danoso.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "ReAd",
+                "base_has_target": true,
+                "test_has_target": false
+              }
+            }
+          }
+        }
+      },
+      "output_path": "outputs/legal/compiled/mipro/case_13_results.json"
+    },
+    {
+      "case_id": 14,
+      "name": "Combustível Adulterado (Produção com Conjunção)",
+      "validation": {
+        "knowledge_base": {
+          "matches": true,
+          "expected": {
+            "premises": [
+              "CoAd",
+              "MoAb"
+            ],
+            "potential_causes": [
+              "CoAd",
+              "MoAb"
+            ],
+            "target_conclusion": "MoDa"
+          },
+          "got": {
+            "premises": [
+              "CoAd",
+              "MoAb"
+            ],
+            "potential_causes": [
+              "CoAd",
+              "MoAb"
+            ],
+            "target_conclusion": "MoDa"
+          }
+        },
+        "causal_model": {
+          "matches": true,
+          "expected": {
+            "defeasible_rules": [
+              "r0: CoAd AND MoAb => MoDa"
+            ],
+            "undercutter_rules": []
+          },
+          "got": {
+            "strict_rules": [],
+            "defeasible_rules": [
+              "r0: CoAd AND MoAb => MoDa"
+            ],
+            "undercutter_rules": [],
+            "preferences": {
+              "r0": 0.9
+            }
+          }
+        },
+        "causal_results": {
+          "matches": true,
+          "expected": {
+            "CoAd": true,
+            "MoAb": true
+          },
+          "got": {
+            "CoAd": {
+              "is_cause": true,
+              "explanation": "1. **Tipo de Causa**: Identificado como \"production\". A venda de combustível adulterado (`CoAd`) é um fator ativo e necessário que, em conjunto com o abastecimento (`MoAb`), produz o dano ao motor (`MoDa`).\n2. **Regras Críticas**: A regra `CoAd ∧ MoAb => MoDa` é a regra central de causalidade. A negação de `CoAd` interrompe a cadeia causal.\n3. **Argumentos Derrotados**: O argumento `A2`, que sustenta a conclusão `MoDa`, é derrotado no AF modificado, pois a premissa `CoAd` é essencial para a sua derivação.\n4. **Justificativa Jurídica**: De acordo com a Definição 4.3, `CoAd` é causa-in-fact porque, \"but-for\" a venda do combustível adulterado, o dano ao motor não teria ocorrido. A relação é de produção direta, onde o produto defeituoso é o agente causador do dano.\n5. **Conclusão**: A venda de combustível adulterado é causa direta do dano ao motor, satisfazendo o teste de causalidade jurídica.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "MoDa",
+                "base_has_target": true,
+                "test_has_target": false
+              }
+            },
+            "MoAb": {
+              "is_cause": true,
+              "explanation": "1. **Tipo de Causa**: Identificada como \"production\". O ato de abastecer com combustível adulterado (`MoAb`) é o elo ativo que, em conjunto com a qualidade do combustível (`CoAd`), produz diretamente o dano ao motor (`MoDa`).\n2. **Regras Críticas**: A regra `CoAd ∧ MoAb => MoDa` é a regra central que foi desativada pela negação de `MoAb`.\n3. **Argumentos Derrotados**: O argumento `A2`, que sustentava a ocorrência do dano, foi derrotado no AF modificado, pois a premissa `MoAb` foi substituída por `¬MoAb`.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, `MoAb` é causa-in-fact porque, \"but-for\" o abastecimento com o combustível adulterado, o dano ao motor não teria ocorrido. A ação do motorista (ou o evento de abastecimento) é uma condição necessária para a concretização do dano.\n5. **Conclusão**: A relação causal é direta e de produção, onde a ausência do evento de abastecimento interrompe a cadeia causal que leva ao dano.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "MoDa",
+                "base_has_target": true,
+                "test_has_target": false
+              }
+            }
+          }
+        }
+      },
+      "output_path": "outputs/legal/compiled/mipro/case_14_results.json"
+    },
+    {
+      "case_id": 15,
+      "name": "Obra Sem Tapume (Produção com Conjunção)",
+      "validation": {
+        "knowledge_base": {
+          "matches": true,
+          "expected": {
+            "premises": [
+              "ObSt",
+              "PeCa"
+            ],
+            "potential_causes": [
+              "ObSt"
+            ],
+            "target_conclusion": "PeAt"
+          },
+          "got": {
+            "premises": [
+              "ObSt",
+              "PeCa"
+            ],
+            "potential_causes": [
+              "ObSt"
+            ],
+            "target_conclusion": "PeAt"
+          }
+        },
+        "causal_model": {
+          "matches": true,
+          "expected": {
+            "defeasible_rules": [
+              "r0: ObSt AND PeCa => PeAt"
+            ],
+            "undercutter_rules": []
+          },
+          "got": {
+            "strict_rules": [],
+            "defeasible_rules": [
+              "r0: ObSt AND PeCa => PeAt"
+            ],
+            "undercutter_rules": [],
+            "preferences": {
+              "r0": 0.9
+            }
+          }
+        },
+        "causal_results": {
+          "matches": true,
+          "expected": {
+            "ObSt": true
+          },
+          "got": {
+            "ObSt": {
+              "is_cause": true,
+              "explanation": "1. **Tipo de Causa**: Identificada como \"omission\". A falta de uma medida de segurança obrigatória (tapume) permitiu que o risco se concretizasse em dano.\n2. **Regras Críticas**: A regra `PeCa ∧ ObSt => PeAt` foi desativada pela introdução de `¬ObSt`.\n3. **Argumentos Derrotados**: O argumento `A2`, que sustentava a conclusão `PeAt`, foi invalidado no AF modificado, pois a premissa `ObSt` foi substituída por sua negação.\n4. **Justificativa Jurídica**: A omissão do dever de cuidado (instalar tapume) é causa-in-fact sob o teste \"but-for\": se o tapume estivesse presente, o pedestre não teria sido atingido. A ausência da medida de proteção é, portanto, o fator determinante para a ocorrência do dano.\n5. **Conceito**: A análise confirma que a omissão de uma precaução necessária é causa direta do resultado danoso, conforme a Definição 4.3.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "PeAt",
+                "base_has_target": true,
+                "test_has_target": false
+              }
+            }
+          }
+        }
+      },
+      "output_path": "outputs/legal/compiled/mipro/case_15_results.json"
+    },
+    {
+      "case_id": 16,
+      "name": "Vazamento de Gás (Cadeia de Dois Passos)",
+      "validation": {
+        "knowledge_base": {
+          "matches": true,
+          "expected": {
+            "premises": [
+              "VaGa"
+            ],
+            "potential_causes": [
+              "VaGa"
+            ],
+            "target_conclusion": "InPr"
+          },
+          "got": {
+            "premises": [
+              "VaGa"
+            ],
+            "potential_causes": [
+              "VaGa"
+            ],
+            "target_conclusion": "InPr"
+          }
+        },
+        "causal_model": {
+          "matches": true,
+          "expected": {
+            "defeasible_rules": [
+              "r0: VaGa => ExAp",
+              "r1: ExAp => InPr"
+            ],
+            "undercutter_rules": []
+          },
+          "got": {
+            "strict_rules": [],
+            "defeasible_rules": [
+              "r0: VaGa => ExAp",
+              "r1: ExAp => InPr"
+            ],
+            "undercutter_rules": [],
+            "preferences": {
+              "r0": 0.9,
+              "r1": 0.9
+            }
+          }
+        },
+        "causal_results": {
+          "matches": true,
+          "expected": {
+            "VaGa": true
+          },
+          "got": {
+            "VaGa": {
+              "is_cause": true,
+              "explanation": "1. **Tipo de Causa**: Identificado como \"production\". O vazamento de gás (`VaGa`) é o evento inicial que, através de uma cadeia de eventos (explosão), produz diretamente o dano final (`InPr`).\n2. **Regras Críticas**: A regra que conecta o vazamento à explosão e, consequentemente, ao incêndio, foi desativada pela negação da premissa `VaGa`.\n3. **Argumentos Derrotados**: O argumento `A2`, que estabelecia a relação causal entre o vazamento e o incêndio, perdeu sua validade no AF modificado, pois a premissa necessária (`VaGa`) não está mais presente.\n4. **Justificativa Jurídica**: De acordo com a Definição 4.3, `VaGa` é causa-in-fact porque, na ausência do vazamento, a conclusão `InPr` não é alcançada. O vazamento é uma condição *sine qua non* para a ocorrência do incêndio.\n5. **Conclusão**: O vazamento de gás é a causa direta do incêndio, configurando uma relação de produção causal onde o dano não teria ocorrido \"mas para\" a existência do vazamento.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "InPr",
+                "base_has_target": true,
+                "test_has_target": false
+              }
+            }
+          }
+        }
+      },
+      "output_path": "outputs/legal/compiled/mipro/case_16_results.json"
+    },
+    {
+      "case_id": 17,
+      "name": "Corrosão na Passarela (Cadeia de Dois Passos)",
+      "validation": {
+        "knowledge_base": {
+          "matches": false,
+          "expected": {
+            "premises": [
+              "CoNt"
+            ],
+            "potential_causes": [
+              "CoNt"
+            ],
+            "target_conclusion": "PeQu"
+          },
+          "got": {
+            "premises": [
+              "CoNt",
+              "EsCe"
+            ],
+            "potential_causes": [
+              "CoNt"
+            ],
+            "target_conclusion": "PeQu"
+          }
+        },
+        "causal_model": {
+          "matches": true,
+          "expected": {
+            "defeasible_rules": [
+              "r0: CoNt => EsCe",
+              "r1: EsCe => PeQu"
+            ],
+            "undercutter_rules": []
+          },
+          "got": {
+            "strict_rules": [],
+            "defeasible_rules": [
+              "r0: CoNt => EsCe",
+              "r1: EsCe => PeQu"
+            ],
+            "undercutter_rules": [],
+            "preferences": {
+              "r0": 0.9,
+              "r1": 0.9
+            }
+          }
+        },
+        "causal_results": {
+          "matches": false,
+          "expected": {
+            "CoNt": true
+          },
+          "got": {
+            "CoNt": {
+              "is_cause": false,
+              "explanation": "1. **Tipo de Causa**: Omissão. A falha da concessionária em realizar a manutenção preventiva (`CoNt`) é a causa jurídica da queda dos pedestres.\n2. **Regras Críticas**: A regra que conecta a falta de tratamento à falha estrutural (`EsCe`) e, consequentemente, à queda (`PeQu`).\n3. **Argumentos Derrotados**: O argumento que sustenta a queda como resultado da omissão é o foco da análise. A negação da omissão (realização do tratamento) é o ponto de controle para verificar a causalidade.\n4. **Justificativa Jurídica**: A concessionária possui o dever de garantir a segurança da estrutura. A omissão em tratar a corrosão é uma causa-in-fact, pois, \"but-for\" a omissão, a manutenção teria sido realizada, prevenindo o rompimento dos cabos e a queda dos pedestres.\n5. **Conclusão**: A omissão é a causa determinante, pois a ausência de tratamento é o elo que permite a progressão do dano.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "PeQu",
+                "base_has_target": true,
+                "test_has_target": true
+              }
+            }
+          }
+        }
+      },
+      "output_path": "outputs/legal/compiled/mipro/case_17_results.json"
+    },
+    {
+      "case_id": 18,
+      "name": "Elevador Sem Conserto (Omissão)",
+      "validation": {
+        "knowledge_base": {
+          "matches": true,
+          "expected": {
+            "premises": [
+              "DeFr",
+              "¬CoRe"
+            ],
+            "potential_causes": [
+              "¬CoRe"
+            ],
+            "target_conclusion": "CaDe"
+          },
+          "got": {
+            "premises": [
+              "DeFr",
+              "¬CoRe"
+            ],
+            "potential_causes": [
+              "¬CoRe"
+            ],
+            "target_conclusion": "CaDe"
+          }
+        },
+        "causal_model": {
+          "matches": true,
+          "expected": {
+            "defeasible_rules": [
+              "r0: DeFr => CaDe",
+              "r1: CoRe => DeEl"
+            ],
+            "undercutter_rules": [
+              "r2: DeEl => ¬r0"
+            ]
+          },
+          "got": {
+            "strict_rules": [],
+            "defeasible_rules": [
+              "r0: DeFr => CaDe",
+              "r1: CoRe => DeEl"
+            ],
+            "undercutter_rules": [
+              "r2: DeEl => ¬r0"
+            ],
+            "preferences": {
+              "r0": 0.8,
+              "r1": 0.8,
+              "r2": 0.9
+            }
+          }
+        },
+        "causal_results": {
+          "matches": true,
+          "expected": {
+            "¬CoRe": true
+          },
+          "got": {
+            "¬CoRe": {
+              "is_cause": true,
+              "explanation": "1. **Tipo de Causa**: Trata-se de uma relação de \"omissão\". A falha do condomínio em realizar o conserto (`¬CoRe`) é a condição necessária que permitiu que o defeito no freio (`DeFr`) resultasse na queda da cabine (`CaDe`).\n2. **Regras Críticas**: A regra `DeFr ∧ ¬CoRe => CaDe` é a regra central. Quando `¬CoRe` é substituído por `CoRe` (conserto realizado), a regra `DeFr ∧ CoRe => DeEl` é ativada, eliminando o risco.\n3. **Argumentos Derrotados**: O argumento que sustenta a queda (`CaDe`) é derrotado porque a eliminação do defeito (`DeEl`) impede a progressão da cadeia causal.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, se a negação da omissão (ou seja, a ação de consertar) resulta na ausência do efeito (queda), a omissão é considerada causa-in-fact. O condomínio tinha o dever de manutenção, e sua omissão foi o elo determinante para o resultado danoso.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "CaDe",
+                "base_has_target": true,
+                "test_has_target": false
+              }
+            }
+          }
+        }
+      },
+      "output_path": "outputs/legal/compiled/mipro/case_18_results.json"
+    },
+    {
+      "case_id": 19,
+      "name": "Portão Destrancado (Omissão)",
+      "validation": {
+        "knowledge_base": {
+          "matches": true,
+          "expected": {
+            "premises": [
+              "CrEs",
+              "¬PoTr"
+            ],
+            "potential_causes": [
+              "¬PoTr"
+            ],
+            "target_conclusion": "CrAt"
+          },
+          "got": {
+            "premises": [
+              "CrEs",
+              "¬PoTr"
+            ],
+            "potential_causes": [
+              "¬PoTr"
+            ],
+            "target_conclusion": "CrAt"
+          }
+        },
+        "causal_model": {
+          "matches": true,
+          "expected": {
+            "defeasible_rules": [
+              "r0: CrEs => CrAt",
+              "r1: PoTr => SaIm"
+            ],
+            "undercutter_rules": [
+              "r2: SaIm => ¬r0"
+            ]
+          },
+          "got": {
+            "strict_rules": [],
+            "defeasible_rules": [
+              "r0: CrEs => CrAt",
+              "r1: PoTr => SaIm"
+            ],
+            "undercutter_rules": [
+              "r2: SaIm => ¬r0"
+            ],
+            "preferences": {
+              "r0": 0.8,
+              "r1": 0.8,
+              "r2": 0.9
+            }
+          }
+        },
+        "causal_results": {
+          "matches": true,
+          "expected": {
+            "¬PoTr": true
+          },
+          "got": {
+            "¬PoTr": {
+              "is_cause": true,
+              "explanation": "1. **Tipo de Causa**: Trata-se de uma relação de \"omissão\". A falha da escola em trancar o portão (`¬PoTr`) é a condição necessária que permitiu que a criança saísse e fosse atropelada (`CrAt`).\n2. **Regras Críticas**: A regra `CrEs ∧ ¬PoTr => CrAt` é a regra central. Quando `¬PoTr` é substituído por `PoTr` (portão trancado), a regra de impedimento `PoTr => SaIm` é ativada, bloqueando a progressão para o atropelamento.\n3. **Argumentos Derrotados**: O argumento que sustenta o atropelamento (`CrAt`) é derrotado porque a segurança do portão (`PoTr`) impede a saída da criança.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, se a negação da omissão (ou seja, a ação de trancar o portão) resulta na ausência do efeito (atropelamento), a omissão é considerada causa-in-fact. A escola tinha o dever de vigilância, e sua omissão foi o elo determinante para o resultado danoso.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "CrAt",
+                "base_has_target": true,
+                "test_has_target": false
+              }
+            }
+          }
+        }
+      },
+      "output_path": "outputs/legal/compiled/mipro/case_19_results.json"
+    },
+    {
+      "case_id": 20,
+      "name": "Cartão Não Bloqueado (Omissão)",
+      "validation": {
+        "knowledge_base": {
+          "matches": true,
+          "expected": {
+            "premises": [
+              "AlFr",
+              "¬CaBl"
+            ],
+            "potential_causes": [
+              "¬CaBl"
+            ],
+            "target_conclusion": "PrCo"
+          },
+          "got": {
+            "premises": [
+              "AlFr",
+              "¬CaBl"
+            ],
+            "potential_causes": [
+              "¬CaBl"
+            ],
+            "target_conclusion": "PrCo"
+          }
+        },
+        "causal_model": {
+          "matches": true,
+          "expected": {
+            "defeasible_rules": [
+              "r0: AlFr => PrCo",
+              "r1: CaBl => TrBa"
+            ],
+            "undercutter_rules": [
+              "r2: TrBa => ¬r0"
+            ]
+          },
+          "got": {
+            "strict_rules": [],
+            "defeasible_rules": [
+              "r0: AlFr => PrCo",
+              "r1: CaBl => TrBa"
+            ],
+            "undercutter_rules": [
+              "r2: TrBa => ¬r0"
+            ],
+            "preferences": {
+              "r0": 0.8,
+              "r1": 0.8,
+              "r2": 0.9
+            }
+          }
+        },
+        "causal_results": {
+          "matches": true,
+          "expected": {
+            "¬CaBl": true
+          },
+          "got": {
+            "¬CaBl": {
+              "is_cause": true,
+              "explanation": "1. **Tipo de Causa**: Omissão. A falha do banco em agir (bloquear o cartão) diante de um alerta de fraude foi a condição necessária para que o prejuízo se concretizasse.\n2. **Regras Críticas**: A regra `AlFr ∧ ¬CaBl => PrCo` foi desativada. A introdução de `CaBl` no framework de teste permitiu a ativação de uma regra de proteção (`TrBa`), que bloqueia a conclusão de prejuízo.\n3. **Argumentos Derrotados**: O argumento que sustentava o prejuízo (`PrCo`) foi derrotado pela presença da ação de bloqueio, que interrompe a sequência de transações fraudulentas.\n4. **Justificativa Jurídica**: O teste \"but-for\" é satisfeito: mas pela omissão do banco em bloquear o cartão, o prejuízo não teria ocorrido. O banco possuía o dever de agir após o alerta de fraude, e sua inércia foi o fator determinante para o dano.\n5. **Conceito**: A análise confirma que a omissão é causa-in-fact quando a ação esperada teria evitado o resultado danoso.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "PrCo",
+                "base_has_target": true,
+                "test_has_target": false
+              }
+            }
+          }
+        }
+      },
+      "output_path": "outputs/legal/compiled/mipro/case_20_results.json"
+    },
+    {
+      "case_id": 21,
+      "name": "Centro Cirúrgico Sem Assepsia (Omissão)",
+      "validation": {
+        "knowledge_base": {
+          "matches": false,
+          "expected": {
+            "premises": [
+              "PaCi",
+              "¬AsRe"
+            ],
+            "potential_causes": [
+              "¬AsRe"
+            ],
+            "target_conclusion": "InHo"
+          },
+          "got": {
+            "premises": [
+              "PaCi",
+              "¬AsRe",
+              "AmEs"
+            ],
+            "potential_causes": [
+              "¬AsRe"
+            ],
+            "target_conclusion": "InHo"
+          }
+        },
+        "causal_model": {
+          "matches": true,
+          "expected": {
+            "defeasible_rules": [
+              "r0: PaCi => InHo",
+              "r1: AsRe => AmEs"
+            ],
+            "undercutter_rules": [
+              "r2: AmEs => ¬r0"
+            ]
+          },
+          "got": {
+            "strict_rules": [],
+            "defeasible_rules": [
+              "r0: PaCi => InHo",
+              "r1: AsRe => AmEs"
+            ],
+            "undercutter_rules": [
+              "r2: AmEs => ¬r0"
+            ],
+            "preferences": {
+              "r0": 0.7,
+              "r1": 0.8,
+              "r2": 0.9
+            }
+          }
+        },
+        "causal_results": {
+          "matches": false,
+          "expected": {
+            "¬AsRe": true
+          },
+          "got": {
+            "¬AsRe": {
+              "is_cause": false,
+              "explanation": "1. **Tipo de Causa**: Omissão. A falha em realizar a assepsia (`¬AsRe`) é a omissão de um dever de cuidado que permitiu a ocorrência da infecção hospitalar (`InHo`).\n2. **Regras Críticas**: A regra `¬AsRe ∧ PaCi => InHo` foi desativada no cenário de teste. A presença de `AsRe` (assepsia realizada) invalida a premissa necessária para a infecção.\n3. **Argumentos Derrotados**: O argumento que sustentava a infecção foi derrotado pela introdução da assepsia, que garante um ambiente estéril (`AmEs`), bloqueando a cadeia causal.\n4. **Justificativa Jurídica**: O teste \"but-for\" é satisfeito: mas pela falta de assepsia, a infecção não teria ocorrido. A omissão do hospital em manter o ambiente estéril é, portanto, causa-in-fact do dano sofrido pelo paciente.\n5. **Conceito**: A análise confirma que a omissão é a causa determinante, pois a negação da omissão (realizar a assepsia) interrompe a cadeia causal que leva ao resultado danoso.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "InHo",
+                "base_has_target": false,
+                "test_has_target": false
+              }
+            }
+          }
+        }
+      },
+      "output_path": "outputs/legal/compiled/mipro/case_21_results.json"
+    },
+    {
+      "case_id": 22,
+      "name": "Dois Ataques ao Servidor (Preempção)",
+      "validation": {
+        "knowledge_base": {
+          "matches": true,
+          "expected": {
+            "premises": [
+              "AtA",
+              "AtB",
+              "SeFo"
+            ],
+            "potential_causes": [
+              "AtA",
+              "AtB"
+            ],
+            "target_conclusion": "SeIn"
+          },
+          "got": {
+            "premises": [
+              "AtA",
+              "AtB",
+              "SeFo"
+            ],
+            "potential_causes": [
+              "AtA",
+              "AtB"
+            ],
+            "target_conclusion": "SeIn"
+          }
+        },
+        "causal_model": {
+          "matches": true,
+          "expected": {
+            "defeasible_rules": [
+              "r0: AtA => SeIn",
+              "r1: AtB => SeIn"
+            ],
+            "undercutter_rules": [
+              "r2: SeFo => ¬r1"
+            ]
+          },
+          "got": {
+            "strict_rules": [],
+            "defeasible_rules": [
+              "r0: AtA => SeIn",
+              "r1: AtB => SeIn"
+            ],
+            "undercutter_rules": [
+              "r2: SeFo => ¬r1"
+            ],
+            "preferences": {
+              "r0": 0.9,
+              "r1": 0.7,
+              "r2": 0.95
+            }
+          }
+        },
+        "causal_results": {
+          "matches": true,
+          "expected": {
+            "AtA": true,
+            "AtB": false
+          },
+          "got": {
+            "AtA": {
+              "is_cause": true,
+              "explanation": "1. **Tipo de Causa**: Identificado como \"preemption\" (preempção). O primeiro ataque (`AtA`) causou a indisponibilidade do servidor antes que o segundo ataque (`AtB`) pudesse ocorrer.\n2. **Regras Críticas**: A regra `AtA => SeIn` foi a responsável pela indisponibilidade inicial. A regra `AtB => SeIn` atua como uma causa redundante que garante a continuidade do estado de indisponibilidade.\n3. **Argumentos Derrotados**: O argumento baseado em `AtA` é removido no teste contrafactual, mas a conclusão `SeIn` permanece válida devido à presença de `AtB`.\n4. **Justificativa Jurídica**: Embora o teste contrafactual puro falhe (pois o serviço estaria indisponível de qualquer forma devido a `AtB`), `AtA` é causa-in-fact porque foi o evento que, no tempo, produziu o dano. A preempção ocorre porque o primeiro ataque \"esgota\" a possibilidade de o segundo ataque ser a causa original da indisponibilidade, embora ambos contribuam para o estado final.\n5. **Conceito**: A análise confirma que, em casos de preempção, a causa que efetivamente produz o resultado primeiro é considerada causa-in-fact, mesmo que existam causas subsequentes que manteriam o mesmo resultado.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "SeIn",
+                "base_has_target": true,
+                "test_has_target": false
+              }
+            },
+            "AtB": {
+              "is_cause": false,
+              "explanation": "1. **Tipo de Causa**: \"none\". O segundo ataque (`AtB`) não é causa-in-fact, pois o dano (`SeIn`) já estava consolidado pelo primeiro ataque (`AtA`).\n2. **Regras Críticas**: A regra `AtB => SeIn` torna-se inoperante ou redundante, uma vez que a premissa de que o servidor estava funcional foi violada pelo estado `SeFo` (servidor fora do ar).\n3. **Argumentos Derrotados**: O argumento que tentava atribuir a indisponibilidade ao segundo ataque é superado pela persistência da indisponibilidade causada pelo primeiro ataque.\n4. **Justificativa Jurídica**: O teste *but-for* falha: \"se o segundo ataque não tivesse ocorrido, o servidor ainda estaria indisponível\". Portanto, `AtB` não é causa-in-fact.\n5. **Conceito**: Este é um caso de superposição onde o evento posterior não tem poder causal sobre um resultado que já foi plenamente atingido por um evento anterior.",
+              "llm_is_cause": false,
+              "solver_evidence": {
+                "target": "SeIn",
+                "base_has_target": true,
+                "test_has_target": true
+              }
+            }
+          }
+        }
+      },
+      "output_path": "outputs/legal/compiled/mipro/case_22_results.json"
+    },
+    {
+      "case_id": 23,
+      "name": "Geada e Gafanhotos (Preempção)",
+      "validation": {
+        "knowledge_base": {
+          "matches": true,
+          "expected": {
+            "premises": [
+              "GeDe",
+              "GaCh",
+              "LaPe"
+            ],
+            "potential_causes": [
+              "GeDe",
+              "GaCh"
+            ],
+            "target_conclusion": "SaPe"
+          },
+          "got": {
+            "premises": [
+              "GeDe",
+              "GaCh",
+              "LaPe"
+            ],
+            "potential_causes": [
+              "GeDe",
+              "GaCh"
+            ],
+            "target_conclusion": "SaPe"
+          }
+        },
+        "causal_model": {
+          "matches": true,
+          "expected": {
+            "defeasible_rules": [
+              "r0: GeDe => SaPe",
+              "r1: GaCh => SaPe"
+            ],
+            "undercutter_rules": [
+              "r2: LaPe => ¬r1"
+            ]
+          },
+          "got": {
+            "strict_rules": [],
+            "defeasible_rules": [
+              "r0: GeDe => SaPe",
+              "r1: GaCh => SaPe"
+            ],
+            "undercutter_rules": [
+              "r2: LaPe => ¬r1"
+            ],
+            "preferences": {
+              "r0": 0.9,
+              "r1": 0.7,
+              "r2": 0.95
+            }
+          }
+        },
+        "causal_results": {
+          "matches": true,
+          "expected": {
+            "GeDe": true,
+            "GaCh": false
+          },
+          "got": {
+            "GeDe": {
+              "is_cause": true,
+              "explanation": "1. **Tipo de Causa**: Identificada como \"preemption\" (preempção). A geada (`GeDe`) destruiu a lavoura antes que a nuvem de gafanhotos (`GaCh`) pudesse causar o mesmo dano.\n2. **Regras Críticas**: A regra `GeDe => SaPe` é a cadeia principal no cenário original. A existência de `GaCh` cria uma cadeia causal redundante que garante o mesmo resultado.\n3. **Argumentos Derrotados**: Ao remover `GeDe`, o argumento `A1` é derrotado, mas a conclusão `SaPe` persiste através da cadeia alternativa iniciada por `GaCh`.\n4. **Justificativa Jurídica**: Embora `GeDe` não seja uma condição *sine qua non* (pois a safra seria perdida de qualquer forma pelos gafanhotos), ele é classificado como causa-in-fact sob a ótica da preempção, pois a geada efetivamente causou o dano antes que a causa alternativa pudesse se concretizar.\n5. **Conceito da Definição 4.3**: A análise demonstra que, embora a negação de `GeDe` não impeça `SaPe` (devido à redundância), a ação da geada foi o evento que efetivamente produziu o resultado no mundo real, sobrepondo-se à causa subsequente.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "SaPe",
+                "base_has_target": true,
+                "test_has_target": false
+              }
+            },
+            "GaCh": {
+              "is_cause": false,
+              "explanation": "1. **Tipo de Causa**: Classificado como \"none\" em relação à causalidade necessária. Os gafanhotos não foram a causa da perda da safra, pois o dano já havia ocorrido anteriormente devido à geada.\n2. **Regras Críticas**: A regra `GaCh => SaPe` torna-se inoperante como causa do dano, pois a premissa `LaPe` (lavoura já perdida) atua como um bloqueador lógico para qualquer dano adicional.\n3. **Argumentos Derrotados**: O argumento que tentava atribuir a perda aos gafanhotos é superado pela evidência de que a geada (`GeDe`) foi o evento determinante.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, para que `GaCh` fosse causa-in-fact, a negação de `GaCh` deveria resultar na ausência de `SaPe`. Como a perda da safra persiste devido à geada, os gafanhotos não são causa-in-fact. Trata-se de um caso onde o evento potencial ocorre após o dano já estar consumado, não possuindo nexo causal.",
+              "llm_is_cause": false,
+              "solver_evidence": {
+                "target": "SaPe",
+                "base_has_target": true,
+                "test_has_target": true
+              }
+            }
+          }
+        }
+      },
+      "output_path": "outputs/legal/compiled/mipro/case_23_results.json"
+    },
+    {
+      "case_id": 24,
+      "name": "Vacinas Estragadas (Preempção)",
+      "validation": {
+        "knowledge_base": {
+          "matches": true,
+          "expected": {
+            "premises": [
+              "FaRe",
+              "QuEn",
+              "DoIn"
+            ],
+            "potential_causes": [
+              "FaRe",
+              "QuEn"
+            ],
+            "target_conclusion": "VaPe"
+          },
+          "got": {
+            "premises": [
+              "FaRe",
+              "QuEn",
+              "DoIn"
+            ],
+            "potential_causes": [
+              "FaRe",
+              "QuEn"
+            ],
+            "target_conclusion": "VaPe"
+          }
+        },
+        "causal_model": {
+          "matches": true,
+          "expected": {
+            "defeasible_rules": [
+              "r0: FaRe => VaPe",
+              "r1: QuEn => VaPe"
+            ],
+            "undercutter_rules": [
+              "r2: DoIn => ¬r1"
+            ]
+          },
+          "got": {
+            "strict_rules": [],
+            "defeasible_rules": [
+              "r0: FaRe => VaPe",
+              "r1: QuEn => VaPe"
+            ],
+            "undercutter_rules": [
+              "r2: DoIn => ¬r1"
+            ],
+            "preferences": {
+              "r0": 0.9,
+              "r1": 0.7,
+              "r2": 0.95
+            }
+          }
+        },
+        "causal_results": {
+          "matches": true,
+          "expected": {
+            "FaRe": true,
+            "QuEn": false
+          },
+          "got": {
+            "FaRe": {
+              "is_cause": true,
+              "explanation": "1. **Tipo de Causa**: Identificada como \"preemption\" (preempção). A falha de refrigeração no transporte (`FaRe`) inutilizou as vacinas antes que a queda de energia (`QuEn`) pudesse ocorrer.\n2. **Regras Críticas**: A regra `FaRe => DoIn` foi a que efetivamente causou o dano no mundo real.\n3. **Argumentos Derrotados**: O argumento `A5` (baseado em `FaRe`) é invalidado pela negação da premissa, mas a conclusão `VaPe` permanece no sistema devido à redundância causal causada pela queda de energia.\n4. **Justificativa Jurídica**: Embora o teste contrafactual puro falhe (pois as vacinas seriam perdidas de qualquer forma pela queda de energia), a falha no transporte é causa-in-fact porque foi o evento que, de fato, consumou o dano. A preempção ocorre quando uma causa \"ganha a corrida\" para produzir o efeito, tornando a causa alternativa irrelevante para o resultado final, embora suficiente para o mesmo.\n5. **Conclusão**: A falha no transporte é causa do dano, pois foi o evento que efetivamente inutilizou as vacinas, sobrepondo-se à causa subsequente.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "VaPe",
+                "base_has_target": true,
+                "test_has_target": false
+              }
+            },
+            "QuEn": {
+              "is_cause": false,
+              "explanation": "1. **Tipo de Causa**: \"none\". A queda de energia (`QuEn`) não é causa-in-fact, pois o dano (`VaPe`) já havia se concretizado anteriormente devido à falha no transporte (`FaRe`).\n2. **Regras Críticas**: A regra que ligaria `QuEn` a `VaPe` é inócua, pois o estado de \"vacinas inutilizadas\" (`DoIn`) já existia antes do evento da queda de energia.\n3. **Argumentos Derrotados**: Não há derrota de cadeia causal, pois a conclusão `VaPe` permanece no conjunto fundamentado mesmo na ausência de `QuEn`.\n4. **Justificativa Jurídica**: O teste *but-for* falha: \"Mas não fosse a queda de energia, as vacinas ainda estariam perdidas\". Como a condição necessária não é satisfeita, `QuEn` não pode ser considerado causa jurídica do dano.\n5. **Conceito**: Trata-se de um evento posterior que não possui nexo causal com o dano, uma vez que o dano já era um fato consumado (precedência temporal e causal de `FaRe`).",
+              "llm_is_cause": false,
+              "solver_evidence": {
+                "target": "VaPe",
+                "base_has_target": true,
+                "test_has_target": true
+              }
+            }
+          }
+        }
+      },
+      "output_path": "outputs/legal/compiled/mipro/case_24_results.json"
+    },
+    {
+      "case_id": 25,
+      "name": "Cirurgia com Erro Grosseiro (Excludente Afastada)",
+      "validation": {
+        "knowledge_base": {
+          "matches": true,
+          "expected": {
+            "premises": [
+              "CiEm",
+              "CoIm",
+              "ErTe"
+            ],
+            "potential_causes": [
+              "CiEm"
+            ],
+            "target_conclusion": "MeRe"
+          },
+          "got": {
+            "premises": [
+              "CiEm",
+              "CoIm",
+              "ErTe"
+            ],
+            "potential_causes": [
+              "CiEm"
+            ],
+            "target_conclusion": "MeRe"
+          }
+        },
+        "causal_model": {
+          "matches": true,
+          "expected": {
+            "defeasible_rules": [
+              "r0: CiEm => MeRe",
+              "r1: CoIm => ¬MeRe"
+            ],
+            "undercutter_rules": [
+              "r2: ErTe => ¬r1"
+            ]
+          },
+          "got": {
+            "strict_rules": [],
+            "defeasible_rules": [
+              "r0: CiEm => MeRe",
+              "r1: CoIm => ¬MeRe"
+            ],
+            "undercutter_rules": [
+              "r2: ErTe => ¬r1"
+            ],
+            "preferences": {
+              "r0": 0.9,
+              "r1": 0.7,
+              "r2": 0.95
+            }
+          }
+        },
+        "causal_results": {
+          "matches": true,
+          "expected": {
+            "CiEm": true
+          },
+          "got": {
+            "CiEm": {
+              "is_cause": true,
+              "explanation": "1. **Tipo de Causa**: \"Production\". A atuação do cirurgião sob efeito de álcool (`CiEm`) foi um fator ativo que, em conjunto com o erro técnico (`ErTe`), produziu o resultado de responsabilização (`MeRe`).\n2. **Regras Críticas**: A regra `CiEm ∧ ErTe => MeRe` foi desativada. A negação de `CiEm` impede que o sistema derive a responsabilidade médica, demonstrando que a embriaguez foi um fator determinante.\n3. **Argumentos Derrotados**: O argumento que sustentava a responsabilidade (`MeRe`) foi derrotado, pois a premissa `CiEm` foi substituída por `¬CiEm` no framework de teste.\n4. **Justificativa Jurídica**: A embriaguez do cirurgião é causa-in-fact porque, sem ela, a cadeia causal que leva à responsabilização (considerando o erro técnico como agravante) não se completa. O teste *but-for* é satisfeito: \"não fosse a embriaguez, o resultado de responsabilização, tal como estruturado, não teria ocorrido\".\n5. **Conclusão**: A conduta do cirurgião é causa direta do dano jurídico (responsabilização), configurando uma relação causal de produção.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "MeRe",
+                "base_has_target": true,
+                "test_has_target": false
+              }
+            }
+          }
+        }
+      },
+      "output_path": "outputs/legal/compiled/mipro/case_25_results.json"
+    },
+    {
+      "case_id": 26,
+      "name": "Bagagem Extraviada (Excludente Afastada)",
+      "validation": {
+        "knowledge_base": {
+          "matches": true,
+          "expected": {
+            "premises": [
+              "BaEx",
+              "FoMa",
+              "CeLi"
+            ],
+            "potential_causes": [
+              "BaEx"
+            ],
+            "target_conclusion": "InDe"
+          },
+          "got": {
+            "premises": [
+              "BaEx",
+              "FoMa",
+              "CeLi"
+            ],
+            "potential_causes": [
+              "BaEx"
+            ],
+            "target_conclusion": "InDe"
+          }
+        },
+        "causal_model": {
+          "matches": false,
+          "expected": {
+            "defeasible_rules": [
+              "r0: BaEx => InDe",
+              "r1: FoMa => ¬InDe"
+            ],
+            "undercutter_rules": [
+              "r2: CeLi => ¬r1"
+            ]
+          },
+          "got": {
+            "strict_rules": [],
+            "defeasible_rules": [
+              "r0: BaEx => InDe",
+              "r1: FoMa => ¬r0"
+            ],
+            "undercutter_rules": [
+              "r2: CeLi => ¬r1"
+            ],
+            "preferences": {
+              "r0": 0.8,
+              "r1": 0.7,
+              "r2": 0.9
+            }
+          }
+        },
+        "causal_results": {
+          "matches": true,
+          "expected": {
+            "BaEx": true
+          },
+          "got": {
+            "BaEx": {
+              "is_cause": true,
+              "explanation": "1. **Tipo de Causa**: Identificada como \"production\". O extravio da bagagem (`BaEx`) é o evento que produz diretamente a obrigação de indenizar (`InDe`).\n2. **Regras Críticas**: A regra `BaEx => InDe` é a regra central de responsabilidade civil aplicada ao caso. A negação de `BaEx` torna a regra inoperante.\n3. **Argumentos Derrotados**: O argumento `A5`, que vinculava o extravio ao dever de indenizar, foi removido do conjunto fundamentado no cenário de teste.\n4. **Justificativa Jurídica**: O teste *but-for* é satisfeito: \"Mas por não ter havido o extravio da bagagem, a companhia aérea não teria o dever de indenizar o passageiro\". A alegação de força maior (`FoMa`) foi afastada pela evidência de céu limpo (`CeLi`), confirmando que o extravio foi a causa determinante.\n5. **Conclusão**: O extravio da bagagem é a causa-in-fact do dever de indenizar, pois sem o primeiro, o segundo não se materializa no sistema jurídico.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "InDe",
+                "base_has_target": true,
+                "test_has_target": false
+              }
+            }
+          }
+        }
+      },
+      "output_path": "outputs/legal/compiled/mipro/case_26_results.json"
+    },
+    {
+      "case_id": 27,
+      "name": "Infiltração no Apartamento (Excludente Afastada)",
+      "validation": {
+        "knowledge_base": {
+          "matches": true,
+          "expected": {
+            "premises": [
+              "ApIn",
+              "ReCo",
+              "FaIm"
+            ],
+            "potential_causes": [
+              "ApIn"
+            ],
+            "target_conclusion": "CtRe"
+          },
+          "got": {
+            "premises": [
+              "ApIn",
+              "ReCo",
+              "FaIm"
+            ],
+            "potential_causes": [
+              "ApIn"
+            ],
+            "target_conclusion": "CtRe"
+          }
+        },
+        "causal_model": {
+          "matches": false,
+          "expected": {
+            "defeasible_rules": [
+              "r0: ApIn => CtRe",
+              "r1: ReCo => ¬CtRe"
+            ],
+            "undercutter_rules": [
+              "r2: FaIm => ¬r1"
+            ]
+          },
+          "got": {
+            "strict_rules": [],
+            "defeasible_rules": [
+              "r0: ApIn AND FaIm => CtRe",
+              "r1: ApIn AND ReCo => ¬CtRe"
+            ],
+            "undercutter_rules": [
+              "r2: FaIm => ¬r1"
+            ],
+            "preferences": {
+              "r0": 0.9,
+              "r1": 0.7,
+              "r2": 0.95
+            }
+          }
+        },
+        "causal_results": {
+          "matches": true,
+          "expected": {
+            "ApIn": true
+          },
+          "got": {
+            "ApIn": {
+              "is_cause": true,
+              "explanation": "1. **Tipo de Causa**: Identificado como \"production\". A infiltração (`ApIn`) é o evento que, em conjunto com a falha de impermeabilização (`FaIm`), produz o resultado jurídico de responsabilização da construtora (`CtRe`).\n2. **Regras Críticas**: A regra `ApIn ∧ FaIm => CtRe` foi desativada pela negação da premissa `ApIn`.\n3. **Argumentos Derrotados**: O argumento `A3`, que sustentava a conclusão de responsabilidade, foi derrotado porque a premissa de existência da infiltração foi removida do conjunto de fatos.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, a infiltração é causa-in-fact porque, sem ela, a responsabilização da construtora não é derivada pelo sistema. A infiltração atua como o fato gerador que, somado à falha técnica (`FaIm`), torna a construtora responsável.\n5. **Conclusão**: A infiltração é um elemento essencial na cadeia causal que leva à responsabilização da construtora, satisfazendo o teste do \"but-for\" (sine qua non).",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "CtRe",
+                "base_has_target": true,
+                "test_has_target": false
+              }
+            }
+          }
+        }
+      },
+      "output_path": "outputs/legal/compiled/mipro/case_27_results.json"
+    },
+    {
+      "case_id": 28,
+      "name": "Dois Poluentes (Sobredeterminação)",
+      "validation": {
+        "knowledge_base": {
+          "matches": true,
+          "expected": {
+            "premises": [
+              "PoA",
+              "PoB"
+            ],
+            "potential_causes": [
+              "PoA",
+              "PoB"
+            ],
+            "target_conclusion": "MoPe"
+          },
+          "got": {
+            "premises": [
+              "PoA",
+              "PoB"
+            ],
+            "potential_causes": [
+              "PoA",
+              "PoB"
+            ],
+            "target_conclusion": "MoPe"
+          }
+        },
+        "causal_model": {
+          "matches": true,
+          "expected": {
+            "defeasible_rules": [
+              "r0: PoA => MoPe",
+              "r1: PoB => MoPe"
+            ],
+            "undercutter_rules": []
+          },
+          "got": {
+            "strict_rules": [],
+            "defeasible_rules": [
+              "r0: PoA => MoPe",
+              "r1: PoB => MoPe"
+            ],
+            "undercutter_rules": [],
+            "preferences": {
+              "r0": 0.5,
+              "r1": 0.5
+            }
+          }
+        },
+        "causal_results": {
+          "matches": true,
+          "expected": {
+            "PoA": false,
+            "PoB": false
+          },
+          "got": {
+            "PoA": {
+              "is_cause": false,
+              "explanation": "1. **Tipo de Causa**: Identificada como \"production\". `PoA` é um evento que, por si só, é suficiente para produzir o dano (`MoPe`).\n2. **Regras Críticas**: A regra `PoA => MoPe` é a cadeia causal direta que conecta a causa ao efeito.\n3. **Argumentos Derrotados**: A negação de `PoA` invalida o argumento `A3`, mas não altera o status da conclusão `MoPe` no sistema, pois a causa redundante `PoB` mantém o efeito.\n4. **Justificativa Jurídica**: Em casos de causalidade cumulativa ou redundante (overdetermination), o teste *but-for* é insuficiente. No entanto, sob a Definição 4.3, `PoA` é causa-in-fact porque contribuiu ativamente para a produção do resultado. A indústria A não pode se eximir de responsabilidade alegando que o dano ocorreria de qualquer forma devido à indústria B, pois sua ação foi um fator de produção suficiente e independente.\n5. **Conceito**: O caso ilustra a causalidade por produção em um cenário de redundância, onde a contribuição de cada agente é considerada causa do dano final.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "MoPe",
+                "base_has_target": true,
+                "test_has_target": true
+              }
+            },
+            "PoB": {
+              "is_cause": false,
+              "explanation": "1. **Tipo de Causa**: Identificada como \"production\". O despejo `PoB` é um evento que, por si só, é suficiente para produzir o dano (`MoPe`).\n2. **Regras Críticas**: A regra `PoB => MoPe` é a cadeia causal direta que conecta a causa ao efeito.\n3. **Argumentos Derrotados**: Embora a negação de `PoB` remova o argumento específico que a utiliza, o sistema de argumentação mantém a conclusão `MoPe` devido à presença de `PoA` (poluente da indústria A).\n4. **Justificativa Jurídica**: Embora o teste contrafactual puro falhe devido à redundância (overdetermination), a Definição 4.3 reconhece a \"produção\" como critério de causalidade. Como `PoB` é um fator que, isoladamente, produz o resultado, ele é considerado causa-in-fact, mesmo que outra causa (`PoA`) também fosse suficiente.\n5. **Conceito**: Trata-se de um caso de causalidade cumulativa/redundante, onde a contribuição ativa de `PoB` para a mortandade é suficiente para atribuir causalidade, independentemente da existência de outras causas concorrentes.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "MoPe",
+                "base_has_target": true,
+                "test_has_target": true
+              }
+            }
+          }
+        }
+      },
+      "output_path": "outputs/legal/compiled/mipro/case_28_results.json"
+    },
+    {
+      "case_id": 29,
+      "name": "Pane Elétrica e Cigarro (Concausa Irrelevante)",
+      "validation": {
+        "knowledge_base": {
+          "matches": true,
+          "expected": {
+            "premises": [
+              "PaEl",
+              "MoFu"
+            ],
+            "potential_causes": [
+              "PaEl",
+              "MoFu"
+            ],
+            "target_conclusion": "InAp"
+          },
+          "got": {
+            "premises": [
+              "PaEl",
+              "MoFu"
+            ],
+            "potential_causes": [
+              "PaEl",
+              "MoFu"
+            ],
+            "target_conclusion": "InAp"
+          }
+        },
+        "causal_model": {
+          "matches": false,
+          "expected": {
+            "defeasible_rules": [
+              "r0: PaEl => InAp"
+            ],
+            "undercutter_rules": []
+          },
+          "got": {
+            "strict_rules": [],
+            "defeasible_rules": [
+              "r0: PaEl => InAp",
+              "r1: MoFu => InAp"
+            ],
+            "undercutter_rules": [
+              "r2: ¬PeCi => ¬r1"
+            ],
+            "preferences": {
+              "r0": 0.9,
+              "r1": 0.5,
+              "r2": 1.0
+            }
+          }
+        },
+        "causal_results": {
+          "matches": false,
+          "expected": {
+            "PaEl": true,
+            "MoFu": false
+          },
+          "got": {
+            "PaEl": {
+              "is_cause": false,
+              "explanation": "1. **Tipo de Causa**: Classificado como \"none\" para o teste de \"but-for\" estrito, pois a conclusão `InAp` permanece no conjunto fundamentado mesmo após a negação de `PaEl`.\n2. **Regras Críticas**: A regra `PaEl => InAp` foi desativada, mas o sistema de argumentação manteve a conclusão `InAp` através de outro caminho lógico (`A4`).\n3. **Argumentos Derrotados**: O argumento `A3` (que ligava a pane elétrica ao incêndio) foi derrotado, mas não foi suficiente para eliminar o efeito final do sistema.\n4. **Justificativa Jurídica**: Para que `PaEl` fosse considerada causa-in-fact, a negação de `PaEl` deveria resultar na ausência de `InAp`. Como o modelo de argumentação ainda deriva `InAp` na ausência de `PaEl`, o critério *sine qua non* não é satisfeito formalmente.\n5. **Conclusão**: Embora no caso real a pane elétrica seja a causa, sob a lógica formal do framework fornecido, a persistência da conclusão `InAp` no `test_grounded_extension` impede a classificação de `PaEl` como causa-in-fact.",
+              "llm_is_cause": false,
+              "solver_evidence": {
+                "target": "InAp",
+                "base_has_target": true,
+                "test_has_target": true
+              }
+            },
+            "MoFu": {
+              "is_cause": false,
+              "explanation": "1. **Tipo de Causa**: \"none\". O hábito de fumar do morador (`MoFu`) não possui relação causal com o incêndio (`InAp`), uma vez que a perícia técnica isolou a pane elétrica (`PaEl`) como a causa determinante.\n2. **Regras Críticas**: Não há regra crítica afetada pela negação de `MoFu` que impeça a conclusão `InAp`, pois a cadeia causal principal (`PaEl => InAp`) permanece intacta.\n3. **Argumentos Derrotados**: O argumento que tentaria vincular o fumo ao incêndio é ineficaz, pois a conclusão `InAp` é derivada independentemente de `MoFu`.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, para que `MoFu` fosse causa-in-fact, a negação de `MoFu` deveria resultar na ausência de `InAp`. Como o incêndio ocorre independentemente do hábito de fumar (devido à pane elétrica), o teste do \"but-for\" falha. Portanto, não há nexo causal entre o comportamento do morador e o dano sofrido.",
+              "llm_is_cause": false,
+              "solver_evidence": {
+                "target": "InAp",
+                "base_has_target": true,
+                "test_has_target": true
+              }
+            }
+          }
+        }
+      },
+      "output_path": "outputs/legal/compiled/mipro/case_29_results.json"
+    },
+    {
+      "case_id": 30,
+      "name": "Infarto Fulminante (Concausa Irrelevante)",
+      "validation": {
+        "knowledge_base": {
+          "matches": false,
+          "expected": {
+            "premises": [
+              "InFu",
+              "AmAt"
+            ],
+            "potential_causes": [
+              "InFu",
+              "AmAt"
+            ],
+            "target_conclusion": "PaMo"
+          },
+          "got": {
+            "premises": [
+              "InFu",
+              "AmAt",
+              "AtIm"
+            ],
+            "potential_causes": [
+              "InFu",
+              "AmAt"
+            ],
+            "target_conclusion": "PaMo"
+          }
+        },
+        "causal_model": {
+          "matches": false,
+          "expected": {
+            "defeasible_rules": [
+              "r0: InFu => PaMo"
+            ],
+            "undercutter_rules": []
+          },
+          "got": {
+            "strict_rules": [],
+            "defeasible_rules": [
+              "r0: InFu => PaMo",
+              "r1: AmAt => PaMo"
+            ],
+            "undercutter_rules": [
+              "r2: AtIm => ¬r1"
+            ],
+            "preferences": {
+              "r0": 0.9,
+              "r1": 0.5,
+              "r2": 0.95
+            }
+          }
+        },
+        "causal_results": {
+          "matches": true,
+          "expected": {
+            "InFu": true,
+            "AmAt": false
+          },
+          "got": {
+            "InFu": {
+              "is_cause": true,
+              "explanation": "1. **Tipo de Causa**: Identificada como \"production\". O infarto fulminante (`InFu`) é o evento que produz diretamente o resultado morte (`PaMo`).\n2. **Regras Críticas**: A regra `InFu => PaMo` é a regra central. A sua desativação pela negação da premissa `InFu` impede a derivação do dano.\n3. **Argumentos Derrotados**: O argumento que sustenta a morte do paciente é derrotado no framework modificado, pois a causa primária foi removida.\n4. **Justificativa Jurídica**: O infarto fulminante é a causa-in-fact, pois, \"but-for\" o infarto, o paciente não teria falecido naquele momento. Em contraste, o atraso da ambulância (`AmAt`) não é causa-in-fact, pois a perícia estabeleceu que o resultado morte seria o mesmo independentemente da ação da ambulância (ausência de nexo causal).\n5. **Conceito**: A análise confirma que apenas o evento que é condição necessária para o resultado (e que o produz) satisfaz o teste de causalidade, excluindo fatores que, embora presentes, não alterariam o desfecho final.",
+              "llm_is_cause": true,
+              "solver_evidence": {
+                "target": "PaMo",
+                "base_has_target": true,
+                "test_has_target": false
+              }
+            },
+            "AmAt": {
+              "is_cause": false,
+              "explanation": "1. **Tipo de Causa**: \"none\". O atraso da ambulância não é causa-in-fact da morte, pois o resultado ocorreria independentemente da ação (ou omissão) da ambulância.\n2. **Regras Críticas**: A regra que vincula o atraso ao resultado foi invalidada como fator causal, pois a perícia estabeleceu que o infarto fulminante (`InFu`) é a causa suficiente e determinante.\n3. **Argumentos Derrotados**: Nenhum argumento que sustenta a morte foi derrotado pela negação de `AmAt`, pois a conclusão `PaMo` é mantida por outros fatores (o infarto).\n4. **Justificativa Jurídica**: O teste *but-for* (sine qua non) falha: \"Mas não fosse o atraso da ambulância, o paciente teria sobrevivido?\" A resposta é negativa, pois o infarto fulminante era fatal por si só. Portanto, o atraso não é causa-in-fact do óbito.\n5. **Conceito da Definição 4.3**: Como a conclusão `PaMo` permanece no `test_grounded_extension` mesmo após a negação de `AmAt`, a condição de causalidade não é satisfeita.",
+              "llm_is_cause": false,
+              "solver_evidence": {
+                "target": "PaMo",
+                "base_has_target": true,
+                "test_has_target": true
+              }
+            }
+          }
+        }
+      },
+      "output_path": "outputs/legal/compiled/mipro/case_30_results.json"
+    }
+  ]
+}

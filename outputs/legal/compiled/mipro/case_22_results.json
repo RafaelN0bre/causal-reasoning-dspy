@@ -1,0 +1,283 @@
+{
+  "case": {
+    "id": 22,
+    "name": "Dois Ataques ao Servidor (Preempção)",
+    "pattern": "preempcao",
+    "case_text": "Um primeiro ataque de negação de serviço derrubou o servidor da loja virtual (AtA).\nHoras depois, um segundo ataque atingiu o mesmo servidor (AtB), que já estava fora do ar (SeFo).\nPergunta-se: o primeiro ataque (AtA) e o segundo ataque (AtB) foram causas da indisponibilidade do serviço (SeIn)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "AtA",
+        "AtB",
+        "SeFo"
+      ],
+      "potential_causes": [
+        "AtA",
+        "AtB"
+      ],
+      "target_conclusion": "SeIn"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: AtA => SeIn",
+        "r1: AtB => SeIn"
+      ],
+      "undercutter_rules": [
+        "r2: SeFo => ¬r1"
+      ]
+    },
+    "expected_causal_result": {
+      "AtA": true,
+      "AtB": false
+    }
+  },
+  "analysis": {
+    "case_text": "Um primeiro ataque de negação de serviço derrubou o servidor da loja virtual (AtA).\nHoras depois, um segundo ataque atingiu o mesmo servidor (AtB), que já estava fora do ar (SeFo).\nPergunta-se: o primeiro ataque (AtA) e o segundo ataque (AtB) foram causas da indisponibilidade do serviço (SeIn)?",
+    "knowledge_base": {
+      "premises": [
+        "AtA",
+        "AtB",
+        "SeFo"
+      ],
+      "potential_causes": [
+        "AtA",
+        "AtB"
+      ],
+      "target_conclusion": "SeIn"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: AtA => SeIn",
+        "r1: AtB => SeIn"
+      ],
+      "undercutter_rules": [
+        "r2: SeFo => ¬r1"
+      ],
+      "preferences": {
+        "r0": 0.9,
+        "r1": 0.7,
+        "r2": 0.95
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "AtA",
+          "AtB",
+          "SeFo"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: AtA => SeIn",
+            "r1: AtB => SeIn"
+          ],
+          "undercutters": [
+            "r2: SeFo => ¬r1"
+          ]
+        },
+        "preferences": {
+          "r0": 0.9,
+          "r1": 0.7,
+          "r2": 0.95
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "AtA"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "SeIn",
+          "strength": 0.9
+        },
+        {
+          "id": "A2",
+          "premises": [
+            "AtB"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r1"
+          ],
+          "conclusion": "SeIn",
+          "strength": 0.7
+        },
+        {
+          "id": "A3",
+          "premises": [
+            "SeFo"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r2"
+          ],
+          "conclusion": "¬r1",
+          "strength": 0.95
+        }
+      ],
+      "attacks": [
+        {
+          "attacker": "A3",
+          "target": "A2",
+          "type": "undercut",
+          "rule": "r1",
+          "succeeds": true
+        }
+      ],
+      "defeats": [
+        {
+          "defeater": "A3",
+          "defeated": "A2",
+          "type": "undercut",
+          "explanation": "Argumento A3 (força 0.95) derrota A2 (força 0.7) via undercut na regra r1"
+        }
+      ]
+    },
+    "base_grounded": [
+      "A0",
+      "A1",
+      "A3",
+      "A5",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A0": "SeFo",
+      "A1": "AtB",
+      "A3": "SeIn",
+      "A5": "¬r1",
+      "A2": "AtA"
+    },
+    "base_explanations": {
+      "A0": [
+        "A0"
+      ],
+      "A1": [
+        "A1"
+      ],
+      "A3": [
+        "A3",
+        "A2"
+      ],
+      "A5": [
+        "A0",
+        "A5"
+      ],
+      "A2": [
+        "A2"
+      ]
+    },
+    "causal_results": {
+      "AtA": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"preemption\" (preempção). O primeiro ataque (`AtA`) causou a indisponibilidade do servidor antes que o segundo ataque (`AtB`) pudesse ocorrer.\n2. **Regras Críticas**: A regra `AtA => SeIn` foi a responsável pela indisponibilidade inicial. A regra `AtB => SeIn` atua como uma causa redundante que garante a continuidade do estado de indisponibilidade.\n3. **Argumentos Derrotados**: O argumento baseado em `AtA` é removido no teste contrafactual, mas a conclusão `SeIn` permanece válida devido à presença de `AtB`.\n4. **Justificativa Jurídica**: Embora o teste contrafactual puro falhe (pois o serviço estaria indisponível de qualquer forma devido a `AtB`), `AtA` é causa-in-fact porque foi o evento que, no tempo, produziu o dano. A preempção ocorre porque o primeiro ataque \"esgota\" a possibilidade de o segundo ataque ser a causa original da indisponibilidade, embora ambos contribuam para o estado final.\n5. **Conceito**: A análise confirma que, em casos de preempção, a causa que efetivamente produz o resultado primeiro é considerada causa-in-fact, mesmo que existam causas subsequentes que manteriam o mesmo resultado.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "SeIn",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      },
+      "AtB": {
+        "is_cause": false,
+        "explanation": "1. **Tipo de Causa**: \"none\". O segundo ataque (`AtB`) não é causa-in-fact, pois o dano (`SeIn`) já estava consolidado pelo primeiro ataque (`AtA`).\n2. **Regras Críticas**: A regra `AtB => SeIn` torna-se inoperante ou redundante, uma vez que a premissa de que o servidor estava funcional foi violada pelo estado `SeFo` (servidor fora do ar).\n3. **Argumentos Derrotados**: O argumento que tentava atribuir a indisponibilidade ao segundo ataque é superado pela persistência da indisponibilidade causada pelo primeiro ataque.\n4. **Justificativa Jurídica**: O teste *but-for* falha: \"se o segundo ataque não tivesse ocorrido, o servidor ainda estaria indisponível\". Portanto, `AtB` não é causa-in-fact.\n5. **Conceito**: Este é um caso de superposição onde o evento posterior não tem poder causal sobre um resultado que já foi plenamente atingido por um evento anterior.",
+        "llm_is_cause": false,
+        "solver_evidence": {
+          "target": "SeIn",
+          "base_has_target": true,
+          "test_has_target": true
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "AtA",
+          "AtB",
+          "SeFo"
+        ],
+        "potential_causes": [
+          "AtA",
+          "AtB"
+        ],
+        "target_conclusion": "SeIn"
+      },
+      "got": {
+        "premises": [
+          "AtA",
+          "AtB",
+          "SeFo"
+        ],
+        "potential_causes": [
+          "AtA",
+          "AtB"
+        ],
+        "target_conclusion": "SeIn"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: AtA => SeIn",
+          "r1: AtB => SeIn"
+        ],
+        "undercutter_rules": [
+          "r2: SeFo => ¬r1"
+        ]
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: AtA => SeIn",
+          "r1: AtB => SeIn"
+        ],
+        "undercutter_rules": [
+          "r2: SeFo => ¬r1"
+        ],
+        "preferences": {
+          "r0": 0.9,
+          "r1": 0.7,
+          "r2": 0.95
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "AtA": true,
+        "AtB": false
+      },
+      "got": {
+        "AtA": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"preemption\" (preempção). O primeiro ataque (`AtA`) causou a indisponibilidade do servidor antes que o segundo ataque (`AtB`) pudesse ocorrer.\n2. **Regras Críticas**: A regra `AtA => SeIn` foi a responsável pela indisponibilidade inicial. A regra `AtB => SeIn` atua como uma causa redundante que garante a continuidade do estado de indisponibilidade.\n3. **Argumentos Derrotados**: O argumento baseado em `AtA` é removido no teste contrafactual, mas a conclusão `SeIn` permanece válida devido à presença de `AtB`.\n4. **Justificativa Jurídica**: Embora o teste contrafactual puro falhe (pois o serviço estaria indisponível de qualquer forma devido a `AtB`), `AtA` é causa-in-fact porque foi o evento que, no tempo, produziu o dano. A preempção ocorre porque o primeiro ataque \"esgota\" a possibilidade de o segundo ataque ser a causa original da indisponibilidade, embora ambos contribuam para o estado final.\n5. **Conceito**: A análise confirma que, em casos de preempção, a causa que efetivamente produz o resultado primeiro é considerada causa-in-fact, mesmo que existam causas subsequentes que manteriam o mesmo resultado.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "SeIn",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        },
+        "AtB": {
+          "is_cause": false,
+          "explanation": "1. **Tipo de Causa**: \"none\". O segundo ataque (`AtB`) não é causa-in-fact, pois o dano (`SeIn`) já estava consolidado pelo primeiro ataque (`AtA`).\n2. **Regras Críticas**: A regra `AtB => SeIn` torna-se inoperante ou redundante, uma vez que a premissa de que o servidor estava funcional foi violada pelo estado `SeFo` (servidor fora do ar).\n3. **Argumentos Derrotados**: O argumento que tentava atribuir a indisponibilidade ao segundo ataque é superado pela persistência da indisponibilidade causada pelo primeiro ataque.\n4. **Justificativa Jurídica**: O teste *but-for* falha: \"se o segundo ataque não tivesse ocorrido, o servidor ainda estaria indisponível\". Portanto, `AtB` não é causa-in-fact.\n5. **Conceito**: Este é um caso de superposição onde o evento posterior não tem poder causal sobre um resultado que já foi plenamente atingido por um evento anterior.",
+          "llm_is_cause": false,
+          "solver_evidence": {
+            "target": "SeIn",
+            "base_has_target": true,
+            "test_has_target": true
+          }
+        }
+      }
+    }
+  }
+}

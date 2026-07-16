@@ -16,8 +16,12 @@ Compilação (BootstrapFewShot):
     uv run scripts/optimize_fewshot.py                    # Otimiza Main-depth2, salva em compiled/
     uv run scripts/optimize_fewshot.py -d Main-depth1     # Otimiza outra variante
     uv run scripts/optimize_fewshot.py --help             # Ver todas as opções
+    uv run scripts/optimize_fewshot_legal.py              # Otimiza pipeline legal (compiled/few-shot/legal.json)
+    uv run scripts/optimize_mipro_legal.py                # Otimiza pipeline legal via MIPROv2 (compiled/mipro/legal.json)
 
 Output directories:
+    outputs/legal/compiled/<optimizer>/           ← análise legal com programa compilado
+    outputs/legal/zero-shot/                      ← análise legal sem programa compilado
     outputs/boardgame/dspy/compiled/<optimizer>/  ← DSPy + ASPIC+ com programa compilado
     outputs/boardgame/dspy/zero-shot/             ← DSPy + ASPIC+ sem programa compilado
     outputs/boardgame/baseline/                   ← raw LLM results (when --baseline is used)
@@ -97,7 +101,7 @@ def setup_dspy(api_key: str, model_name: str, max_tokens: int):
 
 def run_legal_mode(args, pipeline) -> None:
     from src.pipeline import run_legal_analysis
-    run_legal_analysis(pipeline, args.case_id)
+    run_legal_analysis(pipeline, args.case_id, output_dir=args.output)
 
 
 def run_boardgame_dspy(args, pipeline) -> None:
@@ -230,9 +234,10 @@ Compilação (BootstrapFewShot):
         "--output", "-o",
         default=None,
         help=(
-            "Output directory for boardgame results. "
-            "Defaults to outputs/boardgame/dspy or outputs/boardgame/baseline "
-            "depending on --baseline."
+            "Output directory for results. Boardgame defaults to "
+            "outputs/boardgame/dspy or outputs/boardgame/baseline depending on "
+            "--baseline; legal defaults to outputs/legal/compiled/<optimizer> or "
+            "outputs/legal/zero-shot depending on whether a compiled program is loaded."
         ),
     )
 
@@ -317,7 +322,11 @@ Compilação (BootstrapFewShot):
 
     # Resolve default output directory based on mode
     if args.output is None:
-        if args.baseline:
+        if not args.boardgame:
+            compiled_path = os.path.join("compiled", args.optimizer, "legal.json")
+            compiled_used = not args.no_compiled and os.path.exists(compiled_path)
+            args.output = os.path.join("outputs", "legal", "compiled", args.optimizer) if compiled_used else os.path.join("outputs", "legal", "zero-shot")
+        elif args.baseline:
             args.output = "outputs/boardgame/baseline"
         else:
             compiled_path = os.path.join("compiled", args.optimizer, f"boardgame_{args.dataset}.json")
@@ -343,6 +352,7 @@ Compilação (BootstrapFewShot):
         logger.info("Output dir : %s", args.output)
     elif args.legal:
         logger.info("Case ID    : %s", args.case_id if args.case_id else "all")
+        logger.info("Output dir : %s", args.output)
 
     if args.boardgame:
         if args.baseline:
@@ -364,6 +374,13 @@ Compilação (BootstrapFewShot):
         setup_dspy(api_key, model_name, args.max_tokens)
         from src.modules import CausalReasoningPipeline
         pipeline = CausalReasoningPipeline()
+        compiled_path = os.path.join("compiled", args.optimizer, "legal.json")
+        if not args.no_compiled and os.path.exists(compiled_path):
+            logger.info("Pipeline   : compilado (carregando %s)", compiled_path)
+            pipeline.load(compiled_path)
+        else:
+            logger.info("Pipeline   : zero-shot (nenhum programa compilado em '%s')", compiled_path)
+            logger.info("             Para compilar: uv run scripts/optimize_fewshot_legal.py")
         run_legal_mode(args, pipeline)
 
 

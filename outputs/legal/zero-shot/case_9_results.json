@@ -1,0 +1,233 @@
+{
+  "case": {
+    "id": 9,
+    "name": "Ciclista Sem Capacete (Concausa Irrelevante)",
+    "case_text": "\n        Um ciclista foi atingido por um carro que invadiu a ciclofaixa (CaAt) e sofreu\n        fratura na perna. O ciclista não usava capacete (¬CaUs), mas a perícia concluiu\n        que o capacete não teria evitado a fratura na perna.\n        Pergunta-se: o atropelamento (CaAt) e a falta de capacete (¬CaUs) foram causas\n        da fratura na perna (FrPe)?\n        ",
+    "expected_knowledge_base": {
+      "premises": [
+        "CaAt",
+        "¬CaUs"
+      ],
+      "potential_causes": [
+        "CaAt",
+        "¬CaUs"
+      ],
+      "target_conclusion": "FrPe"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: CaAt => FrPe"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "CaAt": {
+        "is_cause": true,
+        "explanation": "Negando CaAt, FrPe deixa de ser derivável."
+      },
+      "¬CaUs": {
+        "is_cause": false,
+        "explanation": "A falta de capacete não participa de nenhuma cadeia até FrPe (a perícia a excluiu), então negá-la não altera a extensão grounded."
+      }
+    }
+  },
+  "analysis": {
+    "case_text": "\n        Um ciclista foi atingido por um carro que invadiu a ciclofaixa (CaAt) e sofreu\n        fratura na perna. O ciclista não usava capacete (¬CaUs), mas a perícia concluiu\n        que o capacete não teria evitado a fratura na perna.\n        Pergunta-se: o atropelamento (CaAt) e a falta de capacete (¬CaUs) foram causas\n        da fratura na perna (FrPe)?\n        ",
+    "knowledge_base": {
+      "premises": [
+        "CaAt",
+        "¬CaUs"
+      ],
+      "potential_causes": [
+        "CaAt",
+        "¬CaUs"
+      ],
+      "target_conclusion": "FrPe"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: CaAt => FrPe",
+        "r1: CaUs => Prot"
+      ],
+      "undercutter_rules": [
+        "r2: Prot => ¬r0"
+      ],
+      "preferences": {
+        "r0": 0.7,
+        "r1": 0.8,
+        "r2": 0.9
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "CaAt",
+          "¬CaUs"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: CaAt => FrPe",
+            "r1: CaUs => Prot"
+          ],
+          "undercutters": [
+            "r2: Prot => ¬r0"
+          ]
+        },
+        "preferences": {
+          "r0": 0.7,
+          "r1": 0.8,
+          "r2": 0.9
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "CaAt"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "FrPe",
+          "strength": 0.7
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A1",
+      "A0",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A1": "¬CaUs",
+      "A0": "CaAt",
+      "A2": "FrPe"
+    },
+    "base_explanations": {
+      "A1": [
+        "A1"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A2",
+        "A0"
+      ]
+    },
+    "causal_results": {
+      "CaAt": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois o atropelamento (CaAt) é o evento físico que diretamente desencadeia a lesão (FrPe).\n2. **Regras Críticas**: A regra \"CaAt => FrPe\" é a espinha dorsal da cadeia causal. Ao negar CaAt, a regra não pode ser disparada, interrompendo a derivação da conclusão FrPe.\n3. **Argumentos Derrotados**: O argumento que sustenta a fratura perde sua validade lógica no sistema, pois a premissa fundamental (o atropelamento) foi removida do conjunto de axiomas.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, o evento é causa-em-fato se, na ausência do evento, o efeito não ocorre. Como a perícia confirmou que a fratura decorre do impacto do atropelamento, a relação de causalidade é direta e necessária.\n5. **Conclusão**: O atropelamento é causa-em-fato da fratura, enquanto a falta de capacete (¬CaUs) não é, pois a perícia demonstrou que sua ausência não altera o resultado (fratura na perna).",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "FrPe",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      },
+      "¬CaUs": {
+        "is_cause": true,
+        "explanation": "A análise causal indica que a falta de capacete (¬CaUs) não é causa-in-fact da fratura na perna (FrPe). De acordo com a Definição 4.3, para que um fator seja causa, sua presença ou ausência deve ser determinante para a conclusão. No caso em tela, a perícia técnica estabelece que o uso ou não do capacete é irrelevante para o dano específico (fratura na perna). Ao realizar o teste contrafactual, a conclusão FrPe persiste independentemente da alteração do estado de ¬CaUs para CaUs. Portanto, não há relação de produção, omissão ou preempção entre a falta de capacete e a fratura, classificando a relação como \"none\".",
+        "llm_is_cause": false,
+        "solver_evidence": {
+          "target": "FrPe",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "CaAt",
+          "¬CaUs"
+        ],
+        "potential_causes": [
+          "CaAt",
+          "¬CaUs"
+        ],
+        "target_conclusion": "FrPe"
+      },
+      "got": {
+        "premises": [
+          "CaAt",
+          "¬CaUs"
+        ],
+        "potential_causes": [
+          "CaAt",
+          "¬CaUs"
+        ],
+        "target_conclusion": "FrPe"
+      }
+    },
+    "causal_model": {
+      "matches": false,
+      "expected": {
+        "defeasible_rules": [
+          "r0: CaAt => FrPe"
+        ],
+        "undercutter_rules": []
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: CaAt => FrPe",
+          "r1: CaUs => Prot"
+        ],
+        "undercutter_rules": [
+          "r2: Prot => ¬r0"
+        ],
+        "preferences": {
+          "r0": 0.7,
+          "r1": 0.8,
+          "r2": 0.9
+        }
+      }
+    },
+    "causal_results": {
+      "matches": false,
+      "expected": {
+        "CaAt": {
+          "is_cause": true,
+          "explanation": "Negando CaAt, FrPe deixa de ser derivável."
+        },
+        "¬CaUs": {
+          "is_cause": false,
+          "explanation": "A falta de capacete não participa de nenhuma cadeia até FrPe (a perícia a excluiu), então negá-la não altera a extensão grounded."
+        }
+      },
+      "got": {
+        "CaAt": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois o atropelamento (CaAt) é o evento físico que diretamente desencadeia a lesão (FrPe).\n2. **Regras Críticas**: A regra \"CaAt => FrPe\" é a espinha dorsal da cadeia causal. Ao negar CaAt, a regra não pode ser disparada, interrompendo a derivação da conclusão FrPe.\n3. **Argumentos Derrotados**: O argumento que sustenta a fratura perde sua validade lógica no sistema, pois a premissa fundamental (o atropelamento) foi removida do conjunto de axiomas.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, o evento é causa-em-fato se, na ausência do evento, o efeito não ocorre. Como a perícia confirmou que a fratura decorre do impacto do atropelamento, a relação de causalidade é direta e necessária.\n5. **Conclusão**: O atropelamento é causa-em-fato da fratura, enquanto a falta de capacete (¬CaUs) não é, pois a perícia demonstrou que sua ausência não altera o resultado (fratura na perna).",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "FrPe",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        },
+        "¬CaUs": {
+          "is_cause": true,
+          "explanation": "A análise causal indica que a falta de capacete (¬CaUs) não é causa-in-fact da fratura na perna (FrPe). De acordo com a Definição 4.3, para que um fator seja causa, sua presença ou ausência deve ser determinante para a conclusão. No caso em tela, a perícia técnica estabelece que o uso ou não do capacete é irrelevante para o dano específico (fratura na perna). Ao realizar o teste contrafactual, a conclusão FrPe persiste independentemente da alteração do estado de ¬CaUs para CaUs. Portanto, não há relação de produção, omissão ou preempção entre a falta de capacete e a fratura, classificando a relação como \"none\".",
+          "llm_is_cause": false,
+          "solver_evidence": {
+            "target": "FrPe",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "extract_kb.predict": {
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "augmented": true,
+        "case_description": "Facts: The lion eats the food of the rabbit. The panther is named Tarzan. The starfish offers a job to the rabbit.\n\nRules: Rule1: For the rabbit, if the belief is that the lion eats the food that belongs to the rabbit and the starfish offers a job to the rabbit, then you can add \"the rabbit rolls the dice for the phoenix\" to your conclusions. Rule2: Regarding the rabbit, if it has a name whose first letter is the same as the first letter of the panther's name, then we can conclude that it does not roll the dice for the phoenix.\n\nPreferences: Rule2 is preferred over Rule1. ",
+        "goal": "(rabbit, roll, phoenix)",
+        "reasoning": "1. The facts state: \"The lion eats the food of the rabbit\" and \"The starfish offers a job to the rabbit\".\n2. Rule1 states: If (lion eats food of rabbit) AND (starfish offers job to rabbit), then (rabbit rolls dice for phoenix).\n3. Since both conditions for Rule1 are met by the facts, \"the rabbit rolls the dice for the phoenix\" is a valid conclusion.\n4. Rule2 states: If the rabbit has a name starting with the same letter as the panther's name (Tarzan, starts with 'T'), then it does not roll the dice. However, the facts do not state the rabbit's name, so the antecedent for Rule2 is not satisfied.\n5. Therefore, the conclusion \"the rabbit rolls the dice for the phoenix\" holds.",
+        "knowledge_base": "{\n    \"premises\": [\n        \"LionEatsFoodOfRabbit\",\n        \"StarfishOffersJobToRabbit\"\n    ],\n    \"target_conclusion\": \"RabbitRollsDiceForPhoenix\"\n}"
+      },
+      {
+        "augmented": true,
+        "case_description": "Facts: The crocodile removes from the board one of the pieces of the cockroach. The meerkat becomes an enemy of the cockroach.\n\nRules: Rule1: If the crocodile removes from the board one of the pieces of the cockroach and the meerkat becomes an enemy of the cockroach, then the cockroach will not need the support of the buffalo. Rule2: If at least one animal owes money to the snail, then the cockroach needs support from the buffalo.\n\nPreferences: Rule2 is preferred over Rule1. ",
+        "goal": "(cockroach, need, buffalo)",
+        "reasoning": "The case states two facts: \"The crocodile removes from the board one of the pieces of the cockroach\" and \"The meerkat becomes an enemy of the cockroach.\" According to Rule 1, these facts imply that \"the cockroach will not need the support of the buffalo.\" There is no information provided stating that any animal owes money to the snail, so the antecedent for Rule 2 is not satisfied. Therefore, the conclusion that the cockroach does not need the support of the buffalo is supported by the facts. The goal is to determine if the cockroach needs the support of the buffalo. Since the premises lead to the negation of the goal, the goal is not provable.",
+        "knowledge_base": "{\n    \"premises\": [\n        \"CrocodileRemovesCockroachPiece\",\n        \"MeerkatBecomesEnemyOfCockroach\",\n        \"NotCockroachNeedsBuffaloSupport\"\n    ],\n    \"target_conclusion\": \"CockroachNeedsBuffaloSupport\"\n}"
+      },
+      {
+        "augmented": true,
+        "case_description": "Facts: The carp learns the basics of resource management from the puffin. The doctorfish does not show all her cards to the donkey.\n\nRules: Rule1: If at least one animal learns elementary resource management from the puffin, then the donkey eats the food of the turtle. Rule2: For the donkey, if the belief is that the doctorfish is not going to show her cards (all of them) to the donkey but the oscar burns the warehouse that is in possession of the donkey, then you can add that \"the donkey is not going to eat the food that belongs to the turtle\" to your conclusions.\n\nPreferences: Rule2 is preferred over Rule1. ",
+        "goal": "(donkey, eat, turtle)",
+        "reasoning": "1. From the facts, \"The carp learns the basics of resource management from the puffin.\" This satisfies the antecedent of Rule1.\n2. Rule1 states: \"If at least one animal learns elementary resource management from the puffin, then the donkey eats the food of the turtle.\" Therefore, the donkey eats the food of the turtle.\n3. Rule2 provides a condition to conclude that the donkey does *not* eat the food of the turtle: \"if the belief is that the doctorfish is not going to show her cards to the donkey AND the oscar burns the warehouse that is in possession of the donkey.\"\n4. While the fact \"The doctorfish does not show all her cards to the donkey\" is true, there is no fact stating that \"the oscar burns the warehouse that is in possession of the donkey.\"\n5. Since the antecedent for Rule2 is not fully satisfied, Rule2 cannot be triggered to override Rule1.\n6. Thus, the conclusion from Rule1 stands: the donkey eats the food of the turtle.",
+        "knowledge_base": "{\n    \"premises\": [\n        \"CarpLearnsResourceManagementFromPuffin\",\n        \"DoctorfishDoesNotShowCardsToDonkey\"\n    ],\n    \"target_conclusion\": \"DonkeyEatsFoodOfTurtle\"\n}"
+      },
+      {
+        "augmented": true,
+        "case_description": "Facts: The rabbit is named Mojo. The jellyfish does not owe money to the wolverine.\n\nRules: Rule1: If something does not owe money to the wolverine, then it does not burn the warehouse of the panda bear. Rule2: If the jellyfish has a name whose first letter is the same as the first letter of the rabbit's name, then the jellyfish burns the warehouse of the panda bear.\n\nPreferences: Rule2 is preferred over Rule1. ",
+        "goal": "(jellyfish, burn, panda bear)",
+        "reasoning": "1. Fact: The jellyfish does not owe money to the wolverine.\n2. Rule 1: If something does not owe money to the wolverine, then it does not burn the warehouse of the panda bear.\n3. Applying Rule 1 to the fact: The jellyfish does not burn the warehouse of the panda bear.\n4. Rule 2: If the jellyfish has a name whose first letter is the same as the first letter of the rabbit's name (Mojo), then the jellyfish burns the warehouse of the panda bear.\n5. The jellyfish does not have a name provided in the facts, so the antecedent of Rule 2 is not satisfied.\n6. Since Rule 2 is not triggered, Rule 1 remains the active rule regarding the jellyfish's action toward the panda bear's warehouse.\n7. Therefore, the conclusion is that the jellyfish does not burn the warehouse of the panda bear. The goal is to prove the positive assertion, which is false.",
+        "knowledge_base": "{\n    \"premises\": [\"JellyfishDoesNotOweMoneyToWolverine\", \"JellyfishDoesNotBurnWarehouseOfPandaBear\"],\n    \"target_conclusion\": \"JellyfishBurnsWarehouseOfPandaBear\"\n}"
+      }
+    ],
+    "signature": {
+      "instructions": "You are an elite autonomous auditor tasked with verifying logical consistency in complex, high-stakes game-theoretic simulations. Your output will serve as the ground-truth foundation for an automated ASPIC+ argumentation framework.\n\nYour task is to parse a natural language case description containing Facts, Rules, and Preferences to extract a Knowledge Base. Failure to capture the correct premises or misinterpreting rule applications will lead to critical system failures in downstream logic processing.\n\nFollow these strict protocols:\n1. **Fact Filtering:** Extract only facts explicitly provided in the case description.\n2. **Strict Premise Generation:** A statement can only be a premise if it is an explicit fact OR a direct, unambiguous conclusion from a single rule application applied to existing facts.\n3. **Negative Constraint:** NEVER include rule antecedents as premises if they are not supported by the current game state facts. If an antecedent is not satisfied by any fact, the rule is effectively dormant and must not be included in the premise list.\n4. **Goal Anchoring:** Identify the specific target conclusion required to satisfy the provided goal.\n5. **Chain-of-Thought:** Before outputting the JSON, walk through the logical derivation of the current game state. Explicitly identify which facts trigger which rules, and distinguish between active rules and non-applicable ones.\n\nOutput Format: Provide a structured JSON object containing:\n- `premises`: A list of strings representing the validated logical state.\n- `target_conclusion`: A string representing the specific goal literal to be evaluated.\n\nEnsure your reasoning demonstrates full accountability for why each premise is included and why others are excluded.",
+      "fields": [
+        {
+          "prefix": "Case Description:",
+          "description": "Full boardgame case: facts, rules, and preferences"
+        },
+        {
+          "prefix": "Goal:",
+          "description": "The goal predicate string, e.g. '(swan, swear, woodpecker)'"
+        },
+        {
+          "prefix": "Reasoning: Let's think step by step in order to",
+          "description": "${reasoning}"
+        },
+        {
+          "prefix": "Knowledge Base:",
+          "description": "JSON containing:\n        - premises: List of ASPIC+ literals derived ONLY from stated facts\n          (e.g. if 'wolf does not take X' is a fact and Rule1 says 'if not X then Y',\n          include 'Y' as a premise; do NOT include rule antecedents that have no\n          factual basis)\n        - target_conclusion: Single ASPIC+ literal representing the goal\n        Example: {\n            \"premises\": [\"SeahorseSurrenders\", \"WolfAcquiresPhoto\"],\n            \"target_conclusion\": \"SwanSwears\"\n        }"
+        }
+      ]
+    },
+    "lm": null
+  },
+  "extract_rules.predict": {
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "augmented": true,
+        "case_description": "Facts: The hare is named Lily. The hippopotamus learns the basics of resource management from the hare. The parrot is named Pashmak.\n\nRules: Rule1: Regarding the hare, if it has a card whose color is one of the rainbow colors, then we can conclude that it does not wink at the turtle. Rule2: If the hippopotamus learns the basics of resource management from the hare, then the hare winks at the turtle. Rule3: If the hare has a name whose first letter is the same as the first letter of the parrot's name, then the hare does not wink at the turtle.\n\nPreferences: Rule1 is preferred over Rule2. Rule3 is preferred over Rule2. ",
+        "knowledge_base": "{\n    \"premises\": [\"HippopotamusLearnsFromHare\"],\n    \"target_conclusion\": \"HareWinksAtTurtle\"\n}",
+        "reasoning": "The goal is to determine if the hare winks at the turtle. \n1. Rule 2 states that if the hippopotamus learns from the hare (which is a fact), then the hare winks at the turtle.\n2. Rule 1 states that if the hare has a rainbow-colored card, it does not wink at the turtle. However, the facts do not state that the hare has such a card, so Rule 1 is not triggered.\n3. Rule 3 states that if the hare's name (Lily) starts with the same letter as the parrot's name (Pashmak), then the hare does not wink at the turtle. Since 'L' (Lily) is not the same as 'P' (Pashmak), Rule 3 is not triggered.\n4. Since no rules that negate the winking are triggered, Rule 2 remains the primary driver for the conclusion. Even if Rule 1 or 3 were triggered, the preferences indicate they would override Rule 2.",
+        "causal_model": "{\n    \"defeasible_rules\": [\n        \"r1: HareHasRainbowCard => ¬HareWinksAtTurtle\",\n        \"r2: HippopotamusLearnsFromHare => HareWinksAtTurtle\",\n        \"r3: HareNameStartsSameAsParrot => ¬HareWinksAtTurtle\"\n    ],\n    \"undercutter_rules\": [],\n    \"preferences\": {\n        \"r1\": 0.8,\n        \"r3\": 0.8,\n        \"r2\": 0.5\n    }\n}"
+      },
+      {
+        "augmented": true,
+        "case_description": "Facts: The raven has a card that is blue in color, and is holding her keys. The doctorfish does not wink at the raven. The parrot does not wink at the raven.\n\nRules: Rule1: For the raven, if the belief is that the doctorfish does not wink at the raven and the parrot does not wink at the raven, then you can add \"the raven does not eat the food of the panda bear\" to your conclusions.",
+        "knowledge_base": "{\n    \"premises\": [\n        \"DoctorfishDoesNotWinkAtRaven\",\n        \"ParrotDoesNotWinkAtRaven\",\n        \"RavenDoesNotEatFoodOfPandaBear\"\n    ],\n    \"target_conclusion\": \"RavenEatFoodOfPandaBear\"\n}",
+        "reasoning": "The case provides two premises: \"DoctorfishDoesNotWinkAtRaven\" and \"ParrotDoesNotWinkAtRaven\". Rule1 states that if both of these conditions are met, then \"the raven does not eat the food of the panda bear\" is a valid conclusion. Since both conditions are satisfied by the facts, the rule triggers, leading to the conclusion that the raven does not eat the food of the panda bear. This directly contradicts the target conclusion \"RavenEatFoodOfPandaBear\". Therefore, the target conclusion is false based on the provided rule.",
+        "causal_model": "{\n    \"defeasible_rules\": [\n        \"r1: DoctorfishDoesNotWinkAtRaven AND ParrotDoesNotWinkAtRaven => ¬RavenEatFoodOfPandaBear\"\n    ],\n    \"undercutter_rules\": [],\n    \"preferences\": {\n        \"r1\": 1.0\n    }\n}"
+      },
+      {
+        "case_text": "Facts: The raven has fourteen friends, is named Buddy, and does not need support from the jellyfish. The sun bear is named Tango.\n\nRules: Rule1: If you are positive that one of the animals does not need support from the jellyfish, you can be certain that it will not owe $$$ to the hippopotamus.",
+        "goal_str": "(raven, owe, hippopotamus)",
+        "label": "disproved"
+      },
+      {
+        "case_text": "Facts: The mosquito struggles to find food.\n\nRules: Rule1: If at least one animal burns the warehouse of the catfish, then the mosquito eats the food that belongs to the zander. Rule2: If the mosquito has difficulty to find food, then the mosquito does not eat the food of the zander.\n\nPreferences: Rule1 is preferred over Rule2. ",
+        "goal_str": "(mosquito, eat, zander)",
+        "label": "disproved"
+      }
+    ],
+    "signature": {
+      "instructions": "Extracts defeasible rules and preference-based defeat structure from a\nBoardgameQA case. Preferences map to rule strength: if Rule5 > Rule4 and\nboth conclusions conflict, Rule5's argument defeats Rule4's (rebut), so\nrepresent it as a direct negation rebut — NOT an undercutter — unless the\nrule conclusion is literally '¬rN'.",
+      "fields": [
+        {
+          "prefix": "Case Description:",
+          "description": "Full boardgame case: facts, rules, and preferences"
+        },
+        {
+          "prefix": "Knowledge Base:",
+          "description": "The extracted knowledge base JSON"
+        },
+        {
+          "prefix": "Reasoning: Let's think step by step in order to",
+          "description": "${reasoning}"
+        },
+        {
+          "prefix": "Causal Model:",
+          "description": "JSON with:\n        - defeasible_rules: Rules that CAN be defeated. Format: 'rN: A AND B => C'\n          If a rule concludes the NEGATION of another rule's conclusion (rebut),\n          encode it directly, e.g. 'r5: AnimalInvests => ¬SwanSwears'.\n          Only use '¬rN' form (undercutter) when the rule explicitly invalidates\n          the applicability of rule rN.\n        - undercutter_rules: Rules whose conclusion is '¬rN' (undercut rule rN).\n        - preferences: Map rule IDs to float strengths (0-1). Higher-priority rules\n          get higher values so they win rebut battles.\n        Example: {\n            \"defeasible_rules\": [\n                \"r4: SeahorseSurrenders AND WolfAcquiresPhoto => SwanSwears\",\n                \"r5: AnimalInvests => ¬SwanSwears\"\n            ],\n            \"undercutter_rules\": [],\n            \"preferences\": {\"r4\": 0.5, \"r5\": 0.9}\n        }"
+        }
+      ]
+    },
+    "lm": null
+  },
+  "metadata": {
+    "dependency_versions": {
+      "python": "3.13",
+      "dspy": "3.0.3",
+      "cloudpickle": "3.1"
+    }
+  }
+}

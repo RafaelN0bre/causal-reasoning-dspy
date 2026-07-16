@@ -1,0 +1,187 @@
+{
+  "case": {
+    "id": 17,
+    "name": "Corrosão na Passarela (Cadeia de Dois Passos)",
+    "pattern": "cadeia",
+    "case_text": "A concessionária deixou de tratar a corrosão nos cabos da passarela (CoNt).\nOs cabos se romperam e a estrutura cedeu (EsCe), causando a queda de pedestres que a atravessavam (PeQu).\nPergunta-se: a corrosão não tratada (CoNt) foi causa da queda dos pedestres (PeQu)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "CoNt"
+      ],
+      "potential_causes": [
+        "CoNt"
+      ],
+      "target_conclusion": "PeQu"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: CoNt => EsCe",
+        "r1: EsCe => PeQu"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "CoNt": true
+    }
+  },
+  "analysis": {
+    "case_text": "A concessionária deixou de tratar a corrosão nos cabos da passarela (CoNt).\nOs cabos se romperam e a estrutura cedeu (EsCe), causando a queda de pedestres que a atravessavam (PeQu).\nPergunta-se: a corrosão não tratada (CoNt) foi causa da queda dos pedestres (PeQu)?",
+    "knowledge_base": {
+      "premises": [
+        "CoNt"
+      ],
+      "potential_causes": [
+        "CoNt"
+      ],
+      "target_conclusion": "PeQu"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: CoNt => EsCe",
+        "r1: EsCe => PeQu"
+      ],
+      "undercutter_rules": [],
+      "preferences": {
+        "r0": 0.6,
+        "r1": 0.6
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "CoNt"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: CoNt => EsCe",
+            "r1: EsCe => PeQu"
+          ],
+          "undercutters": []
+        },
+        "preferences": {
+          "r0": 0.6,
+          "r1": 0.6
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "CoNt"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0",
+            "r1"
+          ],
+          "conclusion": "PeQu",
+          "strength": 0.6
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A0",
+      "A2",
+      "A1"
+    ],
+    "base_grounded_conclusions": {
+      "A0": "CoNt",
+      "A2": "PeQu",
+      "A1": "EsCe"
+    },
+    "base_explanations": {
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A2",
+        "A0",
+        "A1"
+      ],
+      "A1": [
+        "A0",
+        "A1"
+      ]
+    },
+    "causal_results": {
+      "CoNt": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"omission\", pois a falha da concessionária em realizar a manutenção (CoNt) é a omissão que permitiu que o dano (PeQu) ocorresse.\n2. **Regras Críticas**: A regra \"CoNt => EsCe\" é a regra crítica. Ao negar `CoNt` (assumindo que o tratamento teria ocorrido), a regra não é disparada, impedindo a sequência de eventos que leva à queda.\n3. **Argumentos Derrotados**: O argumento `A2`, que sustentava a conclusão `PeQu`, torna-se inoperante no AF modificado, pois sua base factual foi removida.\n4. **Justificativa Jurídica**: De acordo com a Definição 4.3, `CoNt` é causa-in-fact porque, na ausência dessa omissão (contrafactual), o resultado `PeQu` não teria ocorrido. A omissão é uma condição *sine qua non* para o dano.\n5. **Conclusão**: A relação é de causalidade por omissão, onde o dever de agir (manutenção) não foi cumprido, tornando a concessionária responsável pelo resultado danoso.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "PeQu",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "CoNt"
+        ],
+        "potential_causes": [
+          "CoNt"
+        ],
+        "target_conclusion": "PeQu"
+      },
+      "got": {
+        "premises": [
+          "CoNt"
+        ],
+        "potential_causes": [
+          "CoNt"
+        ],
+        "target_conclusion": "PeQu"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: CoNt => EsCe",
+          "r1: EsCe => PeQu"
+        ],
+        "undercutter_rules": []
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: CoNt => EsCe",
+          "r1: EsCe => PeQu"
+        ],
+        "undercutter_rules": [],
+        "preferences": {
+          "r0": 0.6,
+          "r1": 0.6
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "CoNt": true
+      },
+      "got": {
+        "CoNt": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"omission\", pois a falha da concessionária em realizar a manutenção (CoNt) é a omissão que permitiu que o dano (PeQu) ocorresse.\n2. **Regras Críticas**: A regra \"CoNt => EsCe\" é a regra crítica. Ao negar `CoNt` (assumindo que o tratamento teria ocorrido), a regra não é disparada, impedindo a sequência de eventos que leva à queda.\n3. **Argumentos Derrotados**: O argumento `A2`, que sustentava a conclusão `PeQu`, torna-se inoperante no AF modificado, pois sua base factual foi removida.\n4. **Justificativa Jurídica**: De acordo com a Definição 4.3, `CoNt` é causa-in-fact porque, na ausência dessa omissão (contrafactual), o resultado `PeQu` não teria ocorrido. A omissão é uma condição *sine qua non* para o dano.\n5. **Conclusão**: A relação é de causalidade por omissão, onde o dever de agir (manutenção) não foi cumprido, tornando a concessionária responsável pelo resultado danoso.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "PeQu",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

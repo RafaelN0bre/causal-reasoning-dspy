@@ -1,0 +1,171 @@
+{
+  "case": {
+    "id": 11,
+    "name": "Derramamento de Óleo (Produção Simples)",
+    "pattern": "producao",
+    "case_text": "Um navio derramou óleo na baía durante a operação de carga (DeOl).\nAs praias da região ficaram contaminadas, configurando dano ambiental (DaAm).\nPergunta-se: o derramamento de óleo (DeOl) foi causa do dano ambiental (DaAm)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "DeOl"
+      ],
+      "potential_causes": [
+        "DeOl"
+      ],
+      "target_conclusion": "DaAm"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: DeOl => DaAm"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "DeOl": true
+    }
+  },
+  "analysis": {
+    "case_text": "Um navio derramou óleo na baía durante a operação de carga (DeOl).\nAs praias da região ficaram contaminadas, configurando dano ambiental (DaAm).\nPergunta-se: o derramamento de óleo (DeOl) foi causa do dano ambiental (DaAm)?",
+    "knowledge_base": {
+      "premises": [
+        "DeOl"
+      ],
+      "potential_causes": [
+        "DeOl"
+      ],
+      "target_conclusion": "DaAm"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: DeOl => DaAm"
+      ],
+      "undercutter_rules": [],
+      "preferences": {
+        "r0": 0.5
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "DeOl"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: DeOl => DaAm"
+          ],
+          "undercutters": []
+        },
+        "preferences": {
+          "r0": 0.5
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "DeOl"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "DaAm",
+          "strength": 0.5
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A1",
+      "A0"
+    ],
+    "base_grounded_conclusions": {
+      "A1": "DaAm",
+      "A0": "DeOl"
+    },
+    "base_explanations": {
+      "A1": [
+        "A1",
+        "A0"
+      ],
+      "A0": [
+        "A0"
+      ]
+    },
+    "causal_results": {
+      "DeOl": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois o derramamento de óleo (DeOl) é o evento que, através de uma cadeia direta, resulta no dano ambiental (DaAm).\n2. **Regras Críticas**: A regra \"DeOl => DaAm\" é a regra central afetada. Ao remover DeOl, a regra perde seu antecedente, tornando impossível a derivação do dano.\n3. **Argumentos Derrotados**: O argumento A1, que conectava o derramamento ao dano, foi derrotado pela ausência da premissa fática necessária.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, φ é causa de ψ se, na ausência de φ, ψ não ocorre. Como a simulação com ¬DeOl resultou na exclusão de DaAm do conjunto de conclusões, o derramamento é causa-in-fact do dano ambiental.\n5. **Conceito**: Aplicação direta do teste contrafactual (conditio sine qua non).",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "DaAm",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "DeOl"
+        ],
+        "potential_causes": [
+          "DeOl"
+        ],
+        "target_conclusion": "DaAm"
+      },
+      "got": {
+        "premises": [
+          "DeOl"
+        ],
+        "potential_causes": [
+          "DeOl"
+        ],
+        "target_conclusion": "DaAm"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: DeOl => DaAm"
+        ],
+        "undercutter_rules": []
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: DeOl => DaAm"
+        ],
+        "undercutter_rules": [],
+        "preferences": {
+          "r0": 0.5
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "DeOl": true
+      },
+      "got": {
+        "DeOl": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois o derramamento de óleo (DeOl) é o evento que, através de uma cadeia direta, resulta no dano ambiental (DaAm).\n2. **Regras Críticas**: A regra \"DeOl => DaAm\" é a regra central afetada. Ao remover DeOl, a regra perde seu antecedente, tornando impossível a derivação do dano.\n3. **Argumentos Derrotados**: O argumento A1, que conectava o derramamento ao dano, foi derrotado pela ausência da premissa fática necessária.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, φ é causa de ψ se, na ausência de φ, ψ não ocorre. Como a simulação com ¬DeOl resultou na exclusão de DaAm do conjunto de conclusões, o derramamento é causa-in-fact do dano ambiental.\n5. **Conceito**: Aplicação direta do teste contrafactual (conditio sine qua non).",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "DaAm",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

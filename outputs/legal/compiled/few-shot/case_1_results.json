@@ -1,0 +1,209 @@
+{
+  "case": {
+    "id": 1,
+    "name": "Caso da Leucemia (Omissão)",
+    "case_text": "\n        Uma criança com leucemia (ChLe) não recebeu quimioterapia (Chem) porque seus pais se recusaram a consentir (¬PaCo).\n        Os médicos recomendaram fortemente a quimioterapia. A criança não foi tratada e morreu (ChDi).\n        Pergunta-se: a recusa dos pais em consentir (¬PaCo) foi causa da morte da criança (ChDi)?\n        Fonte: Baseado em Cassazione penale (2023)\n        ",
+    "expected_knowledge_base": {
+      "premises": [
+        "ChLe",
+        "¬PaCo"
+      ],
+      "potential_causes": [
+        "¬PaCo"
+      ],
+      "target_conclusion": "ChDi",
+      "axioms": []
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: ChLe => ChDi",
+        "r1: PaCo => Chem"
+      ],
+      "undercutter_rules": [
+        "r2: Chem => ¬r0"
+      ]
+    },
+    "expected_causal_result": {
+      "¬PaCo": {
+        "is_cause": true,
+        "explanation": "A omissão do consentimento (¬PaCo) é uma causa da morte (ChDi). Se uma intervenção fosse feita adicionando 'PaCo'[cite: 343], um novo argumento justificado 'Chem' seria criado (via r1), que por sua vez ativaria a regra 'r2' para derrotar 'r0'[cite: 344, 345]. Isso bloquearia a conclusão 'ChDi', provando que '¬PaCo' era causal."
+      }
+    }
+  },
+  "analysis": {
+    "case_text": "\n        Uma criança com leucemia (ChLe) não recebeu quimioterapia (Chem) porque seus pais se recusaram a consentir (¬PaCo).\n        Os médicos recomendaram fortemente a quimioterapia. A criança não foi tratada e morreu (ChDi).\n        Pergunta-se: a recusa dos pais em consentir (¬PaCo) foi causa da morte da criança (ChDi)?\n        Fonte: Baseado em Cassazione penale (2023)\n        ",
+    "knowledge_base": {
+      "premises": [
+        "ChLe",
+        "¬PaCo"
+      ],
+      "potential_causes": [
+        "¬PaCo"
+      ],
+      "target_conclusion": "ChDi"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: ChLe => ChDi",
+        "r1: PaCo => Chem"
+      ],
+      "undercutter_rules": [
+        "r2: Chem => ¬r0"
+      ],
+      "preferences": {
+        "r0": 0.8,
+        "r1": 0.9,
+        "r2": 0.9
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "ChLe",
+          "¬PaCo"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: ChLe => ChDi",
+            "r1: PaCo => Chem"
+          ],
+          "undercutters": [
+            "r2: Chem => ¬r0"
+          ]
+        },
+        "preferences": {
+          "r0": 0.8,
+          "r1": 0.9,
+          "r2": 0.9
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "ChLe"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "ChDi",
+          "strength": 0.8
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A0",
+      "A2",
+      "A1"
+    ],
+    "base_grounded_conclusions": {
+      "A0": "¬PaCo",
+      "A2": "ChDi",
+      "A1": "ChLe"
+    },
+    "base_explanations": {
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A2",
+        "A1"
+      ],
+      "A1": [
+        "A1"
+      ]
+    },
+    "causal_results": {
+      "¬PaCo": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"omission\". A recusa dos pais (`¬PaCo`) é uma omissão que impediu a intervenção médica necessária (`Chem`), permitindo que o estado patológico (`ChLe`) resultasse em morte (`ChDi`).\n2. **Regras Críticas**: A regra \"ChLe ∧ ¬Chem => ChDi\" é a regra crítica. A omissão dos pais garante que a condição `¬Chem` permaneça verdadeira, mantendo a cadeia causal da morte ativa.\n3. **Argumentos Derrotados**: No cenário contrafactual (`PaCo`), o argumento que sustenta a realização da quimioterapia (`Chem`) é ativado. Este argumento derrota a premissa de que o tratamento não ocorreria, invalidando a conclusão `ChDi`.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, a omissão é causa-in-fact quando, na ausência da omissão (ou seja, com o consentimento dado), o resultado (`ChDi`) não teria ocorrido. Como a introdução de `PaCo` na extensão fundamentada bloqueia a conclusão `ChDi`, a recusa é causalmente relevante.\n5. **Conclusão**: A recusa dos pais foi o fator determinante que impediu o tratamento, tornando-a causa-in-fact da morte da criança.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "ChDi",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "ChLe",
+          "¬PaCo"
+        ],
+        "potential_causes": [
+          "¬PaCo"
+        ],
+        "target_conclusion": "ChDi",
+        "axioms": []
+      },
+      "got": {
+        "premises": [
+          "ChLe",
+          "¬PaCo"
+        ],
+        "potential_causes": [
+          "¬PaCo"
+        ],
+        "target_conclusion": "ChDi"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: ChLe => ChDi",
+          "r1: PaCo => Chem"
+        ],
+        "undercutter_rules": [
+          "r2: Chem => ¬r0"
+        ]
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: ChLe => ChDi",
+          "r1: PaCo => Chem"
+        ],
+        "undercutter_rules": [
+          "r2: Chem => ¬r0"
+        ],
+        "preferences": {
+          "r0": 0.8,
+          "r1": 0.9,
+          "r2": 0.9
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "¬PaCo": {
+          "is_cause": true,
+          "explanation": "A omissão do consentimento (¬PaCo) é uma causa da morte (ChDi). Se uma intervenção fosse feita adicionando 'PaCo'[cite: 343], um novo argumento justificado 'Chem' seria criado (via r1), que por sua vez ativaria a regra 'r2' para derrotar 'r0'[cite: 344, 345]. Isso bloquearia a conclusão 'ChDi', provando que '¬PaCo' era causal."
+        }
+      },
+      "got": {
+        "¬PaCo": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"omission\". A recusa dos pais (`¬PaCo`) é uma omissão que impediu a intervenção médica necessária (`Chem`), permitindo que o estado patológico (`ChLe`) resultasse em morte (`ChDi`).\n2. **Regras Críticas**: A regra \"ChLe ∧ ¬Chem => ChDi\" é a regra crítica. A omissão dos pais garante que a condição `¬Chem` permaneça verdadeira, mantendo a cadeia causal da morte ativa.\n3. **Argumentos Derrotados**: No cenário contrafactual (`PaCo`), o argumento que sustenta a realização da quimioterapia (`Chem`) é ativado. Este argumento derrota a premissa de que o tratamento não ocorreria, invalidando a conclusão `ChDi`.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, a omissão é causa-in-fact quando, na ausência da omissão (ou seja, com o consentimento dado), o resultado (`ChDi`) não teria ocorrido. Como a introdução de `PaCo` na extensão fundamentada bloqueia a conclusão `ChDi`, a recusa é causalmente relevante.\n5. **Conclusão**: A recusa dos pais foi o fator determinante que impediu o tratamento, tornando-a causa-in-fact da morte da criança.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "ChDi",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

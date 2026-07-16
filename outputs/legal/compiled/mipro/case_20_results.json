@@ -1,0 +1,202 @@
+{
+  "case": {
+    "id": 20,
+    "name": "Cartão Não Bloqueado (Omissão)",
+    "pattern": "omissao",
+    "case_text": "O banco recebeu alerta de fraude no cartão do correntista (AlFr).\nO banco não bloqueou o cartão (¬CaBl).\nO bloqueio teria barrado as transações seguintes (TrBa).\nO correntista sofreu prejuízo com compras fraudulentas (PrCo).\nPergunta-se: a falta de bloqueio do cartão (¬CaBl) foi causa do prejuízo (PrCo)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "AlFr",
+        "¬CaBl"
+      ],
+      "potential_causes": [
+        "¬CaBl"
+      ],
+      "target_conclusion": "PrCo"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: AlFr => PrCo",
+        "r1: CaBl => TrBa"
+      ],
+      "undercutter_rules": [
+        "r2: TrBa => ¬r0"
+      ]
+    },
+    "expected_causal_result": {
+      "¬CaBl": true
+    }
+  },
+  "analysis": {
+    "case_text": "O banco recebeu alerta de fraude no cartão do correntista (AlFr).\nO banco não bloqueou o cartão (¬CaBl).\nO bloqueio teria barrado as transações seguintes (TrBa).\nO correntista sofreu prejuízo com compras fraudulentas (PrCo).\nPergunta-se: a falta de bloqueio do cartão (¬CaBl) foi causa do prejuízo (PrCo)?",
+    "knowledge_base": {
+      "premises": [
+        "AlFr",
+        "¬CaBl"
+      ],
+      "potential_causes": [
+        "¬CaBl"
+      ],
+      "target_conclusion": "PrCo"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: AlFr => PrCo",
+        "r1: CaBl => TrBa"
+      ],
+      "undercutter_rules": [
+        "r2: TrBa => ¬r0"
+      ],
+      "preferences": {
+        "r0": 0.8,
+        "r1": 0.8,
+        "r2": 0.9
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "AlFr",
+          "¬CaBl"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: AlFr => PrCo",
+            "r1: CaBl => TrBa"
+          ],
+          "undercutters": [
+            "r2: TrBa => ¬r0"
+          ]
+        },
+        "preferences": {
+          "r0": 0.8,
+          "r1": 0.8,
+          "r2": 0.9
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "AlFr"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "PrCo",
+          "strength": 0.8
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A1",
+      "A0",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A1": "AlFr",
+      "A0": "¬CaBl",
+      "A2": "PrCo"
+    },
+    "base_explanations": {
+      "A1": [
+        "A1"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A1",
+        "A2"
+      ]
+    },
+    "causal_results": {
+      "¬CaBl": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Omissão. A falha do banco em agir (bloquear o cartão) diante de um alerta de fraude foi a condição necessária para que o prejuízo se concretizasse.\n2. **Regras Críticas**: A regra `AlFr ∧ ¬CaBl => PrCo` foi desativada. A introdução de `CaBl` no framework de teste permitiu a ativação de uma regra de proteção (`TrBa`), que bloqueia a conclusão de prejuízo.\n3. **Argumentos Derrotados**: O argumento que sustentava o prejuízo (`PrCo`) foi derrotado pela presença da ação de bloqueio, que interrompe a sequência de transações fraudulentas.\n4. **Justificativa Jurídica**: O teste \"but-for\" é satisfeito: mas pela omissão do banco em bloquear o cartão, o prejuízo não teria ocorrido. O banco possuía o dever de agir após o alerta de fraude, e sua inércia foi o fator determinante para o dano.\n5. **Conceito**: A análise confirma que a omissão é causa-in-fact quando a ação esperada teria evitado o resultado danoso.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "PrCo",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "AlFr",
+          "¬CaBl"
+        ],
+        "potential_causes": [
+          "¬CaBl"
+        ],
+        "target_conclusion": "PrCo"
+      },
+      "got": {
+        "premises": [
+          "AlFr",
+          "¬CaBl"
+        ],
+        "potential_causes": [
+          "¬CaBl"
+        ],
+        "target_conclusion": "PrCo"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: AlFr => PrCo",
+          "r1: CaBl => TrBa"
+        ],
+        "undercutter_rules": [
+          "r2: TrBa => ¬r0"
+        ]
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: AlFr => PrCo",
+          "r1: CaBl => TrBa"
+        ],
+        "undercutter_rules": [
+          "r2: TrBa => ¬r0"
+        ],
+        "preferences": {
+          "r0": 0.8,
+          "r1": 0.8,
+          "r2": 0.9
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "¬CaBl": true
+      },
+      "got": {
+        "¬CaBl": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Omissão. A falha do banco em agir (bloquear o cartão) diante de um alerta de fraude foi a condição necessária para que o prejuízo se concretizasse.\n2. **Regras Críticas**: A regra `AlFr ∧ ¬CaBl => PrCo` foi desativada. A introdução de `CaBl` no framework de teste permitiu a ativação de uma regra de proteção (`TrBa`), que bloqueia a conclusão de prejuízo.\n3. **Argumentos Derrotados**: O argumento que sustentava o prejuízo (`PrCo`) foi derrotado pela presença da ação de bloqueio, que interrompe a sequência de transações fraudulentas.\n4. **Justificativa Jurídica**: O teste \"but-for\" é satisfeito: mas pela omissão do banco em bloquear o cartão, o prejuízo não teria ocorrido. O banco possuía o dever de agir após o alerta de fraude, e sua inércia foi o fator determinante para o dano.\n5. **Conceito**: A análise confirma que a omissão é causa-in-fact quando a ação esperada teria evitado o resultado danoso.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "PrCo",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

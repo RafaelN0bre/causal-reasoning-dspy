@@ -1,0 +1,233 @@
+{
+  "case": {
+    "id": 28,
+    "name": "Dois Poluentes (Sobredeterminação)",
+    "pattern": "sobredeterminacao",
+    "case_text": "No mesmo dia, duas indústrias despejaram no lago volumes de poluente (PoA e PoB), cada um suficiente, sozinho, para matar os peixes.\nOs peixes do lago morreram.\nPergunta-se: o despejo da primeira indústria (PoA) e o despejo da segunda indústria (PoB) foram causas da mortandade dos peixes (MoPe)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "PoA",
+        "PoB"
+      ],
+      "potential_causes": [
+        "PoA",
+        "PoB"
+      ],
+      "target_conclusion": "MoPe"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: PoA => MoPe",
+        "r1: PoB => MoPe"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "PoA": false,
+      "PoB": false
+    }
+  },
+  "analysis": {
+    "case_text": "No mesmo dia, duas indústrias despejaram no lago volumes de poluente (PoA e PoB), cada um suficiente, sozinho, para matar os peixes.\nOs peixes do lago morreram.\nPergunta-se: o despejo da primeira indústria (PoA) e o despejo da segunda indústria (PoB) foram causas da mortandade dos peixes (MoPe)?",
+    "knowledge_base": {
+      "premises": [
+        "PoA",
+        "PoB"
+      ],
+      "potential_causes": [
+        "PoA",
+        "PoB"
+      ],
+      "target_conclusion": "MoPe"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: PoA => MoPe",
+        "r1: PoB => MoPe"
+      ],
+      "undercutter_rules": [],
+      "preferences": {
+        "r0": 0.5,
+        "r1": 0.5
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "PoA",
+          "PoB"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: PoA => MoPe",
+            "r1: PoB => MoPe"
+          ],
+          "undercutters": []
+        },
+        "preferences": {
+          "r0": 0.5,
+          "r1": 0.5
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "PoA"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "MoPe",
+          "strength": 0.5
+        },
+        {
+          "id": "A2",
+          "premises": [
+            "PoB"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r1"
+          ],
+          "conclusion": "MoPe",
+          "strength": 0.5
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A1",
+      "A3",
+      "A0",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A1": "PoB",
+      "A3": "MoPe",
+      "A0": "PoA",
+      "A2": "MoPe"
+    },
+    "base_explanations": {
+      "A1": [
+        "A1"
+      ],
+      "A3": [
+        "A1",
+        "A3"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A0",
+        "A2"
+      ]
+    },
+    "causal_results": {
+      "PoA": {
+        "is_cause": false,
+        "explanation": "1. **Tipo de Causa**: Identificada como \"production\". `PoA` é um evento que, por si só, é suficiente para produzir o dano (`MoPe`).\n2. **Regras Críticas**: A regra `PoA => MoPe` é a cadeia causal direta que conecta a causa ao efeito.\n3. **Argumentos Derrotados**: A negação de `PoA` invalida o argumento `A3`, mas não altera o status da conclusão `MoPe` no sistema, pois a causa redundante `PoB` mantém o efeito.\n4. **Justificativa Jurídica**: Em casos de causalidade cumulativa ou redundante (overdetermination), o teste *but-for* é insuficiente. No entanto, sob a Definição 4.3, `PoA` é causa-in-fact porque contribuiu ativamente para a produção do resultado. A indústria A não pode se eximir de responsabilidade alegando que o dano ocorreria de qualquer forma devido à indústria B, pois sua ação foi um fator de produção suficiente e independente.\n5. **Conceito**: O caso ilustra a causalidade por produção em um cenário de redundância, onde a contribuição de cada agente é considerada causa do dano final.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "MoPe",
+          "base_has_target": true,
+          "test_has_target": true
+        }
+      },
+      "PoB": {
+        "is_cause": false,
+        "explanation": "1. **Tipo de Causa**: Identificada como \"production\". O despejo `PoB` é um evento que, por si só, é suficiente para produzir o dano (`MoPe`).\n2. **Regras Críticas**: A regra `PoB => MoPe` é a cadeia causal direta que conecta a causa ao efeito.\n3. **Argumentos Derrotados**: Embora a negação de `PoB` remova o argumento específico que a utiliza, o sistema de argumentação mantém a conclusão `MoPe` devido à presença de `PoA` (poluente da indústria A).\n4. **Justificativa Jurídica**: Embora o teste contrafactual puro falhe devido à redundância (overdetermination), a Definição 4.3 reconhece a \"produção\" como critério de causalidade. Como `PoB` é um fator que, isoladamente, produz o resultado, ele é considerado causa-in-fact, mesmo que outra causa (`PoA`) também fosse suficiente.\n5. **Conceito**: Trata-se de um caso de causalidade cumulativa/redundante, onde a contribuição ativa de `PoB` para a mortandade é suficiente para atribuir causalidade, independentemente da existência de outras causas concorrentes.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "MoPe",
+          "base_has_target": true,
+          "test_has_target": true
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "PoA",
+          "PoB"
+        ],
+        "potential_causes": [
+          "PoA",
+          "PoB"
+        ],
+        "target_conclusion": "MoPe"
+      },
+      "got": {
+        "premises": [
+          "PoA",
+          "PoB"
+        ],
+        "potential_causes": [
+          "PoA",
+          "PoB"
+        ],
+        "target_conclusion": "MoPe"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: PoA => MoPe",
+          "r1: PoB => MoPe"
+        ],
+        "undercutter_rules": []
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: PoA => MoPe",
+          "r1: PoB => MoPe"
+        ],
+        "undercutter_rules": [],
+        "preferences": {
+          "r0": 0.5,
+          "r1": 0.5
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "PoA": false,
+        "PoB": false
+      },
+      "got": {
+        "PoA": {
+          "is_cause": false,
+          "explanation": "1. **Tipo de Causa**: Identificada como \"production\". `PoA` é um evento que, por si só, é suficiente para produzir o dano (`MoPe`).\n2. **Regras Críticas**: A regra `PoA => MoPe` é a cadeia causal direta que conecta a causa ao efeito.\n3. **Argumentos Derrotados**: A negação de `PoA` invalida o argumento `A3`, mas não altera o status da conclusão `MoPe` no sistema, pois a causa redundante `PoB` mantém o efeito.\n4. **Justificativa Jurídica**: Em casos de causalidade cumulativa ou redundante (overdetermination), o teste *but-for* é insuficiente. No entanto, sob a Definição 4.3, `PoA` é causa-in-fact porque contribuiu ativamente para a produção do resultado. A indústria A não pode se eximir de responsabilidade alegando que o dano ocorreria de qualquer forma devido à indústria B, pois sua ação foi um fator de produção suficiente e independente.\n5. **Conceito**: O caso ilustra a causalidade por produção em um cenário de redundância, onde a contribuição de cada agente é considerada causa do dano final.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "MoPe",
+            "base_has_target": true,
+            "test_has_target": true
+          }
+        },
+        "PoB": {
+          "is_cause": false,
+          "explanation": "1. **Tipo de Causa**: Identificada como \"production\". O despejo `PoB` é um evento que, por si só, é suficiente para produzir o dano (`MoPe`).\n2. **Regras Críticas**: A regra `PoB => MoPe` é a cadeia causal direta que conecta a causa ao efeito.\n3. **Argumentos Derrotados**: Embora a negação de `PoB` remova o argumento específico que a utiliza, o sistema de argumentação mantém a conclusão `MoPe` devido à presença de `PoA` (poluente da indústria A).\n4. **Justificativa Jurídica**: Embora o teste contrafactual puro falhe devido à redundância (overdetermination), a Definição 4.3 reconhece a \"produção\" como critério de causalidade. Como `PoB` é um fator que, isoladamente, produz o resultado, ele é considerado causa-in-fact, mesmo que outra causa (`PoA`) também fosse suficiente.\n5. **Conceito**: Trata-se de um caso de causalidade cumulativa/redundante, onde a contribuição ativa de `PoB` para a mortandade é suficiente para atribuir causalidade, independentemente da existência de outras causas concorrentes.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "MoPe",
+            "base_has_target": true,
+            "test_has_target": true
+          }
+        }
+      }
+    }
+  }
+}

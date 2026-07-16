@@ -1,0 +1,246 @@
+{
+  "case": {
+    "id": 19,
+    "name": "Portão Destrancado (Omissão)",
+    "pattern": "omissao",
+    "case_text": "Uma criança pequena estava sob a guarda da escola (CrEs).\nA escola não trancou o portão da frente (¬PoTr).\nO portão trancado teria impedido a saída (SaIm).\nA criança saiu para a rua e foi atropelada (CrAt).\nPergunta-se: o portão destrancado (¬PoTr) foi causa do atropelamento da criança (CrAt)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "CrEs",
+        "¬PoTr"
+      ],
+      "potential_causes": [
+        "¬PoTr"
+      ],
+      "target_conclusion": "CrAt"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: CrEs => CrAt",
+        "r1: PoTr => SaIm"
+      ],
+      "undercutter_rules": [
+        "r2: SaIm => ¬r0"
+      ]
+    },
+    "expected_causal_result": {
+      "¬PoTr": true
+    }
+  },
+  "analysis": {
+    "case_text": "Uma criança pequena estava sob a guarda da escola (CrEs).\nA escola não trancou o portão da frente (¬PoTr).\nO portão trancado teria impedido a saída (SaIm).\nA criança saiu para a rua e foi atropelada (CrAt).\nPergunta-se: o portão destrancado (¬PoTr) foi causa do atropelamento da criança (CrAt)?",
+    "knowledge_base": {
+      "premises": [
+        "CrEs",
+        "¬PoTr",
+        "SaIm"
+      ],
+      "potential_causes": [
+        "¬PoTr"
+      ],
+      "target_conclusion": "CrAt"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: CrEs AND PoTr => CrAt",
+        "r1: SaIm => PoTr"
+      ],
+      "undercutter_rules": [
+        "r2: PoTr => ¬r0"
+      ],
+      "preferences": {
+        "r0": 0.7,
+        "r1": 0.8,
+        "r2": 0.9
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [
+          "¬PoTr"
+        ],
+        "premises": [
+          "CrEs",
+          "SaIm"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: CrEs AND PoTr => CrAt",
+            "r1: SaIm => PoTr"
+          ],
+          "undercutters": [
+            "r2: PoTr => ¬r0"
+          ]
+        },
+        "preferences": {
+          "r0": 0.7,
+          "r1": 0.8,
+          "r2": 0.9
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "CrEs"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "CrAt",
+          "strength": 0.7
+        },
+        {
+          "id": "A2",
+          "premises": [
+            "SaIm"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r1"
+          ],
+          "conclusion": "PoTr",
+          "strength": 0.8
+        },
+        {
+          "id": "A3",
+          "premises": [
+            "PoTr"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r2"
+          ],
+          "conclusion": "¬r0",
+          "strength": 0.9
+        }
+      ],
+      "attacks": [
+        {
+          "attacker": "A3",
+          "target": "A1",
+          "type": "undercut",
+          "rule": "r0",
+          "succeeds": true
+        }
+      ],
+      "defeats": [
+        {
+          "defeater": "A3",
+          "defeated": "A1",
+          "type": "undercut",
+          "explanation": "Argumento A3 (força 0.9) derrota a regra r0 do argumento A1 (força 0.7)"
+        }
+      ]
+    },
+    "base_grounded": [
+      "A1",
+      "A4",
+      "A0"
+    ],
+    "base_grounded_conclusions": {
+      "A1": "CrEs",
+      "A4": "¬r0",
+      "A0": "SaIm"
+    },
+    "base_explanations": {
+      "A1": [
+        "A1"
+      ],
+      "A4": [
+        "A4",
+        "A3",
+        "A0"
+      ],
+      "A0": [
+        "A0"
+      ]
+    },
+    "causal_results": {
+      "¬PoTr": {
+        "is_cause": false,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"omission\". A falha em realizar uma ação esperada (trancar o portão) permitiu que a cadeia causal do atropelamento se concretizasse.\n2. **Regras Críticas**: A regra \"SaIm => CrAt\" (Se a criança sai, ela é atropelada) é a regra central afetada. No cenário original, a omissão de trancar o portão (¬PoTr) é a condição necessária para que a premissa \"SaIm\" seja verdadeira.\n3. **Argumentos Derrotados**: O argumento A4, que sustenta a conclusão \"CrAt\", perde sua validade no cenário modificado porque a premissa \"SaIm\" é negada pela presença de \"PoTr\".\n4. **Justificativa Jurídica**: Sob a ótica da Definição 4.3, a omissão é causa-in-fact porque, na ausência da omissão (ou seja, se o portão estivesse trancado), o dano (atropelamento) não teria ocorrido. O portão trancado atua como um fator de bloqueio que interrompe a sequência de eventos que leva ao dano.\n5. **Conclusão**: A relação causal é estabelecida pela dependência contrafactual: se o portão estivesse trancado, a criança não teria saído e, consequentemente, não teria sido atropelada.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "CrAt",
+          "base_has_target": false,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": false,
+      "expected": {
+        "premises": [
+          "CrEs",
+          "¬PoTr"
+        ],
+        "potential_causes": [
+          "¬PoTr"
+        ],
+        "target_conclusion": "CrAt"
+      },
+      "got": {
+        "premises": [
+          "CrEs",
+          "¬PoTr",
+          "SaIm"
+        ],
+        "potential_causes": [
+          "¬PoTr"
+        ],
+        "target_conclusion": "CrAt"
+      }
+    },
+    "causal_model": {
+      "matches": false,
+      "expected": {
+        "defeasible_rules": [
+          "r0: CrEs => CrAt",
+          "r1: PoTr => SaIm"
+        ],
+        "undercutter_rules": [
+          "r2: SaIm => ¬r0"
+        ]
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: CrEs AND PoTr => CrAt",
+          "r1: SaIm => PoTr"
+        ],
+        "undercutter_rules": [
+          "r2: PoTr => ¬r0"
+        ],
+        "preferences": {
+          "r0": 0.7,
+          "r1": 0.8,
+          "r2": 0.9
+        }
+      }
+    },
+    "causal_results": {
+      "matches": false,
+      "expected": {
+        "¬PoTr": true
+      },
+      "got": {
+        "¬PoTr": {
+          "is_cause": false,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"omission\". A falha em realizar uma ação esperada (trancar o portão) permitiu que a cadeia causal do atropelamento se concretizasse.\n2. **Regras Críticas**: A regra \"SaIm => CrAt\" (Se a criança sai, ela é atropelada) é a regra central afetada. No cenário original, a omissão de trancar o portão (¬PoTr) é a condição necessária para que a premissa \"SaIm\" seja verdadeira.\n3. **Argumentos Derrotados**: O argumento A4, que sustenta a conclusão \"CrAt\", perde sua validade no cenário modificado porque a premissa \"SaIm\" é negada pela presença de \"PoTr\".\n4. **Justificativa Jurídica**: Sob a ótica da Definição 4.3, a omissão é causa-in-fact porque, na ausência da omissão (ou seja, se o portão estivesse trancado), o dano (atropelamento) não teria ocorrido. O portão trancado atua como um fator de bloqueio que interrompe a sequência de eventos que leva ao dano.\n5. **Conclusão**: A relação causal é estabelecida pela dependência contrafactual: se o portão estivesse trancado, a criança não teria saído e, consequentemente, não teria sido atropelada.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "CrAt",
+            "base_has_target": false,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

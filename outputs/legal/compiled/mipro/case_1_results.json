@@ -1,0 +1,237 @@
+{
+  "case": {
+    "id": 1,
+    "name": "Caso da Leucemia (Omissão)",
+    "case_text": "\n        Uma criança com leucemia (ChLe) não recebeu quimioterapia (Chem) porque seus pais se recusaram a consentir (¬PaCo).\n        Os médicos recomendaram fortemente a quimioterapia. A criança não foi tratada e morreu (ChDi).\n        Pergunta-se: a recusa dos pais em consentir (¬PaCo) foi causa da morte da criança (ChDi)?\n        Fonte: Baseado em Cassazione penale (2023)\n        ",
+    "expected_knowledge_base": {
+      "premises": [
+        "ChLe",
+        "¬PaCo"
+      ],
+      "potential_causes": [
+        "¬PaCo"
+      ],
+      "target_conclusion": "ChDi",
+      "axioms": []
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: ChLe => ChDi",
+        "r1: PaCo => Chem"
+      ],
+      "undercutter_rules": [
+        "r2: Chem => ¬r0"
+      ]
+    },
+    "expected_causal_result": {
+      "¬PaCo": {
+        "is_cause": true,
+        "explanation": "A omissão do consentimento (¬PaCo) é uma causa da morte (ChDi). Se uma intervenção fosse feita adicionando 'PaCo'[cite: 343], um novo argumento justificado 'Chem' seria criado (via r1), que por sua vez ativaria a regra 'r2' para derrotar 'r0'[cite: 344, 345]. Isso bloquearia a conclusão 'ChDi', provando que '¬PaCo' era causal."
+      }
+    }
+  },
+  "analysis": {
+    "case_text": "\n        Uma criança com leucemia (ChLe) não recebeu quimioterapia (Chem) porque seus pais se recusaram a consentir (¬PaCo).\n        Os médicos recomendaram fortemente a quimioterapia. A criança não foi tratada e morreu (ChDi).\n        Pergunta-se: a recusa dos pais em consentir (¬PaCo) foi causa da morte da criança (ChDi)?\n        Fonte: Baseado em Cassazione penale (2023)\n        ",
+    "knowledge_base": {
+      "premises": [
+        "ChLe",
+        "¬PaCo"
+      ],
+      "potential_causes": [
+        "¬PaCo"
+      ],
+      "target_conclusion": "ChDi"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: ChLe AND ¬Chem => ChDi",
+        "r1: Chem => ¬ChDi",
+        "r2: ¬PaCo => ¬Chem"
+      ],
+      "undercutter_rules": [
+        "r3: Chem => ¬r0"
+      ],
+      "preferences": {
+        "r0": 0.8,
+        "r1": 0.9,
+        "r2": 0.9,
+        "r3": 0.95
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "ChLe",
+          "¬PaCo"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: ChLe AND ¬Chem => ChDi",
+            "r1: Chem => ¬ChDi",
+            "r2: ¬PaCo => ¬Chem"
+          ],
+          "undercutters": [
+            "r3: Chem => ¬r0"
+          ]
+        },
+        "preferences": {
+          "r0": 0.8,
+          "r1": 0.9,
+          "r2": 0.9,
+          "r3": 0.95
+        }
+      },
+      "arguments": [
+        {
+          "id": "A2",
+          "premises": [
+            "¬PaCo"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r2"
+          ],
+          "conclusion": "¬Chem",
+          "strength": 0.9
+        },
+        {
+          "id": "A1",
+          "premises": [
+            "ChLe",
+            "¬PaCo"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r2",
+            "r0"
+          ],
+          "conclusion": "ChDi",
+          "strength": 0.8
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A1",
+      "A3",
+      "A0",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A1": "ChLe",
+      "A3": "ChDi",
+      "A0": "¬PaCo",
+      "A2": "¬Chem"
+    },
+    "base_explanations": {
+      "A1": [
+        "A1"
+      ],
+      "A3": [
+        "A1",
+        "A3",
+        "A0",
+        "A2"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A0",
+        "A2"
+      ]
+    },
+    "causal_results": {
+      "¬PaCo": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Omissão. A recusa dos pais em consentir com o tratamento médico necessário (`¬PaCo`) é a omissão que permitiu que a doença (`ChLe`) evoluísse para o óbito (`ChDi`).\n2. **Regras Críticas**: A regra `ChLe ∧ ¬PaCo => ChDi` é a regra central que conecta a condição da criança e a omissão dos pais ao resultado fatal.\n3. **Argumentos Derrotados**: O argumento `A3`, que sustentava a conclusão de óbito, foi derrotado no cenário contrafactual, pois a premissa `¬PaCo` foi substituída por `PaCo`, invalidando a regra de óbito.\n4. **Justificativa Jurídica**: A recusa dos pais é causa-in-fact sob o teste \"but-for\": mas pela recusa dos pais, o tratamento teria ocorrido e o óbito, segundo a lógica do caso, teria sido evitado. A omissão é, portanto, o fator determinante para a concretização do dano.\n5. **Conceito**: A análise confirma que a omissão de um dever de agir (consentir para tratamento vital) é causalmente relevante quando sua ausência altera o resultado final.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "ChDi",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "ChLe",
+          "¬PaCo"
+        ],
+        "potential_causes": [
+          "¬PaCo"
+        ],
+        "target_conclusion": "ChDi",
+        "axioms": []
+      },
+      "got": {
+        "premises": [
+          "ChLe",
+          "¬PaCo"
+        ],
+        "potential_causes": [
+          "¬PaCo"
+        ],
+        "target_conclusion": "ChDi"
+      }
+    },
+    "causal_model": {
+      "matches": false,
+      "expected": {
+        "defeasible_rules": [
+          "r0: ChLe => ChDi",
+          "r1: PaCo => Chem"
+        ],
+        "undercutter_rules": [
+          "r2: Chem => ¬r0"
+        ]
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: ChLe AND ¬Chem => ChDi",
+          "r1: Chem => ¬ChDi",
+          "r2: ¬PaCo => ¬Chem"
+        ],
+        "undercutter_rules": [
+          "r3: Chem => ¬r0"
+        ],
+        "preferences": {
+          "r0": 0.8,
+          "r1": 0.9,
+          "r2": 0.9,
+          "r3": 0.95
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "¬PaCo": {
+          "is_cause": true,
+          "explanation": "A omissão do consentimento (¬PaCo) é uma causa da morte (ChDi). Se uma intervenção fosse feita adicionando 'PaCo'[cite: 343], um novo argumento justificado 'Chem' seria criado (via r1), que por sua vez ativaria a regra 'r2' para derrotar 'r0'[cite: 344, 345]. Isso bloquearia a conclusão 'ChDi', provando que '¬PaCo' era causal."
+        }
+      },
+      "got": {
+        "¬PaCo": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Omissão. A recusa dos pais em consentir com o tratamento médico necessário (`¬PaCo`) é a omissão que permitiu que a doença (`ChLe`) evoluísse para o óbito (`ChDi`).\n2. **Regras Críticas**: A regra `ChLe ∧ ¬PaCo => ChDi` é a regra central que conecta a condição da criança e a omissão dos pais ao resultado fatal.\n3. **Argumentos Derrotados**: O argumento `A3`, que sustentava a conclusão de óbito, foi derrotado no cenário contrafactual, pois a premissa `¬PaCo` foi substituída por `PaCo`, invalidando a regra de óbito.\n4. **Justificativa Jurídica**: A recusa dos pais é causa-in-fact sob o teste \"but-for\": mas pela recusa dos pais, o tratamento teria ocorrido e o óbito, segundo a lógica do caso, teria sido evitado. A omissão é, portanto, o fator determinante para a concretização do dano.\n5. **Conceito**: A análise confirma que a omissão de um dever de agir (consentir para tratamento vital) é causalmente relevante quando sua ausência altera o resultado final.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "ChDi",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

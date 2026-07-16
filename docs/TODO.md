@@ -9,14 +9,14 @@
     - somente referenciar como uma boa aplicação, o contexto, referencial teórico pode continuar como está, trazendo o principal embasamento do trabalho
     - destacar a estrutura de engenharia para alcançar o objetivo da aplicação neuro-simbólica
   - [ ] finalizar metodologia
-    - [ ] remover referências de cronograma
-    - [ ] atualizar removendo referência a execuções utilizando processos jurídicos
-    - [ ] adicionar seção sobre dspy
+    - [X] remover referências de cronograma
+    - [X] atualizar removendo referência a execuções utilizando processos jurídicos
+    - [X] adicionar seção sobre dspy
       - descrever com qualidade a utilização e papel do dspy
-      - [ ] adicionar seção sobre o processo de compilação
+      - [X] adicionar seção sobre o processo de compilação
         - descrever sobre a compilação como uma otimização de prompt e não necessariamente como treinamento de um modelo
-    - [ ] descrever melhor o uso do dataset
-    - [ ] descrever utilização do langfuse para observabilidade
+    - [X] descrever melhor o uso do dataset
+    - [X] descrever utilização do langfuse para observabilidade
   - [ ] finalizar resultados
     - [ ] apresentar comparativo com todos os métodos de execução
     - [ ] apresentar samples dos prompts finais, destacando as diferenças entre cada um dos processos de otimização

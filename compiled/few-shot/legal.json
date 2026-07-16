@@ -1,0 +1,621 @@
+{
+  "extract_kb.predict": {
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "augmented": true,
+        "case_description": "\n        Um médico administrou a um paciente uma dose dez vezes maior que a prescrita (DoEr).\n        O paciente morreu horas depois (PaMo).\n        Pergunta-se: a dose errada (DoEr) foi causa da morte do paciente (PaMo)?\n        ",
+        "reasoning": "O caso descreve um evento de erro médico (DoEr) e um evento de dano (PaMo). Para determinar a causalidade, o sistema deve avaliar se a ocorrência de DoEr é a causa necessária para a ocorrência de PaMo. As premissas estabelecem a existência do erro e a ocorrência do óbito, sendo DoEr a causa potencial a ser testada em relação ao efeito PaMo.",
+        "knowledge_base": "{\n    \"premises\": [\"DoEr\"],\n    \"potential_causes\": [\"DoEr\"],\n    \"target_conclusion\": \"PaMo\"\n}"
+      },
+      {
+        "augmented": true,
+        "case_description": "\n        Um restaurante serviu alimento estragado (AlEs) e o cliente o consumiu (ClCo).\n        O cliente desenvolveu infecção alimentar grave (ClIn).\n        Pergunta-se: servir o alimento estragado (AlEs) foi causa da infecção do cliente (ClIn)?\n        ",
+        "reasoning": "O caso descreve uma sequência causal onde o restaurante serviu alimento estragado (AlEs) e o cliente o consumiu (ClCo). O dano observado é a infecção alimentar (ClIn). A análise busca determinar se o fato \"AlEs\" é a causa determinante para o dano \"ClIn\", considerando a cadeia de eventos narrada.",
+        "knowledge_base": "{\n    \"premises\": [\"AlEs\", \"ClCo\"],\n    \"potential_causes\": [\"AlEs\"],\n    \"target_conclusion\": \"ClIn\"\n}"
+      },
+      {
+        "augmented": true,
+        "case_description": "\n        Um nadador entrou em perigo na área funda da piscina (NaPe).\n        O salva-vidas de plantão não estava vigiando a piscina (¬SaVi).\n        Um salva-vidas que vigiasse teria realizado o resgate (ReSg).\n        O nadador morreu afogado (NaMo).\n        Pergunta-se: a falta de vigilância do salva-vidas (¬SaVi) foi causa da morte do nadador (NaMo)?\n        ",
+        "reasoning": "O caso descreve uma situação de omissão (falta de vigilância) que resultou em um dano (morte por afogamento). Para analisar a causalidade, identificamos as premissas factuais: a presença do nadador em perigo (NaPe) e a ausência do salva-vidas (¬SaVi). A regra causal estabelecida é que a vigilância do salva-vidas (SaVi) levaria ao resgate (ReSg), o qual impediria a morte (¬NaMo). A pergunta foca em saber se a omissão (¬SaVi) é a causa do dano (NaMo). O evento \"NaMo\" é o efeito a ser derivado, portanto, não deve constar nas premissas.",
+        "knowledge_base": "{\n    \"premises\": [\"NaPe\", \"¬SaVi\"],\n    \"potential_causes\": [\"¬SaVi\"],\n    \"target_conclusion\": \"NaMo\"\n}"
+      },
+      {
+        "augmented": true,
+        "case_description": "\n        Uma receita continha erro grave de prescrição (ErPr).\n        O farmacêutico não conferiu a receita antes de dispensar o medicamento (¬FaCo).\n        A conferência teria detectado o erro (ErDe).\n        O paciente tomou o medicamento e sofreu intoxicação grave (PaIx).\n        Pergunta-se: a falta de conferência da receita (¬FaCo) foi causa da intoxicação do paciente (PaIx)?\n        ",
+        "reasoning": "O caso descreve uma cadeia causal onde um erro de prescrição (ErPr) e a falta de conferência pelo farmacêutico (¬FaCo) são fatos presentes. A conferência (FaCo) teria detectado o erro (ErDe), o que impediria a administração do medicamento. A análise contrafactual busca determinar se a omissão do farmacêutico (¬FaCo) é causa necessária para o dano (PaIx). As premissas incluem o erro de prescrição e a omissão do farmacêutico, enquanto a intoxicação é o efeito a ser analisado.",
+        "knowledge_base": "{\n    \"premises\": [\"ErPr\", \"¬FaCo\"],\n    \"potential_causes\": [\"¬FaCo\"],\n    \"target_conclusion\": \"PaIx\"\n}"
+      },
+      {
+        "augmented": true,
+        "case_description": "\n        O réu ateou fogo a uma plantação e o incêndio alcançou a casa da vítima (InRe).\n        Um incêndio de origem natural avançava na mesma direção (InNa), mas,\n        quando ele chegou, a casa já estava destruída pelo primeiro incêndio (CaJa).\n        Pergunta-se: o incêndio ateado pelo réu (InRe) e o incêndio natural (InNa)\n        foram causas da destruição da casa (CaDe)?\n        ",
+        "reasoning": "O caso apresenta uma situação de causalidade cumulativa ou sobredeterminação. O réu ateou fogo (InRe), o que causou a destruição da casa (CaDe). Paralelamente, havia um incêndio natural (InNa) que também avançava, mas a casa já estava destruída (CaJa) quando este chegou. Para a análise de causalidade, as premissas são os eventos ocorridos (o ato do réu e a existência do incêndio natural). O dano (CaDe) é o efeito a ser analisado. As causas potenciais a serem testadas são InRe e InNa, verificando se, na ausência de um, o outro teria causado o mesmo dano.",
+        "knowledge_base": "{\n    \"premises\": [\"InRe\", \"InNa\", \"CaJa\"],\n    \"potential_causes\": [\"InRe\", \"InNa\"],\n    \"target_conclusion\": \"CaDe\"\n}"
+      },
+      {
+        "augmented": true,
+        "case_description": "\n        Um motorista avançou o sinal vermelho (AvSi) e atropelou um pedestre, que ficou gravemente ferido.\n        O motorista alega culpa exclusiva da vítima por travessia fora da faixa (FoFa),\n        mas o pedestre atravessava com o semáforo de pedestres verde (SeVe).\n        Pergunta-se: o avanço do sinal vermelho (AvSi) foi causa da responsabilização civil do motorista (MoRe)?\n        ",
+        "reasoning": "O caso apresenta uma colisão entre um veículo e um pedestre. O motorista alega que a causa do acidente foi a travessia do pedestre fora da faixa (FoFa), enquanto o pedestre afirma que atravessava com o sinal verde (SeVe). O fato central a ser analisado é se o avanço do sinal vermelho pelo motorista (AvSi) é a causa jurídica da responsabilização civil (MoRe). As premissas incluem as alegações das partes e os fatos observados, sendo o avanço do sinal a causa potencial a ser testada para a conclusão de responsabilidade.",
+        "knowledge_base": "{\n    \"premises\": [\"AvSi\", \"FoFa\", \"SeVe\"],\n    \"potential_causes\": [\"AvSi\"],\n    \"target_conclusion\": \"MoRe\"\n}"
+      },
+      {
+        "augmented": true,
+        "case_description": "Um motorista dirigiu embriagado em via movimentada (DiEm) e atropelou um pedestre na faixa.\nO pedestre morreu no local (MoPd).\nPergunta-se: a direção embriagada (DiEm) foi causa da morte do pedestre (MoPd)?",
+        "reasoning": "O caso descreve um evento de atropelamento com resultado morte (MoPd) envolvendo um motorista que dirigia embriagado (DiEm). A análise jurídica busca estabelecer o nexo de causalidade entre a conduta (dirigir embriagado) e o resultado (morte do pedestre). Para fins de estruturação da base de conhecimento, o fato \"DiEm\" é a causa potencial a ser testada, enquanto \"MoPd\" é o dano (conclusão alvo) que deve ser derivado da aplicação das regras causais sobre as premissas.",
+        "knowledge_base": "{\n    \"premises\": [\"DiEm\"],\n    \"potential_causes\": [\"DiEm\"],\n    \"target_conclusion\": \"MoPd\"\n}"
+      },
+      {
+        "augmented": true,
+        "case_description": "Uma fábrica operou sem o filtro de exaustão obrigatório e emitiu fumaça tóxica sobre o bairro (FuTo).\nMoradores sofreram crises respiratórias (CrRe).\nPergunta-se: a emissão de fumaça tóxica (FuTo) foi causa das crises respiratórias (CrRe)?",
+        "reasoning": "O caso descreve uma relação de causalidade entre a operação de uma fábrica sem filtro (causa da emissão) e o dano sofrido pelos moradores. A premissa fática estabelecida é a emissão de fumaça tóxica (FuTo). O dano a ser analisado é a ocorrência de crises respiratórias (CrRe). A pergunta busca verificar se a premissa FuTo é a causa determinante para o efeito CrRe.",
+        "knowledge_base": "{\n    \"premises\": [\"FuTo\"],\n    \"potential_causes\": [\"FuTo\"],\n    \"target_conclusion\": \"CrRe\"\n}"
+      }
+    ],
+    "signature": {
+      "instructions": "Extrai elementos da base de conhecimento do texto do caso, incluindo premissas ordinárias (Kp),\ncausas potenciais para teste e a conclusão alvo.\n\nConvenções obrigatórias:\n1. Literais: use EXATAMENTE os símbolos entre parênteses no texto do caso\n   (ex.: se o texto diz \"se recusaram a consentir (¬X)\", o literal é \"¬X\").\n   NUNCA invente, traduza ou renomeie literais.\n2. premises: todos os fatos afirmados como verdadeiros no caso, incluindo\n   alegações das partes, na forma sintática exata (com ¬ quando negativo).\n   Registre cada alegação com a polaridade com que foi alegada (alegação de\n   mau uso vira 'MiUs', nunca '¬MiUs'), mesmo que outra premissa a conteste.\n   EXCEÇÃO: não inclua como premissa um evento que só não ocorreu por causa\n   de uma das causas potenciais (ex.: o tratamento não realizado por causa\n   de uma recusa) — esse evento pertence à cadeia contrafactual das regras.\n3. potential_causes: SUBCONJUNTO de premises — apenas os fatos que a\n   pergunta do caso (\"Pergunta-se: ...\") questiona como possíveis causas.\n4. target_conclusion: o literal do efeito/dano na pergunta do caso.\n   O alvo NUNCA aparece em premises, mesmo que o texto narre que ocorreu:\n   ele deve ser derivado pelas regras causais.",
+      "fields": [
+        {
+          "prefix": "Case Description:",
+          "description": "Texto completo descrevendo o caso jurídico"
+        },
+        {
+          "prefix": "Reasoning: Let's think step by step in order to",
+          "description": "${reasoning}"
+        },
+        {
+          "prefix": "Knowledge Base:",
+          "description": "JSON contendo:\n        - premises: Lista de literais (positivos ou negativos) de Kp\n        - potential_causes: Lista de fatos de Kp para testar como causas (subconjunto de premises)\n        - target_conclusion: O efeito/dano a ser analisado (nunca presente em premises)\n        Exemplo: {\n            \"premises\": [\"FaOc\", \"¬AgIn\", \"TeSt\"],\n            \"potential_causes\": [\"¬AgIn\"],\n            \"target_conclusion\": \"DaRe\"\n        }"
+        }
+      ]
+    },
+    "lm": null
+  },
+  "extract_model.predict": {
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "augmented": true,
+        "knowledge_base": "{\n    \"premises\": [\"DoEr\"],\n    \"potential_causes\": [\"DoEr\"],\n    \"target_conclusion\": \"PaMo\"\n}",
+        "case_description": "\n        Um médico administrou a um paciente uma dose dez vezes maior que a prescrita (DoEr).\n        O paciente morreu horas depois (PaMo).\n        Pergunta-se: a dose errada (DoEr) foi causa da morte do paciente (PaMo)?\n        ",
+        "reasoning": "O caso apresenta uma relação direta de causalidade entre a administração de uma dose errada (DoEr) e o óbito do paciente (PaMo). Como não há elementos de preempção ou causas excludentes mencionadas no relato, a regra causal estabelece que a ocorrência do erro na dosagem é suficiente para a conclusão da morte do paciente.",
+        "causal_model": "{\n    \"strict_rules\": [],\n    \"defeasible_rules\": [\n        \"r0: DoEr => PaMo\"\n    ],\n    \"undercutter_rules\": [],\n    \"preferences\": {\n        \"r0\": 0.5\n    }\n}"
+      },
+      {
+        "augmented": true,
+        "knowledge_base": "{\n    \"premises\": [\"AlEs\", \"ClCo\"],\n    \"potential_causes\": [\"AlEs\"],\n    \"target_conclusion\": \"ClIn\"\n}",
+        "case_description": "\n        Um restaurante serviu alimento estragado (AlEs) e o cliente o consumiu (ClCo).\n        O cliente desenvolveu infecção alimentar grave (ClIn).\n        Pergunta-se: servir o alimento estragado (AlEs) foi causa da infecção do cliente (ClIn)?\n        ",
+        "reasoning": "O caso apresenta uma relação causal direta entre o fornecimento de alimento estragado (AlEs) e o consumo pelo cliente (ClCo), resultando na infecção alimentar (ClIn). A regra causal estabelece que a combinação do alimento estragado com o ato de consumi-lo é a causa necessária e suficiente para a infecção. Não há elementos de preempção ou exclusão, portanto, a relação causal é direta e não derrotada.",
+        "causal_model": "{\n    \"strict_rules\": [],\n    \"defeasible_rules\": [\n        \"r0: AlEs AND ClCo => ClIn\"\n    ],\n    \"undercutter_rules\": [],\n    \"preferences\": {\n        \"r0\": 0.5\n    }\n}"
+      },
+      {
+        "augmented": true,
+        "knowledge_base": "{\n    \"premises\": [\"NaPe\", \"¬SaVi\"],\n    \"potential_causes\": [\"¬SaVi\"],\n    \"target_conclusion\": \"NaMo\"\n}",
+        "case_description": "\n        Um nadador entrou em perigo na área funda da piscina (NaPe).\n        O salva-vidas de plantão não estava vigiando a piscina (¬SaVi).\n        Um salva-vidas que vigiasse teria realizado o resgate (ReSg).\n        O nadador morreu afogado (NaMo).\n        Pergunta-se: a falta de vigilância do salva-vidas (¬SaVi) foi causa da morte do nadador (NaMo)?\n        ",
+        "reasoning": "Para determinar se a falta de vigilância (¬SaVi) foi causa da morte (NaMo), utilizamos o modelo de omissão. A regra principal (r0) estabelece que a presença do nadador em perigo (NaPe) leva à morte (NaMo). A regra contrafactual (r1) estabelece que a vigilância (SaVi) levaria ao resgate (ReSg), e a regra (r2) estabelece que o resgate (ReSg) impediria a morte (NaMo), funcionando como um undercutter para a regra r0. Como o fato é a ausência de vigilância (¬SaVi), a regra r1 não dispara no mundo real, permitindo que r0 prevaleça e a morte ocorra. A causalidade da omissão é confirmada pelo fato de que, se SaVi fosse verdadeiro, o undercutter r2 teria neutralizado a causa da morte.",
+        "causal_model": "{\n    \"strict_rules\": [],\n    \"defeasible_rules\": [\n        \"r0: NaPe => NaMo\",\n        \"r1: SaVi => ReSg\"\n    ],\n    \"undercutter_rules\": [\n        \"r2: ReSg => ¬r0\"\n    ],\n    \"preferences\": {\n        \"r0\": 0.8,\n        \"r1\": 0.9,\n        \"r2\": 0.9\n    }\n}"
+      },
+      {
+        "augmented": true,
+        "knowledge_base": "{\n    \"premises\": [\"ErPr\", \"¬FaCo\"],\n    \"potential_causes\": [\"¬FaCo\"],\n    \"target_conclusion\": \"PaIx\"\n}",
+        "case_description": "\n        Uma receita continha erro grave de prescrição (ErPr).\n        O farmacêutico não conferiu a receita antes de dispensar o medicamento (¬FaCo).\n        A conferência teria detectado o erro (ErDe).\n        O paciente tomou o medicamento e sofreu intoxicação grave (PaIx).\n        Pergunta-se: a falta de conferência da receita (¬FaCo) foi causa da intoxicação do paciente (PaIx)?\n        ",
+        "reasoning": "Para determinar se a falta de conferência (¬FaCo) foi causa da intoxicação (PaIx), devemos modelar a causalidade através da omissão. A intoxicação ocorre devido ao erro de prescrição (ErPr). A conferência (FaCo) teria detectado o erro (ErDe) e impedido a intoxicação. Como a conferência não ocorreu, o erro de prescrição seguiu seu curso. Seguindo as regras de omissão:\n1. A regra principal (r0) estabelece que o erro de prescrição causa a intoxicação.\n2. A cadeia contrafactual (r1) estabelece que, se houvesse conferência, o erro seria detectado.\n3. O undercutter (r2) estabelece que a detecção do erro pela conferência anula a causalidade do erro de prescrição sobre a intoxicação.\nComo o fato é a ausência de conferência (¬FaCo), a regra r1 não dispara no mundo real, logo r2 não é ativado, permitindo que r0 cause a intoxicação.",
+        "causal_model": "{\n    \"strict_rules\": [],\n    \"defeasible_rules\": [\n        \"r0: ErPr => PaIx\",\n        \"r1: FaCo => ErDe\"\n    ],\n    \"undercutter_rules\": [\n        \"r2: ErDe => ¬r0\"\n    ],\n    \"preferences\": {\n        \"r0\": 0.8,\n        \"r1\": 0.8,\n        \"r2\": 0.9\n    }\n}"
+      },
+      {
+        "augmented": true,
+        "knowledge_base": "{\n    \"premises\": [\"InRe\", \"InNa\", \"CaJa\"],\n    \"potential_causes\": [\"InRe\", \"InNa\"],\n    \"target_conclusion\": \"CaDe\"\n}",
+        "case_description": "\n        O réu ateou fogo a uma plantação e o incêndio alcançou a casa da vítima (InRe).\n        Um incêndio de origem natural avançava na mesma direção (InNa), mas,\n        quando ele chegou, a casa já estava destruída pelo primeiro incêndio (CaJa).\n        Pergunta-se: o incêndio ateado pelo réu (InRe) e o incêndio natural (InNa)\n        foram causas da destruição da casa (CaDe)?\n        ",
+        "reasoning": "O caso apresenta um cenário de preempção causal. O incêndio provocado pelo réu (InRe) e o incêndio natural (InNa) são causas potenciais para a destruição da casa (CaDe). Como o incêndio do réu chegou primeiro e destruiu a casa (CaJa), o incêndio natural tornou-se irrelevante para o resultado final, pois a casa já não existia quando ele alcançou o local. Portanto, a regra que deriva a destruição a partir do incêndio natural deve ser derrotada pelo fato de que a casa já estava destruída (CaJa).",
+        "causal_model": "{\n    \"strict_rules\": [],\n    \"defeasible_rules\": [\n        \"r0: InRe => CaDe\",\n        \"r1: InNa => CaDe\"\n    ],\n    \"undercutter_rules\": [\n        \"r2: CaJa => ¬r1\"\n    ],\n    \"preferences\": {\n        \"r0\": 0.8,\n        \"r1\": 0.7,\n        \"r2\": 0.9\n    }\n}"
+      },
+      {
+        "augmented": true,
+        "knowledge_base": "{\n    \"premises\": [\"AvSi\", \"FoFa\", \"SeVe\"],\n    \"potential_causes\": [\"AvSi\"],\n    \"target_conclusion\": \"MoRe\"\n}",
+        "case_description": "\n        Um motorista avançou o sinal vermelho (AvSi) e atropelou um pedestre, que ficou gravemente ferido.\n        O motorista alega culpa exclusiva da vítima por travessia fora da faixa (FoFa),\n        mas o pedestre atravessava com o semáforo de pedestres verde (SeVe).\n        Pergunta-se: o avanço do sinal vermelho (AvSi) foi causa da responsabilização civil do motorista (MoRe)?\n        ",
+        "reasoning": "O caso apresenta uma disputa causal onde o avanço do sinal vermelho (AvSi) é a causa primária da responsabilização (MoRe). A alegação de culpa exclusiva da vítima (FoFa) atua como uma causa excludente que tentaria afastar a responsabilização. No entanto, a existência do semáforo verde para pedestres (SeVe) neutraliza a alegação de culpa exclusiva da vítima, funcionando como um undercutter para a regra excludente. Assim, a regra que liga o avanço do sinal à responsabilização prevalece, pois a tentativa de afastar a responsabilidade é invalidada pelo fato de que o pedestre atravessava corretamente.",
+        "causal_model": "{\n    \"strict_rules\": [],\n    \"defeasible_rules\": [\n        \"r0: AvSi => MoRe\",\n        \"r1: FoFa => ¬MoRe\"\n    ],\n    \"undercutter_rules\": [\n        \"r2: SeVe => ¬r1\"\n    ],\n    \"preferences\": {\n        \"r0\": 0.7,\n        \"r1\": 0.8,\n        \"r2\": 0.9\n    }\n}"
+      },
+      {
+        "augmented": true,
+        "knowledge_base": "{\n    \"premises\": [\"DiEm\"],\n    \"potential_causes\": [\"DiEm\"],\n    \"target_conclusion\": \"MoPd\"\n}",
+        "case_description": "Um motorista dirigiu embriagado em via movimentada (DiEm) e atropelou um pedestre na faixa.\nO pedestre morreu no local (MoPd).\nPergunta-se: a direção embriagada (DiEm) foi causa da morte do pedestre (MoPd)?",
+        "reasoning": "O caso apresenta uma relação direta de causalidade entre a conduta de dirigir embriagado (DiEm) e o resultado morte do pedestre (MoPd). Como não há elementos de preempção ou causas excludentes apresentados no cenário, a regra causal estabelece que a conduta é a causa suficiente para o resultado.",
+        "causal_model": "{\n    \"strict_rules\": [],\n    \"defeasible_rules\": [\n        \"r0: DiEm => MoPd\"\n    ],\n    \"undercutter_rules\": [],\n    \"preferences\": {\n        \"r0\": 0.5\n    }\n}"
+      },
+      {
+        "augmented": true,
+        "knowledge_base": "{\n    \"premises\": [\"FuTo\"],\n    \"potential_causes\": [\"FuTo\"],\n    \"target_conclusion\": \"CrRe\"\n}",
+        "case_description": "Uma fábrica operou sem o filtro de exaustão obrigatório e emitiu fumaça tóxica sobre o bairro (FuTo).\nMoradores sofreram crises respiratórias (CrRe).\nPergunta-se: a emissão de fumaça tóxica (FuTo) foi causa das crises respiratórias (CrRe)?",
+        "reasoning": "O caso apresenta uma relação direta de causalidade entre a emissão de fumaça tóxica (FuTo) e as crises respiratórias (CrRe). Como não há elementos de preempção, omissão ou excludentes apresentados no caso, a modelagem segue a regra causal direta onde a presença do fato (FuTo) é suficiente para a conclusão (CrRe).",
+        "causal_model": "{\n    \"strict_rules\": [],\n    \"defeasible_rules\": [\n        \"r0: FuTo => CrRe\"\n    ],\n    \"undercutter_rules\": [],\n    \"preferences\": {\n        \"r0\": 0.5\n    }\n}"
+      }
+    ],
+    "signature": {
+      "instructions": "Extrai tanto regras causais (Rd) quanto regras undercutter que podem derrotá-las.\nCrucial para lidar corretamente com casos de preempção e omissão.\n\nConvenções obrigatórias:\n1. Use somente literais da base de conhecimento e literais entre parênteses\n   no texto do caso; nunca invente literais novos. Os literais dos exemplos\n   destas instruções (Doe, Con, Trat, Mor, Ac1, Ac2, JaOc, Res, FaB1, FaB2,\n   AlEx, FaNe) são fictícios: NUNCA os use num caso real.\n2. Formato de regra: 'rN: Ant1 AND Ant2 => Cons'. Antecedentes múltiplos\n   são separados EXCLUSIVAMENTE por ' AND ' — NUNCA por vírgula.\n3. O alvo (target_conclusion) DEVE ser derivável das premissas pelas regras\n   no mundo factual: inclua pelo menos uma regra 'premissa(s) => alvo'.\n4. strict_rules: deixe [] salvo definições logicamente incontestáveis.\n5. Padrão de OMISSÃO (a causa potencial é um fato negativo ¬X): o literal\n   negativo ¬X NÃO aparece em NENHUMA regra. Modele:\n   (i) a regra que deriva o alvo do estado de fato;\n   (ii) a cadeia que parte do literal POSITIVO X (ela só dispara no mundo\n        contrafactual em que X vale, mesmo que X não seja premissa);\n   (iii) o undercutter '¬rN' em que o fim dessa cadeia derrota (i).\n   Ex.: premissas [\"Doe\", \"¬Con\"], alvo \"Mor\":\n     defeasible_rules: [\"r0: Doe => Mor\", \"r1: Con => Trat\"]\n     undercutter_rules: [\"r2: Trat => ¬r0\"]\n   A cadeia contrafactual DEVE terminar em undercutter contra a regra do\n   alvo ('r2: Trat => ¬r0'), NUNCA em regra que conclui a negação do alvo\n   (ERRADO: 'r2: Trat => ¬Mor').\n   PROIBIDO usar o literal negativo ¬X em qualquer regra, seja como\n   antecedente, seja em undercutter (ERRADO: 'r3: ¬Con => ¬r1'). Exatamente\n   as 3 regras acima bastam — nenhuma regra extra ou redundante.\n6. Padrão de PREEMPÇÃO (duas causas concorrentes para o mesmo alvo): cada\n   causa recebe sua própria regra '=> alvo'; o fato que mostra que a causa\n   preemptada chegou tarde demais undercutta a regra dela.\n   Ex.: premissas [\"Ac1\", \"Ac2\", \"JaOc\"], alvo \"Res\":\n     defeasible_rules: [\"r0: Ac1 => Res\", \"r1: Ac2 => Res\"]\n     undercutter_rules: [\"r2: JaOc => ¬r0\"]  # Ac1 chegou tarde: JaOc undercutta r0\n7. Padrão de EXCLUDENTE (uma alegação tenta afastar o alvo): a alegação\n   recebe uma regra '=> ¬alvo'; o fato que a neutraliza recebe um\n   undercutter contra essa regra.\n   Ex.: premissas [\"FaB1\", \"FaB2\", \"AlEx\", \"FaNe\"], alvo \"Res\",\n   causas potenciais [\"FaB1\", \"FaB2\"]:\n     defeasible_rules: [\"r0: FaB1 AND FaB2 => Res\", \"r1: AlEx => ¬Res\"]\n     undercutter_rules: [\"r2: FaNe => ¬r1\"]\n8. preferences: dê aos undercutters preferência maior ou igual à das regras\n   que eles atacam.",
+      "fields": [
+        {
+          "prefix": "Knowledge Base:",
+          "description": "A base de conhecimento em JSON do TextToKnowledgeBase"
+        },
+        {
+          "prefix": "Case Description:",
+          "description": "Texto original do caso (para contexto)"
+        },
+        {
+          "prefix": "Reasoning: Let's think step by step in order to",
+          "description": "${reasoning}"
+        },
+        {
+          "prefix": "Causal Model:",
+          "description": "JSON contendo:\n        - strict_rules: Lista de regras estritas (Rs) incontestáveis; normalmente []\n        - defeasible_rules: Lista de regras causais (Rd) que podem ser derrotadas\n          (ex: \"r0: Doe => Mor\")\n        - undercutter_rules: Lista de regras que podem derrotar outras regras\n          (ex: \"r2: Trat => ¬r0\")\n        - preferences: Mapa de preferências entre regras, com valores entre 0 e 1\n          (ex: {\"r0\": 0.8, \"r2\": 0.9})\n        Exemplo: {\n            \"strict_rules\": [],\n            \"defeasible_rules\": [\n                \"r0: Doe => Mor\",\n                \"r1: Con => Trat\"\n            ],\n            \"undercutter_rules\": [\n                \"r2: Trat => ¬r0\"\n            ],\n            \"preferences\": {\n                \"r0\": 0.8,\n                \"r1\": 0.7,\n                \"r2\": 0.9\n            }\n        }"
+        }
+      ]
+    },
+    "lm": null
+  },
+  "build_af.predict": {
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "augmented": true,
+        "knowledge_base": "{\n    \"premises\": [\"DoEr\"],\n    \"potential_causes\": [\"DoEr\"],\n    \"target_conclusion\": \"PaMo\"\n}",
+        "causal_model": "{\n    \"strict_rules\": [],\n    \"defeasible_rules\": [\n        \"r0: DoEr => PaMo\"\n    ],\n    \"undercutter_rules\": [],\n    \"preferences\": {\n        \"r0\": 0.5\n    }\n}",
+        "reasoning": "O sistema consiste em uma premissa ordinária \"DoEr\" (Doutrina da Eficácia/Responsabilidade) e uma regra derrotável \"r0\" que conecta \"DoEr\" à conclusão \"PaMo\" (Padrão de Monitoramento). Como não há regras de undercutter ou contra-argumentos (rebuttal) presentes no modelo causal fornecido, o argumento A1 é construído diretamente a partir da premissa e da regra. A força do argumento é determinada pela preferência da regra r0 (0.5). Não há ataques ou derrotas, pois o conjunto de argumentos é consistente e não possui conflitos.",
+        "af_json": "{\n    \"knowledge\": {\n        \"axioms\": [],\n        \"premises\": [\"DoEr\"],\n        \"rules\": {\n            \"strict\": [],\n            \"defeasible\": [\"r0: DoEr => PaMo\"],\n            \"undercutters\": []\n        },\n        \"preferences\": {\n            \"r0\": 0.5\n        }\n    },\n    \"arguments\": [\n        {\n            \"id\": \"A1\",\n            \"premises\": [\"DoEr\"],\n            \"strict_rules\": [],\n            \"defeasible_rules\": [\"r0\"],\n            \"conclusion\": \"PaMo\",\n            \"strength\": 0.5\n        }\n    ],\n    \"attacks\": [],\n    \"defeats\": []\n}"
+      },
+      {
+        "augmented": true,
+        "knowledge_base": "{\n    \"premises\": [\"AlEs\", \"ClCo\"],\n    \"potential_causes\": [\"AlEs\"],\n    \"target_conclusion\": \"ClIn\"\n}",
+        "causal_model": "{\n    \"strict_rules\": [],\n    \"defeasible_rules\": [\n        \"r0: AlEs AND ClCo => ClIn\"\n    ],\n    \"undercutter_rules\": [],\n    \"preferences\": {\n        \"r0\": 0.5\n    }\n}",
+        "reasoning": "O sistema de argumentação é construído a partir das premissas fornecidas: \"AlEs\" (Alerta de Estresse) e \"ClCo\" (Clima de Conflito). A regra derrotável \"r0\" estabelece que a combinação desses dois fatores leva à conclusão \"ClIn\" (Clima de Instabilidade). Como não existem regras de undercutter ou contra-argumentos (rebuttal) no modelo causal fornecido, o argumento A1 é formado pela aplicação da regra r0 sobre as premissas. A força do argumento é determinada pela preferência da regra r0 (0.5). Não há ataques ou derrotas, pois o conjunto de argumentos é consistente e não possui conflitos.",
+        "af_json": "{\n    \"knowledge\": {\n        \"axioms\": [],\n        \"premises\": [\"AlEs\", \"ClCo\"],\n        \"rules\": {\n            \"strict\": [],\n            \"defeasible\": [\"r0: AlEs AND ClCo => ClIn\"],\n            \"undercutters\": []\n        },\n        \"preferences\": {\n            \"r0\": 0.5\n        }\n    },\n    \"arguments\": [\n        {\n            \"id\": \"A1\",\n            \"premises\": [\"AlEs\", \"ClCo\"],\n            \"strict_rules\": [],\n            \"defeasible_rules\": [\"r0\"],\n            \"conclusion\": \"ClIn\",\n            \"strength\": 0.5\n        }\n    ],\n    \"attacks\": [],\n    \"defeats\": []\n}"
+      },
+      {
+        "augmented": true,
+        "knowledge_base": "{\n    \"premises\": [\"NaPe\", \"¬SaVi\"],\n    \"potential_causes\": [\"¬SaVi\"],\n    \"target_conclusion\": \"NaMo\"\n}",
+        "causal_model": "{\n    \"strict_rules\": [],\n    \"defeasible_rules\": [\n        \"r0: NaPe => NaMo\",\n        \"r1: SaVi => ReSg\"\n    ],\n    \"undercutter_rules\": [\n        \"r2: ReSg => ¬r0\"\n    ],\n    \"preferences\": {\n        \"r0\": 0.8,\n        \"r1\": 0.9,\n        \"r2\": 0.9\n    }\n}",
+        "reasoning": "O sistema baseia-se na premissa \"NaPe\" (Navegação Permitida) para derivar \"NaMo\" (Navegação Monitorada) através da regra derrotável r0. No entanto, existe uma regra de undercutter r2 que ataca a regra r0. O undercutter r2 é ativado pela conclusão da regra r1 (\"ReSg\" - Restrição de Segurança). \n\nAnalisando as premissas:\n1. \"NaPe\" é uma premissa ordinária.\n2. \"¬SaVi\" (Não há Saída Visível) é uma premissa ordinária.\n3. A regra r1 (\"SaVi => ReSg\") não pode ser disparada porque a premissa \"SaVi\" é negada por \"¬SaVi\".\n4. Como r1 não é disparada, o undercutter r2 não é ativado.\n5. Portanto, o argumento A1 (baseado em r0) permanece invicto, pois não há ataque bem-sucedido contra ele.",
+        "af_json": "{\n    \"knowledge\": {\n        \"axioms\": [],\n        \"premises\": [\"NaPe\", \"¬SaVi\"],\n        \"rules\": {\n            \"strict\": [],\n            \"defeasible\": [\"r0: NaPe => NaMo\", \"r1: SaVi => ReSg\"],\n            \"undercutters\": [\"r2: ReSg => ¬r0\"]\n        },\n        \"preferences\": {\n            \"r0\": 0.8,\n            \"r1\": 0.9,\n            \"r2\": 0.9\n        }\n    },\n    \"arguments\": [\n        {\n            \"id\": \"A1\",\n            \"premises\": [\"NaPe\"],\n            \"strict_rules\": [],\n            \"defeasible_rules\": [\"r0\"],\n            \"conclusion\": \"NaMo\",\n            \"strength\": 0.8\n        },\n        {\n            \"id\": \"A2\",\n            \"premises\": [\"SaVi\"],\n            \"strict_rules\": [],\n            \"defeasible_rules\": [\"r1\"],\n            \"conclusion\": \"ReSg\",\n            \"strength\": 0.9\n        }\n    ],\n    \"attacks\": [],\n    \"defeats\": []\n}"
+      },
+      {
+        "augmented": true,
+        "knowledge_base": "{\n    \"premises\": [\"ErPr\", \"¬FaCo\"],\n    \"potential_causes\": [\"¬FaCo\"],\n    \"target_conclusion\": \"PaIx\"\n}",
+        "causal_model": "{\n    \"strict_rules\": [],\n    \"defeasible_rules\": [\n        \"r0: ErPr => PaIx\",\n        \"r1: FaCo => ErDe\"\n    ],\n    \"undercutter_rules\": [\n        \"r2: ErDe => ¬r0\"\n    ],\n    \"preferences\": {\n        \"r0\": 0.8,\n        \"r1\": 0.8,\n        \"r2\": 0.9\n    }\n}",
+        "reasoning": "O sistema de argumentação é construído a partir das premissas fornecidas e das regras causais. \n1. O argumento A1 é formado pela premissa \"ErPr\" e a regra derrotável \"r0\", concluindo \"PaIx\". Sua força é 0.8.\n2. O argumento A2 é formado pela premissa \"FaCo\" (que é a negação de \"¬FaCo\", mas aqui tratamos a premissa como \"¬FaCo\" disponível). Nota: Como a premissa é \"¬FaCo\", a regra \"r1: FaCo => ErDe\" não pode ser disparada, pois o antecedente \"FaCo\" não é satisfeito.\n3. Contudo, para fins de demonstração da estrutura, se \"FaCo\" fosse verdadeiro, \"r1\" geraria \"ErDe\", que por sua vez ativaria o undercutter \"r2\" contra \"r0\".\n4. Como a premissa é \"¬FaCo\", o undercutter \"r2\" não é ativado. Portanto, o argumento A1 permanece não derrotado.",
+        "af_json": "{\n    \"knowledge\": {\n        \"axioms\": [],\n        \"premises\": [\"ErPr\", \"¬FaCo\"],\n        \"rules\": {\n            \"strict\": [],\n            \"defeasible\": [\"r0: ErPr => PaIx\", \"r1: FaCo => ErDe\"],\n            \"undercutters\": [\"r2: ErDe => ¬r0\"]\n        },\n        \"preferences\": {\n            \"r0\": 0.8,\n            \"r1\": 0.8,\n            \"r2\": 0.9\n        }\n    },\n    \"arguments\": [\n        {\n            \"id\": \"A1\",\n            \"premises\": [\"ErPr\"],\n            \"strict_rules\": [],\n            \"defeasible_rules\": [\"r0\"],\n            \"conclusion\": \"PaIx\",\n            \"strength\": 0.8\n        }\n    ],\n    \"attacks\": [],\n    \"defeats\": []\n}"
+      },
+      {
+        "augmented": true,
+        "knowledge_base": "{\n    \"premises\": [\"InRe\", \"InNa\", \"CaJa\"],\n    \"potential_causes\": [\"InRe\", \"InNa\"],\n    \"target_conclusion\": \"CaDe\"\n}",
+        "causal_model": "{\n    \"strict_rules\": [],\n    \"defeasible_rules\": [\n        \"r0: InRe => CaDe\",\n        \"r1: InNa => CaDe\"\n    ],\n    \"undercutter_rules\": [\n        \"r2: CaJa => ¬r1\"\n    ],\n    \"preferences\": {\n        \"r0\": 0.8,\n        \"r1\": 0.7,\n        \"r2\": 0.9\n    }\n}",
+        "reasoning": "O sistema de argumentação é construído a partir de duas premissas que suportam a conclusão \"CaDe\" através de regras derrotáveis (r0 e r1). A premissa \"CaJa\" ativa uma regra undercutter (r2) que ataca especificamente a regra r1. \n\n1. **Argumento A1**: Baseado em \"InRe\" e na regra \"r0\", conclui \"CaDe\". Força: 0.8.\n2. **Argumento A2**: Baseado em \"InNa\" e na regra \"r1\", conclui \"CaDe\". Força: 0.7.\n3. **Argumento A3**: Baseado em \"CaJa\" e na regra \"r2\", conclui \"¬r1\" (ataque à regra r1). Força: 0.9.\n\nO ataque de A3 sobre A2 é um \"undercut\". Como a força de A3 (0.9) é superior à força de A2 (0.7), o ataque é bem-sucedido, resultando em uma derrota (defeat). O argumento A1 permanece invicto, pois não há undercutters ou rebuttals contra r0.",
+        "af_json": "{\n    \"knowledge\": {\n        \"axioms\": [],\n        \"premises\": [\"InRe\", \"InNa\", \"CaJa\"],\n        \"rules\": {\n            \"strict\": [],\n            \"defeasible\": [\"r0: InRe => CaDe\", \"r1: InNa => CaDe\"],\n            \"undercutters\": [\"r2: CaJa => ¬r1\"]\n        },\n        \"preferences\": {\n            \"r0\": 0.8,\n            \"r1\": 0.7,\n            \"r2\": 0.9\n        }\n    },\n    \"arguments\": [\n        {\n            \"id\": \"A1\",\n            \"premises\": [\"InRe\"],\n            \"strict_rules\": [],\n            \"defeasible_rules\": [\"r0\"],\n            \"conclusion\": \"CaDe\",\n            \"strength\": 0.8\n        },\n        {\n            \"id\": \"A2\",\n            \"premises\": [\"InNa\"],\n            \"strict_rules\": [],\n            \"defeasible_rules\": [\"r1\"],\n            \"conclusion\": \"CaDe\",\n            \"strength\": 0.7\n        },\n        {\n            \"id\": \"A3\",\n            \"premises\": [\"CaJa\"],\n            \"strict_rules\": [],\n            \"defeasible_rules\": [\"r2\"],\n            \"conclusion\": \"¬r1\",\n            \"strength\": 0.9\n        }\n    ],\n    \"attacks\": [\n        {\n            \"attacker\": \"A3\",\n            \"target\": \"A2\",\n            \"type\": \"undercut\",\n            \"rule\": \"r1\",\n            \"succeeds\": true\n        }\n    ],\n    \"defeats\": [\n        {\n            \"defeater\": \"A3\",\n            \"defeated\": \"A2\",\n            \"type\": \"undercut\",\n            \"explanation\": \"Argumento A3 (força 0.9) derrota A2 (força 0.7) via undercut na regra r1\"\n        }\n    ]\n}"
+      },
+      {
+        "augmented": true,
+        "knowledge_base": "{\n    \"premises\": [\"AvSi\", \"FoFa\", \"SeVe\"],\n    \"potential_causes\": [\"AvSi\"],\n    \"target_conclusion\": \"MoRe\"\n}",
+        "causal_model": "{\n    \"strict_rules\": [],\n    \"defeasible_rules\": [\n        \"r0: AvSi => MoRe\",\n        \"r1: FoFa => ¬MoRe\"\n    ],\n    \"undercutter_rules\": [\n        \"r2: SeVe => ¬r1\"\n    ],\n    \"preferences\": {\n        \"r0\": 0.7,\n        \"r1\": 0.8,\n        \"r2\": 0.9\n    }\n}",
+        "reasoning": "O sistema de argumentação é construído a partir das premissas fornecidas e das regras causais. \n1. **Argumento A1**: Baseado em `AvSi` e na regra `r0`, conclui `MoRe` (Força: 0.7).\n2. **Argumento A2**: Baseado em `FoFa` e na regra `r1`, conclui `¬MoRe` (Força: 0.8).\n3. **Argumento A3**: Baseado em `SeVe` e na regra `r2`, ataca a regra `r1` (undercut) (Força: 0.9).\n\nConflitos:\n- A1 e A2 possuem conclusões contraditórias (`MoRe` vs `¬MoRe`), gerando um *rebuttal*. Como a força de A2 (0.8) é maior que a de A1 (0.7), A2 derrota A1.\n- A3 ataca a regra `r1` utilizada em A2. Como a força de A3 (0.9) é maior que a de A2 (0.8), o *undercut* é bem-sucedido, invalidando A2.\n- Como A2 é derrotado por A3, o ataque de A2 sobre A1 é neutralizado, permitindo que A1 seja aceito no framework.",
+        "af_json": "{\n    \"knowledge\": {\n        \"axioms\": [],\n        \"premises\": [\"AvSi\", \"FoFa\", \"SeVe\"],\n        \"rules\": {\n            \"strict\": [],\n            \"defeasible\": [\"r0: AvSi => MoRe\", \"r1: FoFa => ¬MoRe\"],\n            \"undercutters\": [\"r2: SeVe => ¬r1\"]\n        },\n        \"preferences\": {\n            \"r0\": 0.7,\n            \"r1\": 0.8,\n            \"r2\": 0.9\n        }\n    },\n    \"arguments\": [\n        {\n            \"id\": \"A1\",\n            \"premises\": [\"AvSi\"],\n            \"strict_rules\": [],\n            \"defeasible_rules\": [\"r0\"],\n            \"conclusion\": \"MoRe\",\n            \"strength\": 0.7\n        },\n        {\n            \"id\": \"A2\",\n            \"premises\": [\"FoFa\"],\n            \"strict_rules\": [],\n            \"defeasible_rules\": [\"r1\"],\n            \"conclusion\": \"¬MoRe\",\n            \"strength\": 0.8\n        },\n        {\n            \"id\": \"A3\",\n            \"premises\": [\"SeVe\"],\n            \"strict_rules\": [],\n            \"defeasible_rules\": [\"r2\"],\n            \"conclusion\": \"¬r1\",\n            \"strength\": 0.9\n        }\n    ],\n    \"attacks\": [\n        {\n            \"attacker\": \"A2\",\n            \"target\": \"A1\",\n            \"type\": \"rebuttal\",\n            \"rule\": \"r1\",\n            \"succeeds\": true\n        },\n        {\n            \"attacker\": \"A3\",\n            \"target\": \"A2\",\n            \"type\": \"undercut\",\n            \"rule\": \"r2\",\n            \"succeeds\": true\n        }\n    ],\n    \"defeats\": [\n        {\n            \"defeater\": \"A2\",\n            \"defeated\": \"A1\",\n            \"type\": \"rebuttal\",\n            \"explanation\": \"A2 (0.8) derrota A1 (0.7)\"\n        },\n        {\n            \"defeater\": \"A3\",\n            \"defeated\": \"A2\",\n            \"type\": \"undercut\",\n            \"explanation\": \"A3 (0.9) derrota A2 (0.8)\"\n        }\n    ]\n}"
+      },
+      {
+        "augmented": true,
+        "knowledge_base": "{\n    \"premises\": [\"DiEm\"],\n    \"potential_causes\": [\"DiEm\"],\n    \"target_conclusion\": \"MoPd\"\n}",
+        "causal_model": "{\n    \"strict_rules\": [],\n    \"defeasible_rules\": [\n        \"r0: DiEm => MoPd\"\n    ],\n    \"undercutter_rules\": [],\n    \"preferences\": {\n        \"r0\": 0.5\n    }\n}",
+        "reasoning": "O sistema baseia-se na premissa \"DiEm\" (Dificuldade de Emprego) e na regra derrotável \"r0\", que estabelece uma relação causal entre \"DiEm\" e \"MoPd\" (Motivação para o Desenvolvimento). Como não existem regras de undercutter ou contra-argumentos (rebuttal) fornecidos no modelo causal, o argumento A1 é construído diretamente a partir da premissa e da regra disponível. A força do argumento é determinada pela preferência associada à regra r0 (0.5). Não há ataques ou derrotas, pois o conjunto de argumentos é consistente e não possui conflitos.",
+        "af_json": "{\n    \"knowledge\": {\n        \"axioms\": [],\n        \"premises\": [\"DiEm\"],\n        \"rules\": {\n            \"strict\": [],\n            \"defeasible\": [\"r0: DiEm => MoPd\"],\n            \"undercutters\": []\n        },\n        \"preferences\": {\n            \"r0\": 0.5\n        }\n    },\n    \"arguments\": [\n        {\n            \"id\": \"A1\",\n            \"premises\": [\"DiEm\"],\n            \"strict_rules\": [],\n            \"defeasible_rules\": [\"r0\"],\n            \"conclusion\": \"MoPd\",\n            \"strength\": 0.5\n        }\n    ],\n    \"attacks\": [],\n    \"defeats\": []\n}"
+      },
+      {
+        "augmented": true,
+        "knowledge_base": "{\n    \"premises\": [\"FuTo\"],\n    \"potential_causes\": [\"FuTo\"],\n    \"target_conclusion\": \"CrRe\"\n}",
+        "causal_model": "{\n    \"strict_rules\": [],\n    \"defeasible_rules\": [\n        \"r0: FuTo => CrRe\"\n    ],\n    \"undercutter_rules\": [],\n    \"preferences\": {\n        \"r0\": 0.5\n    }\n}",
+        "reasoning": "O sistema baseia-se em uma premissa única \"FuTo\" (Fumo/Tabagismo) e uma regra derrotável \"r0\" que conecta o tabagismo à conclusão \"CrRe\" (Crise Respiratória). Como não existem regras estritas, undercutters ou outros argumentos conflitantes, o argumento A1 é construído diretamente a partir da premissa e da regra derrotável. A força do argumento é determinada pela preferência atribuída à regra r0 (0.5). Não há ataques ou derrotas, pois não há contra-argumentos presentes no modelo causal fornecido.",
+        "af_json": "{\n    \"knowledge\": {\n        \"axioms\": [],\n        \"premises\": [\"FuTo\"],\n        \"rules\": {\n            \"strict\": [],\n            \"defeasible\": [\"r0: FuTo => CrRe\"],\n            \"undercutters\": []\n        },\n        \"preferences\": {\n            \"r0\": 0.5\n        }\n    },\n    \"arguments\": [\n        {\n            \"id\": \"A1\",\n            \"premises\": [\"FuTo\"],\n            \"strict_rules\": [],\n            \"defeasible_rules\": [\"r0\"],\n            \"conclusion\": \"CrRe\",\n            \"strength\": 0.5\n        }\n    ],\n    \"attacks\": [],\n    \"defeats\": []\n}"
+      }
+    ],
+    "signature": {
+      "instructions": "Constructs a complete ASPIC+ argumentation framework from the knowledge base\nand rules, optionally adding axioms for causal testing.",
+      "fields": [
+        {
+          "prefix": "Knowledge Base:",
+          "description": "O JSON da base de conhecimento, contendo 'premises' (Kp) e 'axioms' (Kn)."
+        },
+        {
+          "prefix": "Causal Model:",
+          "description": "O JSON do modelo causal com 'defeasible_rules' e 'undercutter_rules'."
+        },
+        {
+          "prefix": "Reasoning: Let's think step by step in order to",
+          "description": "${reasoning}"
+        },
+        {
+          "prefix": "Af Json:",
+          "description": "Complete argumentation framework in JSON format:\n        {\n            \"knowledge\": {\n                \"axioms\": [\"...\"],     # Kn (axiomas)\n                \"premises\": [\"...\"],    # Kp (premissas ordinárias)\n                \"rules\": {\n                    \"strict\": [\"rS0: A -> B\", ...],      # Rs (regras estritas)\n                    \"defeasible\": [\"r0: A => B\", ...],   # Rd (regras derrotáveis)\n                    \"undercutters\": [\"r2: C => ¬r0\", ...] # Ru (regras undercutter)\n                },\n                \"preferences\": {        # Função de preferência (0 a 1)\n                    \"r0\": 0.8,\n                    \"r2\": 0.9\n                }\n            },\n            \"arguments\": [\n                {\n                    \"id\": \"A1\", \n                    \"premises\": [\"P1\"], \n                    \"strict_rules\": [\"rS0\"],  # Rs usadas\n                    \"defeasible_rules\": [\"r0\"],  # Rd usadas\n                    \"conclusion\": \"C1\",\n                    \"strength\": 0.8  # Força do argumento baseada nas preferências\n                },\n                ...\n            ],\n            \"attacks\": [\n                {\n                    \"attacker\": \"A2\", \n                    \"target\": \"A1\", \n                    \"type\": \"undercut\",  # ou \"rebuttal\" para conflito direto\n                    \"rule\": \"r0\",\n                    \"succeeds\": true  # Indica se o ataque vira uma derrota (defeat)\n                                    # baseado nas preferências dos argumentos\n                },\n                ...\n            ],\n            \"defeats\": [\n                {\n                    \"defeater\": \"A2\",\n                    \"defeated\": \"A1\",\n                    \"type\": \"undercut\",\n                    \"explanation\": \"Argumento A2 (força 0.9) derrota A1 (força 0.8)\"\n                },\n                ...\n            ]\n        }"
+        }
+      ]
+    },
+    "lm": null
+  },
+  "analyze_test.predict": {
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "augmented": true,
+        "potential_cause": "DoEr",
+        "target_conclusion": "PaMo",
+        "base_explanations": "{\"A1\": [\"A1\", \"A0\"], \"A0\": [\"A0\"]}",
+        "test_grounded_extension": "{\"grounded_argument_ids\": [\"A1\"], \"grounded_conclusions\": {\"A1\": \"¬DoEr\"}}",
+        "case_description": "\n        Um médico administrou a um paciente uma dose dez vezes maior que a prescrita (DoEr).\n        O paciente morreu horas depois (PaMo).\n        Pergunta-se: a dose errada (DoEr) foi causa da morte do paciente (PaMo)?\n        ",
+        "reasoning": "Para determinar se `DoEr` (Dose Errada) é causa de `PaMo` (Paciente Morreu), aplicamos o teste contrafactual (conditio sine qua non). No AF original, a conclusão `PaMo` é sustentada por argumentos que incluem `DoEr`. Ao introduzir `¬DoEr` como axioma no AF modificado (test_grounded_extension), observamos que a cadeia causal que levava a `PaMo` é interrompida, pois a premissa necessária para a regra de produção do dano foi removida. Como a ausência de `DoEr` resulta na ausência de `PaMo` no conjunto de conclusões fundamentadas, estabelece-se a relação de causa-em-fato.",
+        "is_cause": true,
+        "causation_type": "production",
+        "defeated_chain": {
+          "critical_rule": {
+            "id": "r_dose_morte",
+            "content": "DoEr => PaMo",
+            "type": "strict",
+            "defeat_type": "precondition_removal"
+          },
+          "affected_arguments": [
+            {
+              "id": "A1",
+              "conclusion": "PaMo",
+              "strength": 1.0,
+              "defeat_explanation": "A premissa DoEr foi negada, invalidando a regra de inferência para PaMo."
+            }
+          ],
+          "causal_chain": [
+            "DoEr",
+            "r_dose_morte: DoEr => PaMo",
+            "PaMo"
+          ]
+        },
+        "causal_explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois a ação `DoEr` é o fator determinante que, através de uma regra de inferência direta, resulta no evento `PaMo`.\n2. **Regras Críticas**: A regra `DoEr => PaMo` é a espinha dorsal da cadeia causal. Ao negar `DoEr`, a regra perde sua premissa de ativação.\n3. **Argumentos Derrotados**: O argumento `A1`, que sustentava a conclusão `PaMo`, torna-se inoperante no AF modificado, pois sua base factual foi removida.\n4. **Justificativa Jurídica**: De acordo com a Definição 4.3, se a negação de φ (DoEr) resulta na ausência de ψ (PaMo) no grounded extension, φ é causa-em-fato. O teste contrafactual confirma que, sem a dose errada, o resultado morte não teria sido alcançado pela cadeia causal analisada.\n5. **Conclusão**: A relação é de causalidade direta, onde a conduta do médico é condição necessária para o resultado danoso."
+      },
+      {
+        "augmented": true,
+        "potential_cause": "AlEs",
+        "target_conclusion": "ClIn",
+        "base_explanations": "{\"A1\": [\"A1\"], \"A0\": [\"A0\"], \"A2\": [\"A2\", \"A0\", \"A1\"]}",
+        "test_grounded_extension": "{\"grounded_argument_ids\": [\"A1\", \"A2\"], \"grounded_conclusions\": {\"A1\": \"ClCo\", \"A2\": \"¬AlEs\"}}",
+        "case_description": "\n        Um restaurante serviu alimento estragado (AlEs) e o cliente o consumiu (ClCo).\n        O cliente desenvolveu infecção alimentar grave (ClIn).\n        Pergunta-se: servir o alimento estragado (AlEs) foi causa da infecção do cliente (ClIn)?\n        ",
+        "reasoning": "Para determinar se AlEs (Alimento Estragado) é causa de ClIn (Infecção Alimentar), aplicamos a Definição 4.3 (teste contrafactual). No cenário base, a cadeia causal estabelece que o consumo de alimento estragado leva à infecção. Ao introduzir ¬AlEs (a negação do fato) como axioma no framework de argumentação, observamos que a conclusão ClIn deixa de ser sustentada pela extensão fundamentada (grounded extension). Como a remoção de AlEs interrompe a cadeia causal que leva a ClIn, conclui-se que AlEs é uma condição necessária para o efeito observado.",
+        "is_cause": true,
+        "causation_type": "production",
+        "defeated_chain": {
+          "critical_rule": {
+            "id": "r_infec",
+            "content": "AlEs, ClCo => ClIn",
+            "type": "strict",
+            "defeat_type": "precondition_removal"
+          },
+          "affected_arguments": [
+            {
+              "id": "A_infec",
+              "conclusion": "ClIn",
+              "strength": 1.0,
+              "defeat_explanation": "A premissa AlEs foi removida, invalidando a regra de inferência para ClIn."
+            }
+          ],
+          "causal_chain": [
+            "AlEs",
+            "ClCo",
+            "r_infec: AlEs, ClCo => ClIn",
+            "ClIn"
+          ]
+        },
+        "causal_explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois o ato de servir alimento estragado (AlEs) é o fator determinante que, em conjunto com o consumo (ClCo), produz diretamente a infecção (ClIn).\n2. **Regras Críticas**: A regra \"AlEs, ClCo => ClIn\" é a regra crítica. Ao negar AlEs, a premissa necessária para o disparo desta regra deixa de existir.\n3. **Argumentos Derrotados**: O argumento que sustentava a conclusão \"ClIn\" foi derrotado, pois sua base factual foi alterada pela introdução de ¬AlEs.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, AlEs é causa-in-fact porque, na ausência deste evento (contrafactual), a conclusão ClIn não é mais derivada pela extensão fundamentada do sistema. O evento é uma condição *sine qua non* para o dano.\n5. **Conclusão**: O restaurante, ao servir o alimento estragado, estabeleceu a cadeia causal direta que resultou na infecção do cliente."
+      },
+      {
+        "augmented": true,
+        "potential_cause": "¬SaVi",
+        "target_conclusion": "NaMo",
+        "base_explanations": "{\"A1\": [\"A1\"], \"A0\": [\"A0\"], \"A2\": [\"A2\", \"A0\"]}",
+        "test_grounded_extension": "{\"grounded_argument_ids\": [\"A2\", \"A0\", \"A4\", \"A5\"], \"grounded_conclusions\": {\"A2\": \"SaVi\", \"A0\": \"NaPe\", \"A4\": \"ReSg\", \"A5\": \"¬r0\"}}",
+        "case_description": "\n        Um nadador entrou em perigo na área funda da piscina (NaPe).\n        O salva-vidas de plantão não estava vigiando a piscina (¬SaVi).\n        Um salva-vidas que vigiasse teria realizado o resgate (ReSg).\n        O nadador morreu afogado (NaMo).\n        Pergunta-se: a falta de vigilância do salva-vidas (¬SaVi) foi causa da morte do nadador (NaMo)?\n        ",
+        "reasoning": "A análise baseada na Definição 4.3 compara o estado do sistema com a presença da omissão (¬SaVi) e a sua ausência (o cenário contrafactual onde o salva-vidas vigia, SaVi). No cenário original, a ausência de vigilância (¬SaVi) permite que o perigo (NaPe) evolua para a morte (NaMo) por falta de resgate. Ao introduzir a premissa contrafactual (SaVi) no sistema, o argumento A4 (Resgate - ReSg) torna-se parte da extensão fundamentada, o que bloqueia a conclusão NaMo. Como a negação da causa (¬SaVi) altera o status da conclusão (NaMo), a omissão é considerada causa-in-fact.",
+        "is_cause": true,
+        "causation_type": "omission",
+        "defeated_chain": {
+          "critical_rule": {
+            "id": "r_morte",
+            "content": "NaPe ∧ ¬ReSg => NaMo",
+            "type": "defeasible",
+            "defeat_type": "undercut"
+          },
+          "affected_arguments": [
+            {
+              "id": "A_morte",
+              "conclusion": "NaMo",
+              "strength": 1.0,
+              "defeat_explanation": "A introdução de SaVi ativa o argumento A4 (ReSg), que atua como um undercut para a regra que leva à morte."
+            }
+          ],
+          "causal_chain": [
+            "NaPe",
+            "¬SaVi",
+            "¬ReSg",
+            "NaMo"
+          ]
+        },
+        "causal_explanation": "1. **Tipo de Causa**: Identificada como \"omission\". A ausência de vigilância (¬SaVi) é a condição necessária que permitiu que o estado de perigo (NaPe) resultasse em morte (NaMo).\n2. **Regras Críticas**: A regra \"NaPe ∧ ¬ReSg => NaMo\" é a regra crítica. A omissão (¬SaVi) garante que o resgate (ReSg) não ocorra, mantendo a cadeia causal da morte ativa.\n3. **Argumentos Derrotados**: Ao testar o contrafactual (SaVi), o argumento A4 (ReSg) é ativado. Este argumento derrota a premissa de que o resgate não ocorreria, invalidando a conclusão NaMo.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, a omissão é causa-in-fact quando, na ausência da omissão (ou seja, com a ação esperada), o resultado (NaMo) não teria ocorrido. Como a introdução de SaVi na extensão fundamentada bloqueia a conclusão NaMo, a omissão é causalmente relevante.\n5. **Conclusão**: A falta de vigilância foi o fator determinante que impediu a intervenção (resgate), tornando-a causa-in-fact da morte."
+      },
+      {
+        "augmented": true,
+        "potential_cause": "¬FaCo",
+        "target_conclusion": "PaIx",
+        "base_explanations": "{\"A1\": [\"A1\"], \"A0\": [\"A0\"], \"A2\": [\"A2\", \"A0\"]}",
+        "test_grounded_extension": "{\"grounded_argument_ids\": [\"A2\", \"A0\", \"A4\", \"A5\"], \"grounded_conclusions\": {\"A2\": \"FaCo\", \"A0\": \"ErPr\", \"A4\": \"ErDe\", \"A5\": \"¬r0\"}}",
+        "case_description": "\n        Uma receita continha erro grave de prescrição (ErPr).\n        O farmacêutico não conferiu a receita antes de dispensar o medicamento (¬FaCo).\n        A conferência teria detectado o erro (ErDe).\n        O paciente tomou o medicamento e sofreu intoxicação grave (PaIx).\n        Pergunta-se: a falta de conferência da receita (¬FaCo) foi causa da intoxicação do paciente (PaIx)?\n        ",
+        "reasoning": "A análise baseada na Definição 4.3 compara o estado original (onde a falta de conferência `¬FaCo` é um fato) com o estado hipotético onde a conferência ocorre (`FaCo`). No estado original, a cadeia causal `ErPr -> PaIx` é mantida porque a omissão do farmacêutico (`¬FaCo`) falha em bloquear o erro. No estado hipotético (test_grounded_extension), a introdução de `FaCo` ativa a regra `ErDe` (Erro Detectado), que atua como um *undercut* ou bloqueador da cadeia causal que leva à intoxicação (`PaIx`). Como a conclusão `PaIx` não está presente na extensão fundamentada do cenário hipotético, conclui-se que a omissão `¬FaCo` é uma condição necessária para o resultado.",
+        "is_cause": true,
+        "causation_type": "omission",
+        "defeated_chain": {
+          "critical_rule": {
+            "id": "r_intox",
+            "content": "ErPr => PaIx",
+            "type": "defeasible",
+            "defeat_type": "undercut"
+          },
+          "affected_arguments": [
+            {
+              "id": "A_intox",
+              "conclusion": "PaIx",
+              "strength": 1.0,
+              "defeat_explanation": "A conferência (FaCo) ativa a regra de detecção (ErDe), que derrota a cadeia de administração do medicamento."
+            }
+          ],
+          "causal_chain": [
+            "ErPr",
+            "r_intox: ErPr => PaIx",
+            "PaIx"
+          ]
+        },
+        "causal_explanation": "1. **Tipo de Causa**: Identificada como \"omission\". A falta de conferência (`¬FaCo`) é uma omissão que permitiu que o erro de prescrição (`ErPr`) seguisse seu curso até a intoxicação do paciente (`PaIx`).\n2. **Regras Críticas**: A regra crítica é a que conecta o erro de prescrição ao dano (`ErPr => PaIx`). No cenário hipotético, a ação `FaCo` ativa a regra `ErDe` (Erro Detectado), que impede a concretização do dano.\n3. **Argumentos Derrotados**: O argumento que sustenta a intoxicação (`PaIx`) é derrotado no cenário hipotético, pois a detecção do erro interrompe a cadeia causal.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, `¬FaCo` é causa-in-fact porque, na ausência dessa omissão (ou seja, se a conferência tivesse ocorrido), o resultado `PaIx` não teria sido alcançado. A omissão é, portanto, uma condição *sine qua non* para o dano.\n5. **Conceitos**: A análise demonstra que a omissão do farmacêutico removeu a barreira de segurança necessária para evitar o dano, configurando uma relação causal direta por omissão."
+      },
+      {
+        "augmented": true,
+        "potential_cause": "InRe",
+        "target_conclusion": "CaDe",
+        "base_explanations": "{\"A5\": [\"A5\", \"A0\"], \"A0\": [\"A0\"], \"A2\": [\"A2\"], \"A1\": [\"A1\"], \"A3\": [\"A1\", \"A3\"]}",
+        "test_grounded_extension": "{\"grounded_argument_ids\": [\"A6\", \"A2\", \"A0\", \"A3\"], \"grounded_conclusions\": {\"A6\": \"¬r1\", \"A2\": \"InNa\", \"A0\": \"CaJa\", \"A3\": \"¬InRe\"}}",
+        "case_description": "\n        O réu ateou fogo a uma plantação e o incêndio alcançou a casa da vítima (InRe).\n        Um incêndio de origem natural avançava na mesma direção (InNa), mas,\n        quando ele chegou, a casa já estava destruída pelo primeiro incêndio (CaJa).\n        Pergunta-se: o incêndio ateado pelo réu (InRe) e o incêndio natural (InNa)\n        foram causas da destruição da casa (CaDe)?\n        ",
+        "reasoning": "Para determinar se `InRe` (incêndio do réu) é causa de `CaDe` (destruição da casa), aplicamos o teste contrafactual (conditio sine qua non) conforme a Definição 4.3. No cenário original, `InRe` leva à destruição da casa (`CaJa`). Ao testar a negação de `InRe` (`¬InRe`), observamos que a extensão fundamentada do AF modificado contém `¬InRe` e `InNa` (incêndio natural). Como a casa seria destruída pelo incêndio natural caso o do réu não tivesse ocorrido, a conclusão `CaDe` permanece presente no sistema, embora por uma via causal alternativa. Contudo, no momento do evento, `InRe` foi o fator que efetivamente produziu o dano antes da chegada de `InNa`. Trata-se de um caso clássico de preempção (preempção precoce).",
+        "is_cause": true,
+        "causation_type": "preemption",
+        "defeated_chain": {
+          "critical_rule": {
+            "id": "r_preempt",
+            "content": "InRe => CaJa",
+            "type": "strict",
+            "defeat_type": "preemption"
+          },
+          "affected_arguments": [
+            {
+              "id": "A5",
+              "conclusion": "CaDe",
+              "strength": 1.0,
+              "defeat_explanation": "A5 é derrotado pela ausência de InRe, mas a conclusão CaDe é mantida por A3 (InNa)"
+            }
+          ],
+          "causal_chain": [
+            "InRe",
+            "r_preempt: InRe => CaJa",
+            "CaDe"
+          ]
+        },
+        "causal_explanation": "1. **Tipo de Causa**: Identificado como \"preemption\" (preempção). O incêndio do réu (`InRe`) agiu como causa efetiva ao destruir a casa antes que o incêndio natural (`InNa`) pudesse fazê-lo.\n2. **Regras Críticas**: A regra que conecta `InRe` à destruição da casa (`CaJa`) é a regra crítica. Ao negar `InRe`, essa cadeia é interrompida.\n3. **Argumentos Derrotados**: O argumento `A5` (que vincula a ação do réu ao dano) é invalidado pela negação de `InRe`. No entanto, o sistema jurídico reconhece a responsabilidade porque, sem a intervenção do réu, o dano teria ocorrido por outra via, mas o réu antecipou o resultado.\n4. **Justificativa Jurídica**: Sob a Definição 4.3, embora o teste contrafactual puro possa falhar devido à redundância (o incêndio natural destruiria a casa de qualquer forma), a doutrina da preempção estabelece que o agente que causa o dano primeiro é responsável, pois ele \"preemptou\" a cadeia causal natural.\n5. **Conclusão**: `InRe` é causa-in-fact porque, no mundo real, foi o fator determinante que produziu o dano `CaDe` no tempo `t`."
+      },
+      {
+        "augmented": true,
+        "potential_cause": "AvSi",
+        "target_conclusion": "MoRe",
+        "base_explanations": "{\"A5\": [\"A5\", \"A2\"], \"A1\": [\"A1\"], \"A2\": [\"A2\"], \"A0\": [\"A0\"], \"A3\": [\"A1\", \"A3\"]}",
+        "test_grounded_extension": "{\"grounded_argument_ids\": [\"A6\", \"A2\", \"A0\", \"A3\"], \"grounded_conclusions\": {\"A6\": \"¬r1\", \"A2\": \"SeVe\", \"A0\": \"FoFa\", \"A3\": \"¬AvSi\"}}",
+        "case_description": "\n        Um motorista avançou o sinal vermelho (AvSi) e atropelou um pedestre, que ficou gravemente ferido.\n        O motorista alega culpa exclusiva da vítima por travessia fora da faixa (FoFa),\n        mas o pedestre atravessava com o semáforo de pedestres verde (SeVe).\n        Pergunta-se: o avanço do sinal vermelho (AvSi) foi causa da responsabilização civil do motorista (MoRe)?\n        ",
+        "reasoning": "Para determinar se `AvSi` (Avanço do sinal vermelho) é causa de `MoRe` (Responsabilização civil), aplicamos o teste contrafactual da Definição 4.3. No cenário original (base), `AvSi` é um argumento que sustenta a conclusão de responsabilidade. Ao introduzir `¬AvSi` como axioma no framework de testes, observamos que a extensão fundamentada resultante não contém mais o argumento que leva a `MoRe`. A ausência de `AvSi` altera a cadeia causal, pois o fato de o motorista ter avançado o sinal é o elo que conecta sua conduta ao dano, superando a alegação de culpa exclusiva da vítima (`FoFa`), uma vez que o pedestre possuía o direito de passagem (`SeVe`).",
+        "is_cause": true,
+        "causation_type": "production",
+        "defeated_chain": {
+          "critical_rule": {
+            "id": "r_resp",
+            "content": "AvSi => MoRe",
+            "type": "defeasible",
+            "defeat_type": "rebuttal"
+          },
+          "affected_arguments": [
+            {
+              "id": "A_resp",
+              "conclusion": "MoRe",
+              "strength": 1.0,
+              "defeat_explanation": "A remoção de AvSi impede a ativação da regra de responsabilidade civil."
+            }
+          ],
+          "causal_chain": [
+            "AvSi",
+            "r_resp: AvSi => MoRe",
+            "MoRe"
+          ]
+        },
+        "causal_explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois o avanço do sinal vermelho é o ato ilícito que produz diretamente a obrigação de reparar o dano (responsabilização civil).\n2. **Regras Críticas**: A regra `AvSi => MoRe` é a regra central afetada. Sem a premissa `AvSi`, a conclusão `MoRe` não é alcançada no framework de testes.\n3. **Argumentos Derrotados**: O argumento que sustenta a responsabilidade do motorista é invalidado quando a premissa `AvSi` é negada, demonstrando que a conduta do motorista é condição necessária para a conclusão jurídica de responsabilidade.\n4. **Justificativa Jurídica**: De acordo com a Definição 4.3, `AvSi` é causa-in-fact porque, na ausência deste fato, a cadeia causal que leva à responsabilização (`MoRe`) é interrompida. O fato de o pedestre estar atravessando com o sinal verde (`SeVe`) reforça que a conduta do motorista foi o fator determinante, não sendo superada pela alegação de travessia fora da faixa (`FoFa`)."
+      },
+      {
+        "augmented": true,
+        "potential_cause": "DiEm",
+        "target_conclusion": "MoPd",
+        "base_explanations": "{\"A1\": [\"A1\", \"A0\"], \"A0\": [\"A0\"]}",
+        "test_grounded_extension": "{\"grounded_argument_ids\": [\"A1\"], \"grounded_conclusions\": {\"A1\": \"¬DiEm\"}}",
+        "case_description": "Um motorista dirigiu embriagado em via movimentada (DiEm) e atropelou um pedestre na faixa.\nO pedestre morreu no local (MoPd).\nPergunta-se: a direção embriagada (DiEm) foi causa da morte do pedestre (MoPd)?",
+        "reasoning": "Para determinar se DiEm (dirigir embriagado) é causa-in-fact de MoPd (morte do pedestre), aplicamos o teste contrafactual (conditio sine qua non). No cenário original, a cadeia causal estabelece que a direção embriagada leva ao atropelamento e, consequentemente, à morte. Ao introduzir a negação da causa (¬DiEm) no framework de argumentação, observamos que a conclusão MoPd deixa de ser sustentada pelo argumento original, pois a premissa fundamental que desencadeia a cadeia causal foi removida. Como a ausência de DiEm resulta na ausência de MoPd no grounded extension, a condição de causa-in-fact é satisfeita.",
+        "is_cause": true,
+        "causation_type": "production",
+        "defeated_chain": {
+          "critical_rule": {
+            "id": "r1",
+            "content": "DiEm => Atropelamento => MoPd",
+            "type": "strict",
+            "defeat_type": "precondition_failure"
+          },
+          "affected_arguments": [
+            {
+              "id": "A1",
+              "conclusion": "MoPd",
+              "strength": 1.0,
+              "defeat_explanation": "A premissa DiEm foi negada, invalidando a cadeia causal que sustenta a conclusão MoPd."
+            }
+          ],
+          "causal_chain": [
+            "DiEm",
+            "r1: DiEm => Atropelamento",
+            "Atropelamento => MoPd"
+          ]
+        },
+        "causal_explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois a ação de dirigir embriagado (DiEm) é o evento ativo que desencadeia a sequência de fatos que culminam na morte do pedestre (MoPd).\n2. **Regras Críticas**: A regra que conecta a conduta ao resultado foi afetada pela negação da premissa. Sem a direção embriagada, a cadeia causal que leva ao atropelamento é interrompida.\n3. **Argumentos Derrotados**: O argumento A1, que sustentava a conclusão MoPd, perde sua validade no framework modificado, pois sua premissa base (DiEm) foi substituída por sua negação (¬DiEm).\n4. **Justificativa Jurídica**: De acordo com a Definição 4.3, DiEm é causa-in-fact porque, no mundo contrafactual onde o motorista não estava embriagado (e, presumivelmente, não teria atropelado o pedestre na faixa), o resultado MoPd não ocorreria. A relação de dependência contrafactual é clara.\n5. **Conceito**: A análise confirma que a conduta é uma condição necessária para o resultado, validando a causalidade sob a ótica da teoria da equivalência dos antecedentes (conditio sine qua non)."
+      },
+      {
+        "augmented": true,
+        "potential_cause": "FuTo",
+        "target_conclusion": "CrRe",
+        "base_explanations": "{\"A1\": [\"A1\", \"A0\"], \"A0\": [\"A0\"]}",
+        "test_grounded_extension": "{\"grounded_argument_ids\": [\"A1\"], \"grounded_conclusions\": {\"A1\": \"¬FuTo\"}}",
+        "case_description": "Uma fábrica operou sem o filtro de exaustão obrigatório e emitiu fumaça tóxica sobre o bairro (FuTo).\nMoradores sofreram crises respiratórias (CrRe).\nPergunta-se: a emissão de fumaça tóxica (FuTo) foi causa das crises respiratórias (CrRe)?",
+        "reasoning": "A análise baseada na Definição 4.3 compara o estado original (onde FuTo é um fato aceito e CrRe é derivado) com o estado contrafactual (onde ¬FuTo é introduzido como axioma). No estado original, a cadeia causal {FuTo -> CrRe} é sustentada por argumentos válidos. Ao introduzir ¬FuTo no framework, a conclusão CrRe deixa de ser sustentada, pois a premissa necessária para a regra que conecta a emissão à crise respiratória foi removida. Como a ausência de FuTo resulta na ausência de CrRe, FuTo é uma condição necessária (sine qua non) para o efeito.",
+        "is_cause": true,
+        "causation_type": "production",
+        "defeated_chain": {
+          "critical_rule": {
+            "id": "r_crise",
+            "content": "FuTo => CrRe",
+            "type": "defeasible",
+            "defeat_type": "premissa_negada"
+          },
+          "affected_arguments": [
+            {
+              "id": "A1",
+              "conclusion": "CrRe",
+              "strength": 1.0,
+              "defeat_explanation": "A premissa FuTo foi negada, invalidando a regra r_crise."
+            }
+          ],
+          "causal_chain": [
+            "FuTo",
+            "r_crise: FuTo => CrRe",
+            "CrRe"
+          ]
+        },
+        "causal_explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois a emissão de fumaça tóxica (FuTo) é o agente direto que desencadeia as crises respiratórias (CrRe).\n2. **Regras Críticas**: A regra \"FuTo => CrRe\" é a espinha dorsal da cadeia causal. Ao negar FuTo, a regra perde sua base factual, tornando-se inoperante.\n3. **Argumentos Derrotados**: O argumento A1, que sustentava a conclusão CrRe, é derrotado porque sua premissa fundamental (FuTo) foi removida do conjunto de axiomas no teste contrafactual.\n4. **Justificativa Jurídica**: De acordo com a Definição 4.3, FuTo é causa-in-fact porque, no cenário contrafactual onde a fumaça não é emitida (¬FuTo), a conclusão CrRe não é mais alcançada pelo sistema de argumentação. Isso estabelece a relação de dependência contrafactual necessária para a responsabilidade civil.\n5. **Conclusão**: A emissão de fumaça tóxica é a causa direta das crises respiratórias, visto que a remoção do evento causador interrompe a cadeia causal que leva ao dano."
+      }
+    ],
+    "signature": {
+      "instructions": "Implements the causal test logic from Definition 4.3, comparing base and test results\nto determine if a potential cause actually qualifies as a cause-in-fact.\nProvides detailed analysis of the causal relationship and the critical points\nof defeat in the argumentation framework.",
+      "fields": [
+        {
+          "prefix": "Potential Cause:",
+          "description": "The fact φ being tested as a potential cause"
+        },
+        {
+          "prefix": "Target Conclusion:",
+          "description": "The effect/damage ψ being analyzed"
+        },
+        {
+          "prefix": "Base Explanations:",
+          "description": "JSON list of explanations (minimal winning strategies) from the base AF:\n        [\n            {\n                \"arguments\": [\"A1\", \"A2\"],\n                \"rules\": [\"r0\", \"r1\"],\n                \"premises\": [\"P1\", \"P2\"]\n            },\n            ...\n        ]"
+        },
+        {
+          "prefix": "Test Grounded Extension:",
+          "description": "The grounded extension of the modified AF (with ¬φ as axiom)"
+        },
+        {
+          "prefix": "Case Description:",
+          "description": "Original case text (for generating natural language explanation)"
+        },
+        {
+          "prefix": "Reasoning: Let's think step by step in order to",
+          "description": "${reasoning}"
+        },
+        {
+          "prefix": "Is Cause:",
+          "description": "True if φ is a cause-in-fact of ψ according to Definition 4.3"
+        },
+        {
+          "prefix": "Causation Type:",
+          "description": "O tipo de relação causal identificada:\n        - \"production\": φ diretamente produz ψ\n        - \"omission\": A ausência de φ permite ψ\n        - \"preemption\": φ previne uma cadeia causal alternativa para ψ\n        - \"supervention\": φ sobrepõe outros fatores causais de ψ\n        - \"none\": Quando não há relação causal"
+        },
+        {
+          "prefix": "Defeated Chain:",
+          "description": "Análise detalhada da cadeia causal derrotada quando φ é negado:\n        {\n            \"critical_rule\": {\n                \"id\": \"r0\",  # ID da regra crítica\n                \"content\": \"LeucAtv => Obito\",  # Conteúdo da regra\n                \"type\": \"defeasible\",  # Tipo da regra (strict/defeasible)\n                \"defeat_type\": \"undercut\"  # Como a regra foi derrotada\n            },\n            \"affected_arguments\": [\n                {\n                    \"id\": \"A1\",  # ID do argumento afetado\n                    \"conclusion\": \"Obito\",  # Conclusão perdida\n                    \"strength\": 0.8,  # Força do argumento\n                    \"defeat_explanation\": \"Derrotado por A2 (0.9) via undercut de r2\"\n                },\n                ...\n            ],\n            \"causal_chain\": [\n                \"LeucAtv\",  # Premissa inicial\n                \"r0: LeucAtv => Obito\",  # Regra intermediária\n                \"Obito\"  # Conclusão final\n            ]\n        }"
+        },
+        {
+          "prefix": "Causal Explanation:",
+          "description": "Explicação detalhada da análise causal, incluindo:\n        1. Identificação do tipo de causa (produção, omissão, etc.)\n        2. Regras críticas afetadas pela negação de φ\n        3. Argumentos derrotados e suas cadeias causais\n        4. Justificativa jurídica para classificação como causa-in-fact\n        5. Referência a conceitos da Definição 4.3"
+        }
+      ]
+    },
+    "lm": null
+  },
+  "boardgame_extract_kb.predict": {
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature": {
+      "instructions": "Extracts knowledge base from a BoardgameQA case.\n\nOnly facts explicitly stated (or directly derivable via a single rule application\nfrom stated facts) should become premises. Rule antecedents that are NOT mentioned\nas facts must NOT be added as premises — they are simply not true in this game state.\nThe goal literal is the target conclusion to check for provability.",
+      "fields": [
+        {
+          "prefix": "Case Description:",
+          "description": "Full boardgame case: facts, rules, and preferences"
+        },
+        {
+          "prefix": "Goal:",
+          "description": "The goal predicate string, e.g. '(swan, swear, woodpecker)'"
+        },
+        {
+          "prefix": "Reasoning: Let's think step by step in order to",
+          "description": "${reasoning}"
+        },
+        {
+          "prefix": "Knowledge Base:",
+          "description": "JSON containing:\n        - premises: List of ASPIC+ literals derived ONLY from stated facts\n          (e.g. if 'wolf does not take X' is a fact and Rule1 says 'if not X then Y',\n          include 'Y' as a premise; do NOT include rule antecedents that have no\n          factual basis)\n        - target_conclusion: Single ASPIC+ literal representing the goal\n        Example: {\n            \"premises\": [\"SeahorseSurrenders\", \"WolfAcquiresPhoto\"],\n            \"target_conclusion\": \"SwanSwears\"\n        }"
+        }
+      ]
+    },
+    "lm": null
+  },
+  "boardgame_extract_rules.predict": {
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature": {
+      "instructions": "Extracts defeasible rules and preference-based defeat structure from a\nBoardgameQA case. Preferences map to rule strength: if Rule5 > Rule4 and\nboth conclusions conflict, Rule5's argument defeats Rule4's (rebut), so\nrepresent it as a direct negation rebut — NOT an undercutter — unless the\nrule conclusion is literally '¬rN'.",
+      "fields": [
+        {
+          "prefix": "Case Description:",
+          "description": "Full boardgame case: facts, rules, and preferences"
+        },
+        {
+          "prefix": "Knowledge Base:",
+          "description": "The extracted knowledge base JSON"
+        },
+        {
+          "prefix": "Reasoning: Let's think step by step in order to",
+          "description": "${reasoning}"
+        },
+        {
+          "prefix": "Causal Model:",
+          "description": "JSON with:\n        - defeasible_rules: Rules that CAN be defeated. Format: 'rN: A AND B => C'\n          If a rule concludes the NEGATION of another rule's conclusion (rebut),\n          encode it directly, e.g. 'r5: AnimalInvests => ¬SwanSwears'.\n          Only use '¬rN' form (undercutter) when the rule explicitly invalidates\n          the applicability of rule rN.\n        - undercutter_rules: Rules whose conclusion is '¬rN' (undercut rule rN).\n        - preferences: Map rule IDs to float strengths (0-1). Higher-priority rules\n          get higher values so they win rebut battles.\n        Example: {\n            \"defeasible_rules\": [\n                \"r4: SeahorseSurrenders AND WolfAcquiresPhoto => SwanSwears\",\n                \"r5: AnimalInvests => ¬SwanSwears\"\n            ],\n            \"undercutter_rules\": [],\n            \"preferences\": {\"r4\": 0.5, \"r5\": 0.9}\n        }"
+        }
+      ]
+    },
+    "lm": null
+  },
+  "metadata": {
+    "dependency_versions": {
+      "python": "3.13",
+      "dspy": "3.0.3",
+      "cloudpickle": "3.1"
+    }
+  }
+}

@@ -1,0 +1,207 @@
+{
+  "case": {
+    "id": 4,
+    "name": "Eletrocardiograma Não Solicitado (Omissão)",
+    "case_text": "\n        Um paciente chegou ao pronto-socorro com dor torácica típica de infarto (DoTo).\n        O médico não solicitou o eletrocardiograma exigido pelo protocolo (¬EcSo).\n        O exame teria revelado o infarto e permitido o tratamento imediato (TrIm).\n        O paciente faleceu (PaFa).\n        Pergunta-se: a não solicitação do exame (¬EcSo) foi causa da morte do paciente (PaFa)?\n        ",
+    "expected_knowledge_base": {
+      "premises": [
+        "DoTo",
+        "¬EcSo"
+      ],
+      "potential_causes": [
+        "¬EcSo"
+      ],
+      "target_conclusion": "PaFa"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: DoTo => PaFa",
+        "r1: EcSo => TrIm"
+      ],
+      "undercutter_rules": [
+        "r2: TrIm => ¬r0"
+      ]
+    },
+    "expected_causal_result": {
+      "¬EcSo": {
+        "is_cause": true,
+        "explanation": "No mundo contrafactual em que o exame é solicitado (EcSo), o tratamento imediato (TrIm) undercutta a regra que deriva a morte, removendo PaFa da extensão."
+      }
+    }
+  },
+  "analysis": {
+    "case_text": "\n        Um paciente chegou ao pronto-socorro com dor torácica típica de infarto (DoTo).\n        O médico não solicitou o eletrocardiograma exigido pelo protocolo (¬EcSo).\n        O exame teria revelado o infarto e permitido o tratamento imediato (TrIm).\n        O paciente faleceu (PaFa).\n        Pergunta-se: a não solicitação do exame (¬EcSo) foi causa da morte do paciente (PaFa)?\n        ",
+    "knowledge_base": {
+      "premises": [
+        "DoTo",
+        "¬EcSo"
+      ],
+      "potential_causes": [
+        "¬EcSo"
+      ],
+      "target_conclusion": "PaFa"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: DoTo => PaFa",
+        "r1: EcSo => TrIm"
+      ],
+      "undercutter_rules": [
+        "r2: TrIm => ¬r0"
+      ],
+      "preferences": {
+        "r0": 0.7,
+        "r1": 0.8,
+        "r2": 0.9
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "DoTo",
+          "¬EcSo"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: DoTo => PaFa",
+            "r1: EcSo => TrIm"
+          ],
+          "undercutters": [
+            "r2: TrIm => ¬r0"
+          ]
+        },
+        "preferences": {
+          "r0": 0.7,
+          "r1": 0.8,
+          "r2": 0.9
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "DoTo"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "PaFa",
+          "strength": 0.7
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A1",
+      "A0",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A1": "DoTo",
+      "A0": "¬EcSo",
+      "A2": "PaFa"
+    },
+    "base_explanations": {
+      "A1": [
+        "A1"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A1",
+        "A2"
+      ]
+    },
+    "causal_results": {
+      "¬EcSo": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Omissão. A falha do médico em solicitar o exame (`¬EcSo`) foi a omissão que permitiu a progressão do infarto para o óbito.\n2. **Regras Críticas**: A regra `DoTo ∧ ¬EcSo => PaFa` foi desativada. A introdução de `EcSo` no framework de teste permitiu a derivação de `TrIm` (tratamento imediato), que logicamente impede a conclusão de óbito.\n3. **Argumentos Derrotados**: O argumento que sustentava o óbito foi derrotado pela nova evidência de que o tratamento teria sido realizado, interrompendo a cadeia causal.\n4. **Justificativa Jurídica**: O teste \"but-for\" é satisfeito: \"Mas por não ter solicitado o exame, o paciente não teria falecido\". A omissão de um dever profissional (solicitar o exame em caso de dor torácica) é a causa jurídica do dano, pois a ação esperada teria evitado o resultado.\n5. **Conceito**: A análise confirma que a omissão é causa-in-fact, pois a negação da omissão (realizar o exame) altera o resultado final do sistema de argumentação.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "PaFa",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "DoTo",
+          "¬EcSo"
+        ],
+        "potential_causes": [
+          "¬EcSo"
+        ],
+        "target_conclusion": "PaFa"
+      },
+      "got": {
+        "premises": [
+          "DoTo",
+          "¬EcSo"
+        ],
+        "potential_causes": [
+          "¬EcSo"
+        ],
+        "target_conclusion": "PaFa"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: DoTo => PaFa",
+          "r1: EcSo => TrIm"
+        ],
+        "undercutter_rules": [
+          "r2: TrIm => ¬r0"
+        ]
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: DoTo => PaFa",
+          "r1: EcSo => TrIm"
+        ],
+        "undercutter_rules": [
+          "r2: TrIm => ¬r0"
+        ],
+        "preferences": {
+          "r0": 0.7,
+          "r1": 0.8,
+          "r2": 0.9
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "¬EcSo": {
+          "is_cause": true,
+          "explanation": "No mundo contrafactual em que o exame é solicitado (EcSo), o tratamento imediato (TrIm) undercutta a regra que deriva a morte, removendo PaFa da extensão."
+        }
+      },
+      "got": {
+        "¬EcSo": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Omissão. A falha do médico em solicitar o exame (`¬EcSo`) foi a omissão que permitiu a progressão do infarto para o óbito.\n2. **Regras Críticas**: A regra `DoTo ∧ ¬EcSo => PaFa` foi desativada. A introdução de `EcSo` no framework de teste permitiu a derivação de `TrIm` (tratamento imediato), que logicamente impede a conclusão de óbito.\n3. **Argumentos Derrotados**: O argumento que sustentava o óbito foi derrotado pela nova evidência de que o tratamento teria sido realizado, interrompendo a cadeia causal.\n4. **Justificativa Jurídica**: O teste \"but-for\" é satisfeito: \"Mas por não ter solicitado o exame, o paciente não teria falecido\". A omissão de um dever profissional (solicitar o exame em caso de dor torácica) é a causa jurídica do dano, pois a ação esperada teria evitado o resultado.\n5. **Conceito**: A análise confirma que a omissão é causa-in-fact, pois a negação da omissão (realizar o exame) altera o resultado final do sistema de argumentação.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "PaFa",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

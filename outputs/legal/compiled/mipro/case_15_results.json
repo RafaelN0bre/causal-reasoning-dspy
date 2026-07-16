@@ -1,0 +1,183 @@
+{
+  "case": {
+    "id": 15,
+    "name": "Obra Sem Tapume (Produção com Conjunção)",
+    "pattern": "producao",
+    "case_text": "Uma obra funcionava sem tapume de proteção (ObSt) enquanto pedestres passavam pela calçada ao lado (PeCa).\nUm pedestre foi atingido por entulho (PeAt).\nPergunta-se: a ausência de tapume (ObSt) foi causa de o pedestre ser atingido (PeAt)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "ObSt",
+        "PeCa"
+      ],
+      "potential_causes": [
+        "ObSt"
+      ],
+      "target_conclusion": "PeAt"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: ObSt AND PeCa => PeAt"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "ObSt": true
+    }
+  },
+  "analysis": {
+    "case_text": "Uma obra funcionava sem tapume de proteção (ObSt) enquanto pedestres passavam pela calçada ao lado (PeCa).\nUm pedestre foi atingido por entulho (PeAt).\nPergunta-se: a ausência de tapume (ObSt) foi causa de o pedestre ser atingido (PeAt)?",
+    "knowledge_base": {
+      "premises": [
+        "ObSt",
+        "PeCa"
+      ],
+      "potential_causes": [
+        "ObSt"
+      ],
+      "target_conclusion": "PeAt"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: ObSt AND PeCa => PeAt"
+      ],
+      "undercutter_rules": [],
+      "preferences": {
+        "r0": 0.9
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "ObSt",
+          "PeCa"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: ObSt AND PeCa => PeAt"
+          ],
+          "undercutters": []
+        },
+        "preferences": {
+          "r0": 0.9
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "ObSt",
+            "PeCa"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "PeAt",
+          "strength": 0.9
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A1",
+      "A0",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A1": "PeCa",
+      "A0": "ObSt",
+      "A2": "PeAt"
+    },
+    "base_explanations": {
+      "A1": [
+        "A1"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A1",
+        "A0",
+        "A2"
+      ]
+    },
+    "causal_results": {
+      "ObSt": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Identificada como \"omission\". A falta de uma medida de segurança obrigatória (tapume) permitiu que o risco se concretizasse em dano.\n2. **Regras Críticas**: A regra `PeCa ∧ ObSt => PeAt` foi desativada pela introdução de `¬ObSt`.\n3. **Argumentos Derrotados**: O argumento `A2`, que sustentava a conclusão `PeAt`, foi invalidado no AF modificado, pois a premissa `ObSt` foi substituída por sua negação.\n4. **Justificativa Jurídica**: A omissão do dever de cuidado (instalar tapume) é causa-in-fact sob o teste \"but-for\": se o tapume estivesse presente, o pedestre não teria sido atingido. A ausência da medida de proteção é, portanto, o fator determinante para a ocorrência do dano.\n5. **Conceito**: A análise confirma que a omissão de uma precaução necessária é causa direta do resultado danoso, conforme a Definição 4.3.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "PeAt",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "ObSt",
+          "PeCa"
+        ],
+        "potential_causes": [
+          "ObSt"
+        ],
+        "target_conclusion": "PeAt"
+      },
+      "got": {
+        "premises": [
+          "ObSt",
+          "PeCa"
+        ],
+        "potential_causes": [
+          "ObSt"
+        ],
+        "target_conclusion": "PeAt"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: ObSt AND PeCa => PeAt"
+        ],
+        "undercutter_rules": []
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: ObSt AND PeCa => PeAt"
+        ],
+        "undercutter_rules": [],
+        "preferences": {
+          "r0": 0.9
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "ObSt": true
+      },
+      "got": {
+        "ObSt": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Identificada como \"omission\". A falta de uma medida de segurança obrigatória (tapume) permitiu que o risco se concretizasse em dano.\n2. **Regras Críticas**: A regra `PeCa ∧ ObSt => PeAt` foi desativada pela introdução de `¬ObSt`.\n3. **Argumentos Derrotados**: O argumento `A2`, que sustentava a conclusão `PeAt`, foi invalidado no AF modificado, pois a premissa `ObSt` foi substituída por sua negação.\n4. **Justificativa Jurídica**: A omissão do dever de cuidado (instalar tapume) é causa-in-fact sob o teste \"but-for\": se o tapume estivesse presente, o pedestre não teria sido atingido. A ausência da medida de proteção é, portanto, o fator determinante para a ocorrência do dano.\n5. **Conceito**: A análise confirma que a omissão de uma precaução necessária é causa direta do resultado danoso, conforme a Definição 4.3.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "PeAt",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

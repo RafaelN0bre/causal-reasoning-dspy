@@ -1,0 +1,270 @@
+{
+  "case": {
+    "id": 25,
+    "name": "Cirurgia com Erro Grosseiro (Excludente Afastada)",
+    "pattern": "excludente",
+    "case_text": "Um cirurgião operou o paciente em estado de embriaguez (CiEm) e o paciente saiu da cirurgia com lesão permanente.\nA defesa alega complicação imprevisível (CoIm), mas o laudo pericial apontou erro técnico grosseiro incompatível com essa tese (ErTe).\nPergunta-se: a atuação embriagada do cirurgião (CiEm) foi causa da responsabilização do médico (MeRe)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "CiEm",
+        "CoIm",
+        "ErTe"
+      ],
+      "potential_causes": [
+        "CiEm"
+      ],
+      "target_conclusion": "MeRe"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: CiEm => MeRe",
+        "r1: CoIm => ¬MeRe"
+      ],
+      "undercutter_rules": [
+        "r2: ErTe => ¬r1"
+      ]
+    },
+    "expected_causal_result": {
+      "CiEm": true
+    }
+  },
+  "analysis": {
+    "case_text": "Um cirurgião operou o paciente em estado de embriaguez (CiEm) e o paciente saiu da cirurgia com lesão permanente.\nA defesa alega complicação imprevisível (CoIm), mas o laudo pericial apontou erro técnico grosseiro incompatível com essa tese (ErTe).\nPergunta-se: a atuação embriagada do cirurgião (CiEm) foi causa da responsabilização do médico (MeRe)?",
+    "knowledge_base": {
+      "premises": [
+        "CiEm",
+        "CoIm",
+        "ErTe"
+      ],
+      "potential_causes": [
+        "CiEm"
+      ],
+      "target_conclusion": "MeRe"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: CiEm => MeRe",
+        "r1: CoIm => ¬MeRe"
+      ],
+      "undercutter_rules": [
+        "r2: ErTe => ¬r1"
+      ],
+      "preferences": {
+        "r0": 0.7,
+        "r1": 0.8,
+        "r2": 0.9
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "CiEm",
+          "CoIm",
+          "ErTe"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: CiEm => MeRe",
+            "r1: CoIm => ¬MeRe"
+          ],
+          "undercutters": [
+            "r2: ErTe => ¬r1"
+          ]
+        },
+        "preferences": {
+          "r0": 0.7,
+          "r1": 0.8,
+          "r2": 0.9
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "CiEm"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "MeRe",
+          "strength": 0.7
+        },
+        {
+          "id": "A2",
+          "premises": [
+            "CoIm"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r1"
+          ],
+          "conclusion": "¬MeRe",
+          "strength": 0.8
+        },
+        {
+          "id": "A3",
+          "premises": [
+            "ErTe"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r2"
+          ],
+          "conclusion": "¬r1",
+          "strength": 0.9
+        }
+      ],
+      "attacks": [
+        {
+          "attacker": "A2",
+          "target": "A1",
+          "type": "rebuttal",
+          "rule": "r1",
+          "succeeds": true
+        },
+        {
+          "attacker": "A3",
+          "target": "A2",
+          "type": "undercut",
+          "rule": "r2",
+          "succeeds": true
+        }
+      ],
+      "defeats": [
+        {
+          "defeater": "A2",
+          "defeated": "A1",
+          "type": "rebuttal",
+          "explanation": "A2 (0.8) derrota A1 (0.7)"
+        },
+        {
+          "defeater": "A3",
+          "defeated": "A2",
+          "type": "undercut",
+          "explanation": "A3 (0.9) derrota A2 (0.8)"
+        }
+      ]
+    },
+    "base_grounded": [
+      "A2",
+      "A5",
+      "A1",
+      "A0",
+      "A3"
+    ],
+    "base_grounded_conclusions": {
+      "A2": "CiEm",
+      "A5": "¬r1",
+      "A1": "ErTe",
+      "A0": "CoIm",
+      "A3": "MeRe"
+    },
+    "base_explanations": {
+      "A2": [
+        "A2"
+      ],
+      "A5": [
+        "A5",
+        "A1"
+      ],
+      "A1": [
+        "A1"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A3": [
+        "A2",
+        "A3"
+      ]
+    },
+    "causal_results": {
+      "CiEm": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois a embriaguez do cirurgião (`CiEm`) é um fator determinante que, em conjunto com o erro técnico (`ErTe`), produz a responsabilização (`MeRe`).\n2. **Regras Críticas**: A regra `CiEm, ErTe => MeRe` é a regra crítica. A negação de `CiEm` impede que esta regra seja disparada no sistema de argumentação.\n3. **Argumentos Derrotados**: O argumento `A5`, que sustentava a conclusão `MeRe`, é derrotado no cenário contrafactual, pois a premissa `CiEm` foi substituída por `¬CiEm`.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, `CiEm` é causa-in-fact porque, na ausência desse fato, a conclusão `MeRe` não é mais derivada pela extensão fundamentada. A embriaguez é uma condição necessária para a configuração da responsabilidade nos termos apresentados.\n5. **Conclusão**: A atuação embriagada do cirurgião é causa-in-fact da responsabilização, pois a remoção desse fato altera o resultado jurídico do sistema, demonstrando sua relevância causal direta.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "MeRe",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "CiEm",
+          "CoIm",
+          "ErTe"
+        ],
+        "potential_causes": [
+          "CiEm"
+        ],
+        "target_conclusion": "MeRe"
+      },
+      "got": {
+        "premises": [
+          "CiEm",
+          "CoIm",
+          "ErTe"
+        ],
+        "potential_causes": [
+          "CiEm"
+        ],
+        "target_conclusion": "MeRe"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: CiEm => MeRe",
+          "r1: CoIm => ¬MeRe"
+        ],
+        "undercutter_rules": [
+          "r2: ErTe => ¬r1"
+        ]
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: CiEm => MeRe",
+          "r1: CoIm => ¬MeRe"
+        ],
+        "undercutter_rules": [
+          "r2: ErTe => ¬r1"
+        ],
+        "preferences": {
+          "r0": 0.7,
+          "r1": 0.8,
+          "r2": 0.9
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "CiEm": true
+      },
+      "got": {
+        "CiEm": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois a embriaguez do cirurgião (`CiEm`) é um fator determinante que, em conjunto com o erro técnico (`ErTe`), produz a responsabilização (`MeRe`).\n2. **Regras Críticas**: A regra `CiEm, ErTe => MeRe` é a regra crítica. A negação de `CiEm` impede que esta regra seja disparada no sistema de argumentação.\n3. **Argumentos Derrotados**: O argumento `A5`, que sustentava a conclusão `MeRe`, é derrotado no cenário contrafactual, pois a premissa `CiEm` foi substituída por `¬CiEm`.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, `CiEm` é causa-in-fact porque, na ausência desse fato, a conclusão `MeRe` não é mais derivada pela extensão fundamentada. A embriaguez é uma condição necessária para a configuração da responsabilidade nos termos apresentados.\n5. **Conclusão**: A atuação embriagada do cirurgião é causa-in-fact da responsabilização, pois a remoção desse fato altera o resultado jurídico do sistema, demonstrando sua relevância causal direta.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "MeRe",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

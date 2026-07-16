@@ -1,0 +1,183 @@
+{
+  "case": {
+    "id": 16,
+    "name": "Vazamento de Gás (Cadeia de Dois Passos)",
+    "pattern": "cadeia",
+    "case_text": "Um vazamento de gás no apartamento não foi reparado pela distribuidora (VaGa).\nO gás acumulado explodiu (ExAp) e a explosão provocou incêndio no prédio (InPr).\nPergunta-se: o vazamento de gás (VaGa) foi causa do incêndio no prédio (InPr)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "VaGa"
+      ],
+      "potential_causes": [
+        "VaGa"
+      ],
+      "target_conclusion": "InPr"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: VaGa => ExAp",
+        "r1: ExAp => InPr"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "VaGa": true
+    }
+  },
+  "analysis": {
+    "case_text": "Um vazamento de gás no apartamento não foi reparado pela distribuidora (VaGa).\nO gás acumulado explodiu (ExAp) e a explosão provocou incêndio no prédio (InPr).\nPergunta-se: o vazamento de gás (VaGa) foi causa do incêndio no prédio (InPr)?",
+    "knowledge_base": {
+      "premises": [
+        "VaGa",
+        "ExAp"
+      ],
+      "potential_causes": [
+        "VaGa"
+      ],
+      "target_conclusion": "InPr"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: VaGa AND ExAp => InPr"
+      ],
+      "undercutter_rules": [],
+      "preferences": {
+        "r0": 0.9
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "VaGa",
+          "ExAp"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: VaGa AND ExAp => InPr"
+          ],
+          "undercutters": []
+        },
+        "preferences": {
+          "r0": 0.9
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "VaGa",
+            "ExAp"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "InPr",
+          "strength": 0.9
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A1",
+      "A0",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A1": "VaGa",
+      "A0": "ExAp",
+      "A2": "InPr"
+    },
+    "base_explanations": {
+      "A1": [
+        "A1"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A2",
+        "A1",
+        "A0"
+      ]
+    },
+    "causal_results": {
+      "VaGa": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois o vazamento de gás (VaGa) é o evento iniciador que, através de uma cadeia de eventos físicos (explosão), produz diretamente o dano (incêndio).\n2. **Regras Críticas**: A regra \"ExAp => InPr\" foi afetada indiretamente. Embora a regra em si permaneça válida, sua premissa \"ExAp\" (explosão) depende da ocorrência de \"VaGa\". Sem o vazamento, a explosão não ocorre, tornando a regra inoperante para a conclusão do incêndio.\n3. **Argumentos Derrotados**: O argumento que sustentava a conclusão \"InPr\" foi derrotado porque a cadeia de inferência foi quebrada na base (o axioma VaGa foi substituído por ¬VaGa).\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, VaGa é causa-in-fact porque, no mundo contrafactual onde o vazamento não ocorre, o incêndio não se verifica. Portanto, o vazamento é uma condição necessária (sine qua non) para o resultado danoso.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "InPr",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": false,
+      "expected": {
+        "premises": [
+          "VaGa"
+        ],
+        "potential_causes": [
+          "VaGa"
+        ],
+        "target_conclusion": "InPr"
+      },
+      "got": {
+        "premises": [
+          "VaGa",
+          "ExAp"
+        ],
+        "potential_causes": [
+          "VaGa"
+        ],
+        "target_conclusion": "InPr"
+      }
+    },
+    "causal_model": {
+      "matches": false,
+      "expected": {
+        "defeasible_rules": [
+          "r0: VaGa => ExAp",
+          "r1: ExAp => InPr"
+        ],
+        "undercutter_rules": []
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: VaGa AND ExAp => InPr"
+        ],
+        "undercutter_rules": [],
+        "preferences": {
+          "r0": 0.9
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "VaGa": true
+      },
+      "got": {
+        "VaGa": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois o vazamento de gás (VaGa) é o evento iniciador que, através de uma cadeia de eventos físicos (explosão), produz diretamente o dano (incêndio).\n2. **Regras Críticas**: A regra \"ExAp => InPr\" foi afetada indiretamente. Embora a regra em si permaneça válida, sua premissa \"ExAp\" (explosão) depende da ocorrência de \"VaGa\". Sem o vazamento, a explosão não ocorre, tornando a regra inoperante para a conclusão do incêndio.\n3. **Argumentos Derrotados**: O argumento que sustentava a conclusão \"InPr\" foi derrotado porque a cadeia de inferência foi quebrada na base (o axioma VaGa foi substituído por ¬VaGa).\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, VaGa é causa-in-fact porque, no mundo contrafactual onde o vazamento não ocorre, o incêndio não se verifica. Portanto, o vazamento é uma condição necessária (sine qua non) para o resultado danoso.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "InPr",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

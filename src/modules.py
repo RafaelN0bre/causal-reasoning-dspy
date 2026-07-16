@@ -51,6 +51,29 @@ def _extract_json_braces(text: str) -> str:
     return text
 
 
+def _build_af_input(premises: List[str], axioms: List[str], model: Dict[str, Any]) -> str:
+    """
+    Constrói deterministicamente o JSON de entrada do solver a partir da KB e
+    do modelo causal extraídos.
+
+    Isso garante que premissas, axiomas contrafactuais e regras cheguem ao
+    solver exatamente como extraídos — sem depender de um LLM para recopiá-los
+    (o que pode omitir premissas/axiomas e invalidar o teste da Definição 4.3).
+    """
+    return json.dumps({
+        "knowledge": {
+            "premises": premises,
+            "axioms": axioms,
+            "preferences": model.get("preferences", {}),
+            "rules": {
+                "strict": model.get("strict_rules", []),
+                "defeasible": model.get("defeasible_rules", []),
+                "undercutters": model.get("undercutter_rules", []),
+            },
+        }
+    }, ensure_ascii=False)
+
+
 def _fix_and_parse_json(text: str) -> Optional[Dict]:
     """Attempt to fix common JSON truncation issues."""
     text = _extract_json_braces(text)
@@ -122,6 +145,7 @@ class ArgumentationSolver(dspy.Tool):
             af = ArgumentationFramework(
                 knowledge_base=af_data["knowledge"],
                 causal_model={
+                    "strict_rules": af_data["knowledge"].get("rules", {}).get("strict", []),
                     "defeasible_rules": af_data["knowledge"].get("rules", {}).get("defeasible", []),
                     "undercutter_rules": af_data["knowledge"].get("rules", {}).get("undercutters", [])
                 }
@@ -166,51 +190,23 @@ class ArgumentationSolver(dspy.Tool):
 
 def negate_fact(fact: str, context: Dict[str, Any], case_text: str) -> str:
     """
-    Gera a negação contrafactual adequada para um fato, considerando seu papel
-    causal no contexto do caso.
-    
+    Gera a negação contrafactual sintática de um fato (alterna o prefixo ¬).
+
+    O solver só reconhece a negação sintática '¬': o axioma contrafactual
+    precisa ser o contrário sintático exato do fato testado para gerar os
+    ataques undermine que removem a premissa original. Um literal distinto
+    (ex.: "Sobreviveu" para "Obito") não atacaria nada e tornaria o teste
+    da Definição 4.3 inócuo.
+
     Args:
         fact: O fato a ser negado (ex: "AdminQuimio", "¬ParaPres")
-        context: Dicionário com conhecimento do caso (kb, modelo causal)
-        case_text: Texto original do caso para análise contextual
-    
+        context: Mantido por compatibilidade de assinatura (não utilizado)
+        case_text: Mantido por compatibilidade de assinatura (não utilizado)
+
     Returns:
-        str: A negação apropriada do fato considerando o contexto
-    
-    Exemplos:
-        - "AdminQuimio" → "¬AdminQuimio" (omissão de tratamento)
-        - "¬ParaPres" → "ParaPres" (prescrição que deveria ter ocorrido)
-        - "Obito" → "Sobreviveu" (estado final alternativo)
-        - "LeucAtv" → "LeucCont" (condição controlada vs ativa)
+        str: "¬X" para "X", e "X" para "¬X"
     """
-    # Remove qualquer negação existente
-    is_negative = fact.startswith("¬")
-    base_fact = fact[1:] if is_negative else fact
-    
-    # Mapeamento de pares positivo/negativo para conceitos comuns
-    DOMAIN_PAIRS = {
-        # Estados clínicos
-        "LeucAtv": "LeucCont",  # Leucemia ativa vs controlada
-        "Obito": "Sobreviveu",  # Desfecho fatal vs sobrevivência
-        
-        # Ações médicas
-        "AdminQuimio": "¬AdminQuimio",  # Administração vs omissão
-        "ParaPres": "¬ParaPres",    # Prescrição vs não prescrição
-        "PaCo": "¬PaCo",          # Parada cardíaca vs ausência
-        
-        # Relações causais
-        "ChDi": "¬ChDi",  # Nexo causal vs ausência de nexo
-    }
-    
-    # Verifica se temos um par definido para este fato
-    if base_fact in DOMAIN_PAIRS:
-        positive = base_fact
-        negative = DOMAIN_PAIRS[base_fact]
-        # Se o fato original era negativo, retorna o positivo
-        return positive if is_negative else negative
-    
-    # Regra padrão: adiciona ou remove ¬
-    return fact[1:] if is_negative else f"¬{fact}"
+    return fact[1:] if fact.startswith("¬") else f"¬{fact}"
 
 
 class CausalReasoningPipeline(dspy.Module):
@@ -336,6 +332,10 @@ class CausalReasoningPipeline(dspy.Module):
         )
 
         # Passo 3: Construir AF base
+        # O af_json do LLM é mantido apenas como artefato de rastreabilidade
+        # (argumentos/ataques narrados); o solver recebe um AF construído
+        # deterministicamente a partir da KB e do modelo extraídos, pois o LLM
+        # pode omitir premissas/axiomas ao recopiá-los.
         logger.info("[3/5] Building base argumentation framework via LLM...")
         base_af_json = self.build_af(
             knowledge_base=kb_json,
@@ -346,9 +346,10 @@ class CausalReasoningPipeline(dspy.Module):
             base_af_data = {"knowledge": {"premises": kb.get("premises", []), "axioms": [], "rules": {}}, "arguments": [], "attacks": [], "defeats": []}
         logger.info("[3/5] Base AF built, invoking solver...")
 
-        # Passo 4: Obter resultados base
+        # Passo 4: Obter resultados base (AF determinístico: KB + modelo)
         logger.info("[4/5] Running solver on base framework...")
-        base_grounded, base_explanations, base_conclusions_json = self.solver(base_af_json)
+        base_af_input = _build_af_input(kb.get("premises", []), [], model)
+        base_grounded, base_explanations, base_conclusions_json = self.solver(base_af_input)
         base_grounded_list = json.loads(base_grounded)
         base_grounded_conclusions = json.loads(base_conclusions_json)  # {id: conclusion}
         logger.info(
@@ -362,32 +363,24 @@ class CausalReasoningPipeline(dspy.Module):
         potential_causes = kb.get("potential_causes", [])
         logger.info("[5/5] Running counterfactual tests for %d potential cause(s): %s", len(potential_causes), potential_causes)
         causal_results = {}
+        target = kb.get("target_conclusion", "")
+        base_has_target = target in base_grounded_conclusions.values()
+        if not base_has_target:
+            logger.warning(
+                "[5/5] Target '%s' is NOT in the base grounded extension — "
+                "Definition 4.3 precondition fails; no potential cause can qualify.",
+                target,
+            )
         for cause in potential_causes:
             logger.info("[5/5]   Testing cause: '%s'", cause)
 
-            # Create test AF with contrafactual axiom
-            context = {
-                "knowledge_base": kb,
-                "causal_model": model,
-                "base_grounded": base_grounded_list,
-                "base_explanations": json.loads(base_explanations)
-            }
-
-            negated = negate_fact(cause, context, case_text)
+            negated = negate_fact(cause, {}, case_text)
             logger.info("[5/5]     Counterfactual axiom: '%s'", negated)
 
-            test_kb = {
-                "axioms": [negated],
-                "premises": kb["premises"]
-            }
-
-            test_af_json = self.build_af(
-                knowledge_base=json.dumps(test_kb),
-                causal_model=model_json
-            ).af_json
-
-            # Get test results
-            test_grounded, _, test_conclusions_json = self.solver(test_af_json)
+            # AF contrafactual determinístico: mesmas premissas e regras,
+            # com ¬φ adicionado como axioma (Kn)
+            test_af_input = _build_af_input(kb.get("premises", []), [negated], model)
+            test_grounded, _, test_conclusions_json = self.solver(test_af_input)
             test_grounded_list = json.loads(test_grounded)
             test_grounded_conclusions = json.loads(test_conclusions_json)
             logger.info(
@@ -396,49 +389,57 @@ class CausalReasoningPipeline(dspy.Module):
                 list(test_grounded_conclusions.values()) if test_grounded_conclusions else "[]",
             )
 
-            # Analyze causation
+            # Veredito determinístico (Definição 4.3):
+            # φ é causa-em-fato de ψ sse ψ está na extensão grounded do AF base
+            # e deixa de estar quando ¬φ é adicionado como axioma.
+            test_has_target = target in test_grounded_conclusions.values()
+            is_cause = bool(target) and base_has_target and not test_has_target
+            logger.info(
+                "[5/5]     Solver verdict for '%s': is_cause=%s (base_has_target=%s, test_has_target=%s)",
+                cause, is_cause, base_has_target, test_has_target,
+            )
+
+            # LLM gera apenas a explicação em linguagem natural do veredito
+            llm_is_cause = None
             try:
                 result = self.analyze_test(
                     potential_cause=cause,
-                    target_conclusion=kb["target_conclusion"],
+                    target_conclusion=target,
                     base_explanations=base_explanations,
-                    test_grounded_extension=test_grounded,
+                    test_grounded_extension=json.dumps({
+                        "grounded_argument_ids": test_grounded_list,
+                        "grounded_conclusions": test_grounded_conclusions,
+                    }, ensure_ascii=False),
                     case_description=case_text
                 )
-                logger.info(
-                    "[5/5]     Result for '%s': is_cause=%s | %s",
-                    cause, result.is_cause, result.causal_explanation,
-                )
-                causal_results[cause] = {
-                    "is_cause": result.is_cause,
-                    "explanation": result.causal_explanation
-                }
+                llm_is_cause = bool(result.is_cause)
+                explanation = result.causal_explanation
+                if llm_is_cause != is_cause:
+                    logger.warning(
+                        "[5/5]     LLM verdict (%s) disagrees with solver verdict (%s) for '%s' — keeping solver verdict",
+                        llm_is_cause, is_cause, cause,
+                    )
             except Exception as e:
                 logger.warning(
-                    "[5/5]     analyze_test failed for '%s': %s — falling back to solver-based determination",
+                    "[5/5]     analyze_test failed for '%s': %s — using solver-only explanation",
                     cause, e,
                 )
-                target_clean = (
-                    kb.get("target_conclusion", "")
-                    .lower().replace("(", "").replace(")", "").replace(",", "").replace(" ", "")
+                explanation = (
+                    f"[solver] target='{target}', base_has_target={base_has_target}, "
+                    f"test_has_target={test_has_target}"
                 )
-                base_has_target = any(
-                    target_clean in c.lower().replace("(", "").replace(")", "").replace(",", "").replace(" ", "")
-                    for c in base_grounded_conclusions.values()
-                )
-                test_has_target = any(
-                    target_clean in c.lower().replace("(", "").replace(")", "").replace(",", "").replace(" ", "")
-                    for c in test_grounded_conclusions.values()
-                )
-                is_cause = base_has_target and not test_has_target
-                logger.info(
-                    "[5/5]     Fallback result for '%s': is_cause=%s (base_has_target=%s, test_has_target=%s)",
-                    cause, is_cause, base_has_target, test_has_target,
-                )
-                causal_results[cause] = {
-                    "is_cause": is_cause,
-                    "explanation": f"[solver fallback] base_has_target={base_has_target}, test_has_target={test_has_target}"
-                }
+
+            logger.info("[5/5]     Result for '%s': is_cause=%s | %s", cause, is_cause, explanation)
+            causal_results[cause] = {
+                "is_cause": is_cause,
+                "explanation": explanation,
+                "llm_is_cause": llm_is_cause,
+                "solver_evidence": {
+                    "target": target,
+                    "base_has_target": base_has_target,
+                    "test_has_target": test_has_target,
+                },
+            }
         
         return {
             "case_text": case_text,

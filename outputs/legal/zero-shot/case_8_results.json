@@ -1,0 +1,230 @@
+{
+  "case": {
+    "id": 8,
+    "name": "Freios Sem Manutenção (Cadeia de Dois Passos)",
+    "case_text": "\n        Uma transportadora manteve em circulação um caminhão sem manutenção nos freios (FrSm).\n        Os freios falharam em uma descida e o caminhão colidiu com um veículo de passeio (CoVe).\n        O motorista do veículo faleceu (MoFa).\n        Pergunta-se: a falta de manutenção dos freios (FrSm) foi causa da morte do motorista (MoFa)?\n        ",
+    "expected_knowledge_base": {
+      "premises": [
+        "FrSm"
+      ],
+      "potential_causes": [
+        "FrSm"
+      ],
+      "target_conclusion": "MoFa"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: FrSm => CoVe",
+        "r1: CoVe => MoFa"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "FrSm": {
+        "is_cause": true,
+        "explanation": "Cadeia de dois passos: FrSm deriva CoVe, que deriva MoFa; negando FrSm a cadeia inteira cai. A colisão (CoVe) é elo intermediário, não premissa."
+      }
+    }
+  },
+  "analysis": {
+    "case_text": "\n        Uma transportadora manteve em circulação um caminhão sem manutenção nos freios (FrSm).\n        Os freios falharam em uma descida e o caminhão colidiu com um veículo de passeio (CoVe).\n        O motorista do veículo faleceu (MoFa).\n        Pergunta-se: a falta de manutenção dos freios (FrSm) foi causa da morte do motorista (MoFa)?\n        ",
+    "knowledge_base": {
+      "premises": [
+        "FrSm",
+        "CoVe"
+      ],
+      "potential_causes": [
+        "FrSm"
+      ],
+      "target_conclusion": "MoFa"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: FrSm => CoVe",
+        "r1: CoVe => MoFa"
+      ],
+      "undercutter_rules": [],
+      "preferences": {
+        "r0": 0.5,
+        "r1": 0.5
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "FrSm",
+          "CoVe"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: FrSm => CoVe",
+            "r1: CoVe => MoFa"
+          ],
+          "undercutters": []
+        },
+        "preferences": {
+          "r0": 0.5,
+          "r1": 0.5
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "FrSm"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "CoVe",
+          "strength": 0.5
+        },
+        {
+          "id": "A2",
+          "premises": [
+            "FrSm"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0",
+            "r1"
+          ],
+          "conclusion": "MoFa",
+          "strength": 0.5
+        },
+        {
+          "id": "A3",
+          "premises": [
+            "CoVe"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r1"
+          ],
+          "conclusion": "MoFa",
+          "strength": 0.5
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A3",
+      "A4",
+      "A1",
+      "A0",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A3": "MoFa",
+      "A4": "MoFa",
+      "A1": "CoVe",
+      "A0": "FrSm",
+      "A2": "CoVe"
+    },
+    "base_explanations": {
+      "A3": [
+        "A1",
+        "A3"
+      ],
+      "A4": [
+        "A2",
+        "A4",
+        "A0"
+      ],
+      "A1": [
+        "A1"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A2",
+        "A0"
+      ]
+    },
+    "causal_results": {
+      "FrSm": {
+        "is_cause": false,
+        "explanation": "1. **Tipo de causa**: Identificado como \"none\" (nenhuma relação causal necessária).\n2. **Regras críticas**: A regra que conecta a falta de manutenção (FrSm) à colisão (CoVe) foi desativada pela introdução de ¬FrSm.\n3. **Argumentos derrotados**: O argumento A3, que ligava a falha dos freios à morte, perdeu sua sustentação. No entanto, o grounded extension do sistema modificado ainda contém a conclusão MoFa (via argumento A4).\n4. **Justificativa jurídica**: De acordo com a Definição 4.3, para que φ seja causa-in-fact de ψ, a negação de φ deve resultar na ausência de ψ no grounded extension. Como MoFa permanece presente mesmo na ausência de FrSm, FrSm não é uma causa necessária (condição sine qua non) para o resultado morte neste modelo.\n5. **Conclusão**: Embora intuitivamente a falha dos freios pareça ligada ao acidente, o sistema lógico fornecido indica que a morte (MoFa) é sustentada por outros fatores (A4), tornando a falha dos freios um fator não determinante para a conclusão final sob a ótica da causalidade estrita.",
+        "llm_is_cause": false,
+        "solver_evidence": {
+          "target": "MoFa",
+          "base_has_target": true,
+          "test_has_target": true
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": false,
+      "expected": {
+        "premises": [
+          "FrSm"
+        ],
+        "potential_causes": [
+          "FrSm"
+        ],
+        "target_conclusion": "MoFa"
+      },
+      "got": {
+        "premises": [
+          "FrSm",
+          "CoVe"
+        ],
+        "potential_causes": [
+          "FrSm"
+        ],
+        "target_conclusion": "MoFa"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: FrSm => CoVe",
+          "r1: CoVe => MoFa"
+        ],
+        "undercutter_rules": []
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: FrSm => CoVe",
+          "r1: CoVe => MoFa"
+        ],
+        "undercutter_rules": [],
+        "preferences": {
+          "r0": 0.5,
+          "r1": 0.5
+        }
+      }
+    },
+    "causal_results": {
+      "matches": false,
+      "expected": {
+        "FrSm": {
+          "is_cause": true,
+          "explanation": "Cadeia de dois passos: FrSm deriva CoVe, que deriva MoFa; negando FrSm a cadeia inteira cai. A colisão (CoVe) é elo intermediário, não premissa."
+        }
+      },
+      "got": {
+        "FrSm": {
+          "is_cause": false,
+          "explanation": "1. **Tipo de causa**: Identificado como \"none\" (nenhuma relação causal necessária).\n2. **Regras críticas**: A regra que conecta a falta de manutenção (FrSm) à colisão (CoVe) foi desativada pela introdução de ¬FrSm.\n3. **Argumentos derrotados**: O argumento A3, que ligava a falha dos freios à morte, perdeu sua sustentação. No entanto, o grounded extension do sistema modificado ainda contém a conclusão MoFa (via argumento A4).\n4. **Justificativa jurídica**: De acordo com a Definição 4.3, para que φ seja causa-in-fact de ψ, a negação de φ deve resultar na ausência de ψ no grounded extension. Como MoFa permanece presente mesmo na ausência de FrSm, FrSm não é uma causa necessária (condição sine qua non) para o resultado morte neste modelo.\n5. **Conclusão**: Embora intuitivamente a falha dos freios pareça ligada ao acidente, o sistema lógico fornecido indica que a morte (MoFa) é sustentada por outros fatores (A4), tornando a falha dos freios um fator não determinante para a conclusão final sob a ótica da causalidade estrita.",
+          "llm_is_cause": false,
+          "solver_evidence": {
+            "target": "MoFa",
+            "base_has_target": true,
+            "test_has_target": true
+          }
+        }
+      }
+    }
+  }
+}

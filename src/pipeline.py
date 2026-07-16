@@ -32,9 +32,49 @@ from src.dataset import (
 logger = logging.getLogger(__name__)
 
 
-def analyze_case(pipeline: CausalReasoningPipeline, 
+def _parse_rule_str(rule_str: str) -> Tuple[str, frozenset, str]:
+    """Parse 'id: A AND B => C' em (id, {antecedentes}, consequente).
+
+    Aceita tanto '=>' (derrotável) quanto '->' (estrita)."""
+    rule_id, _, body = rule_str.partition(":")
+    body = body.strip()
+    for arrow in ("=>", "->"):
+        if arrow in body:
+            lhs, rhs = body.split(arrow, 1)
+            ants = frozenset(a.strip() for a in lhs.split("AND") if a.strip())
+            return rule_id.strip(), ants, rhs.strip()
+    return rule_id.strip(), frozenset(), body
+
+
+def _canonical_causal_model(model: Dict[str, Any]) -> Tuple[set, set]:
+    """
+    Reduz um modelo causal a formas canônicas independentes da numeração
+    das regras, permitindo comparação semântica com o golden dataset.
+
+    - Regras causais (estritas + derrotáveis) viram 'A AND B => C' com
+      antecedentes ordenados.
+    - Undercutters ('X => ¬rN') têm o alvo ¬rN substituído pelo conteúdo
+      canônico da regra rN, já que os IDs são arbitrários.
+    """
+    by_id: Dict[str, str] = {}
+    causal = set()
+    for r in list(model.get("strict_rules", [])) + list(model.get("defeasible_rules", [])):
+        rid, ants, cons = _parse_rule_str(r)
+        canon = f"{' AND '.join(sorted(ants))} => {cons}"
+        by_id[rid] = canon
+        causal.add(canon)
+    undercutters = set()
+    for r in model.get("undercutter_rules", []):
+        rid, ants, cons = _parse_rule_str(r)
+        target_id = cons[1:] if cons.startswith("¬") else cons
+        resolved = by_id.get(target_id, cons)
+        undercutters.add(f"{' AND '.join(sorted(ants))} => ¬({resolved})")
+    return causal, undercutters
+
+
+def analyze_case(pipeline: CausalReasoningPipeline,
                 case_data: Dict[str, Any],
-                output_dir: str = "outputs") -> Dict[str, Any]:
+                output_dir: str = "outputs/legal") -> Dict[str, Any]:
     """
     Analyze a single case and compare with expected results.
     
@@ -54,15 +94,30 @@ def analyze_case(pipeline: CausalReasoningPipeline,
                  (case_data['case_text'][:200] + '...') if len(case_data['case_text']) > 200 else case_data['case_text'])
     result = pipeline(case_data['case_text'])
     
-    # Validate against expected results
+    # Validação semântica (não comparação exata de dicts):
+    # - KB: conjuntos de premissas/causas potenciais e alvo iguais, ignorando
+    #   chaves extras (axioms, preferences) e ordem
+    # - Modelo causal: regras canonizadas, independentes da numeração rN
+    # - Resultados causais: veredito is_cause por causa esperada
+    kb_got = result["knowledge_base"]
+    kb_exp = case_data["expected_knowledge_base"]
+    kb_matches = (
+        set(kb_got.get("premises", [])) == set(kb_exp.get("premises", []))
+        and set(kb_got.get("potential_causes", [])) == set(kb_exp.get("potential_causes", []))
+        and kb_got.get("target_conclusion") == kb_exp.get("target_conclusion")
+    )
+
     validation = {
         "knowledge_base": {
-            "matches": result["knowledge_base"] == case_data["expected_knowledge_base"],
-            "expected": case_data["expected_knowledge_base"],
-            "got": result["knowledge_base"]
+            "matches": kb_matches,
+            "expected": kb_exp,
+            "got": kb_got
         },
         "causal_model": {
-            "matches": result["causal_model"] == case_data["expected_causal_model"],
+            "matches": (
+                _canonical_causal_model(result["causal_model"])
+                == _canonical_causal_model(case_data["expected_causal_model"])
+            ),
             "expected": case_data["expected_causal_model"],
             "got": result["causal_model"]
         },
@@ -743,28 +798,38 @@ def generate_boardgame_charts(results_dir: str = "outputs/boardgame") -> None:
     logger.info("📊 Chart saved to: %s", chart_path)
 
 
-def run_legal_analysis(pipeline: CausalReasoningPipeline, case_id: Optional[str] = None):
-    """Run legal case analysis."""
+def run_legal_analysis(pipeline: CausalReasoningPipeline,
+                       case_id: Optional[str] = None,
+                       output_dir: str = "outputs/legal"):
+    """Run legal case analysis.
+
+    Args:
+        pipeline: Configured CausalReasoningPipeline instance
+        case_id: Specific case ID to analyze (None for all)
+        output_dir: Directory for per-case results and summary. main.py resolves
+            it to outputs/legal/compiled/<optimizer>/ or outputs/legal/zero-shot/
+            depending on whether a compiled program was loaded.
+    """
     logger.info("📚 Available cases:")
     for case in GOLDEN_DATASET:
         logger.info("%s. %s", case['id'], case['name'])
-    
+
     if case_id:
         case = next((c for c in GOLDEN_DATASET if str(c["id"]) == case_id), None)
         if not case:
             print(f"⚠️  Caso {case_id} não encontrado")
             return
-        results = [analyze_case(pipeline, case)]
+        results = [analyze_case(pipeline, case, output_dir=output_dir)]
     else:
-        results = [analyze_case(pipeline, case) for case in GOLDEN_DATASET]
-    
+        results = [analyze_case(pipeline, case, output_dir=output_dir) for case in GOLDEN_DATASET]
+
     logger.info("📊 Resultados Gerais:")
-    successful = sum(1 for r in results 
+    successful = sum(1 for r in results
                     if all(v["matches"] for v in r["validation"].values()))
     logger.info("✅ %s/%s casos passaram em todas as validações", successful, len(results))
-    
-    summary_path = os.path.join("outputs", "analysis_summary.json")
-    os.makedirs("outputs", exist_ok=True)
+
+    summary_path = os.path.join(output_dir, "analysis_summary.json")
+    os.makedirs(output_dir, exist_ok=True)
     with open(summary_path, "w", encoding="utf-8") as f:
         json.dump({
             "total_cases": len(results),

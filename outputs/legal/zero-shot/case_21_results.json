@@ -1,0 +1,237 @@
+{
+  "case": {
+    "id": 21,
+    "name": "Centro Cirúrgico Sem Assepsia (Omissão)",
+    "pattern": "omissao",
+    "case_text": "Um paciente foi submetido a cirurgia no hospital (PaCi).\nA equipe não realizou a assepsia do centro cirúrgico (¬AsRe).\nA assepsia teria garantido ambiente estéril (AmEs).\nO paciente contraiu infecção hospitalar (InHo).\nPergunta-se: a falta de assepsia (¬AsRe) foi causa da infecção hospitalar (InHo)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "PaCi",
+        "¬AsRe"
+      ],
+      "potential_causes": [
+        "¬AsRe"
+      ],
+      "target_conclusion": "InHo"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: PaCi => InHo",
+        "r1: AsRe => AmEs"
+      ],
+      "undercutter_rules": [
+        "r2: AmEs => ¬r0"
+      ]
+    },
+    "expected_causal_result": {
+      "¬AsRe": true
+    }
+  },
+  "analysis": {
+    "case_text": "Um paciente foi submetido a cirurgia no hospital (PaCi).\nA equipe não realizou a assepsia do centro cirúrgico (¬AsRe).\nA assepsia teria garantido ambiente estéril (AmEs).\nO paciente contraiu infecção hospitalar (InHo).\nPergunta-se: a falta de assepsia (¬AsRe) foi causa da infecção hospitalar (InHo)?",
+    "knowledge_base": {
+      "premises": [
+        "PaCi",
+        "¬AsRe",
+        "AmEs"
+      ],
+      "potential_causes": [
+        "¬AsRe"
+      ],
+      "target_conclusion": "InHo"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: PaCi => InHo",
+        "r1: AsRe => AmEs"
+      ],
+      "undercutter_rules": [
+        "r2: AmEs => ¬r0"
+      ],
+      "preferences": {
+        "r0": 0.7,
+        "r1": 0.8,
+        "r2": 0.9
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "PaCi",
+          "¬AsRe",
+          "AmEs"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: PaCi => InHo",
+            "r1: AsRe => AmEs"
+          ],
+          "undercutters": [
+            "r2: AmEs => ¬r0"
+          ]
+        },
+        "preferences": {
+          "r0": 0.7,
+          "r1": 0.8,
+          "r2": 0.9
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "PaCi"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "InHo",
+          "strength": 0.7
+        },
+        {
+          "id": "A3",
+          "premises": [
+            "AmEs"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r2"
+          ],
+          "conclusion": "¬r0",
+          "strength": 0.9
+        }
+      ],
+      "attacks": [
+        {
+          "attacker": "A3",
+          "target": "A1",
+          "type": "undercut",
+          "rule": "r0",
+          "succeeds": true
+        }
+      ],
+      "defeats": [
+        {
+          "defeater": "A3",
+          "defeated": "A1",
+          "type": "undercut",
+          "explanation": "Argumento A3 (força 0.9) derrota A1 (força 0.7) via undercutter r2."
+        }
+      ]
+    },
+    "base_grounded": [
+      "A1",
+      "A4",
+      "A0",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A1": "¬AsRe",
+      "A4": "¬r0",
+      "A0": "AmEs",
+      "A2": "PaCi"
+    },
+    "base_explanations": {
+      "A1": [
+        "A1"
+      ],
+      "A4": [
+        "A4",
+        "A0"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A2"
+      ]
+    },
+    "causal_results": {
+      "¬AsRe": {
+        "is_cause": false,
+        "explanation": "1. **Tipo de Causa**: Identificada como \"omission\" (omissão). A falha em realizar a assepsia (¬AsRe) é a omissão de um dever de cuidado que, se tivesse sido cumprido, teria impedido o resultado danoso.\n2. **Regras Críticas**: A regra \"¬AmEs => InHo\" é a regra crítica. Ela depende da ausência de ambiente estéril.\n3. **Cadeia Derrotada**: Quando a assepsia (AsRe) é introduzida no modelo de teste, a premissa \"¬AmEs\" (ambiente não estéril) deixa de ser sustentada. Consequentemente, a cadeia causal que leva à infecção hospitalar (InHo) é interrompida.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, a omissão é causa-in-fact quando a sua negação (a realização da ação omitida) resulta na ausência do dano no grounded extension. Como a infecção hospitalar não é mais derivada quando a assepsia é garantida, a omissão é considerada causa direta do dano.\n5. **Conclusão**: A falta de assepsia é uma condição *sine qua non* para a infecção, configurando nexo causal por omissão.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "InHo",
+          "base_has_target": false,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": false,
+      "expected": {
+        "premises": [
+          "PaCi",
+          "¬AsRe"
+        ],
+        "potential_causes": [
+          "¬AsRe"
+        ],
+        "target_conclusion": "InHo"
+      },
+      "got": {
+        "premises": [
+          "PaCi",
+          "¬AsRe",
+          "AmEs"
+        ],
+        "potential_causes": [
+          "¬AsRe"
+        ],
+        "target_conclusion": "InHo"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: PaCi => InHo",
+          "r1: AsRe => AmEs"
+        ],
+        "undercutter_rules": [
+          "r2: AmEs => ¬r0"
+        ]
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: PaCi => InHo",
+          "r1: AsRe => AmEs"
+        ],
+        "undercutter_rules": [
+          "r2: AmEs => ¬r0"
+        ],
+        "preferences": {
+          "r0": 0.7,
+          "r1": 0.8,
+          "r2": 0.9
+        }
+      }
+    },
+    "causal_results": {
+      "matches": false,
+      "expected": {
+        "¬AsRe": true
+      },
+      "got": {
+        "¬AsRe": {
+          "is_cause": false,
+          "explanation": "1. **Tipo de Causa**: Identificada como \"omission\" (omissão). A falha em realizar a assepsia (¬AsRe) é a omissão de um dever de cuidado que, se tivesse sido cumprido, teria impedido o resultado danoso.\n2. **Regras Críticas**: A regra \"¬AmEs => InHo\" é a regra crítica. Ela depende da ausência de ambiente estéril.\n3. **Cadeia Derrotada**: Quando a assepsia (AsRe) é introduzida no modelo de teste, a premissa \"¬AmEs\" (ambiente não estéril) deixa de ser sustentada. Consequentemente, a cadeia causal que leva à infecção hospitalar (InHo) é interrompida.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, a omissão é causa-in-fact quando a sua negação (a realização da ação omitida) resulta na ausência do dano no grounded extension. Como a infecção hospitalar não é mais derivada quando a assepsia é garantida, a omissão é considerada causa direta do dano.\n5. **Conclusão**: A falta de assepsia é uma condição *sine qua non* para a infecção, configurando nexo causal por omissão.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "InHo",
+            "base_has_target": false,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

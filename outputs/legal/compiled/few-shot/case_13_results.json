@@ -1,0 +1,183 @@
+{
+  "case": {
+    "id": 13,
+    "name": "Medicamento Vencido (Produção com Conjunção)",
+    "pattern": "producao",
+    "case_text": "Uma farmácia vendeu medicamento vencido (MeVe) e o paciente o ingeriu seguindo a posologia (PaIg).\nO paciente sofreu reação adversa grave (ReAd).\nPergunta-se: a venda do medicamento vencido (MeVe) foi causa da reação adversa (ReAd)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "MeVe",
+        "PaIg"
+      ],
+      "potential_causes": [
+        "MeVe"
+      ],
+      "target_conclusion": "ReAd"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: MeVe AND PaIg => ReAd"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "MeVe": true
+    }
+  },
+  "analysis": {
+    "case_text": "Uma farmácia vendeu medicamento vencido (MeVe) e o paciente o ingeriu seguindo a posologia (PaIg).\nO paciente sofreu reação adversa grave (ReAd).\nPergunta-se: a venda do medicamento vencido (MeVe) foi causa da reação adversa (ReAd)?",
+    "knowledge_base": {
+      "premises": [
+        "MeVe",
+        "PaIg"
+      ],
+      "potential_causes": [
+        "MeVe"
+      ],
+      "target_conclusion": "ReAd"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: MeVe AND PaIg => ReAd"
+      ],
+      "undercutter_rules": [],
+      "preferences": {
+        "r0": 0.5
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "MeVe",
+          "PaIg"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: MeVe AND PaIg => ReAd"
+          ],
+          "undercutters": []
+        },
+        "preferences": {
+          "r0": 0.5
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "MeVe",
+            "PaIg"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "ReAd",
+          "strength": 0.5
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A0",
+      "A2",
+      "A1"
+    ],
+    "base_grounded_conclusions": {
+      "A0": "MeVe",
+      "A2": "ReAd",
+      "A1": "PaIg"
+    },
+    "base_explanations": {
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A2",
+        "A0",
+        "A1"
+      ],
+      "A1": [
+        "A1"
+      ]
+    },
+    "causal_results": {
+      "MeVe": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois a venda do medicamento vencido (`MeVe`) é o fator determinante que, ao ser ingerido pelo paciente, produz diretamente a reação adversa (`ReAd`).\n2. **Regras Críticas**: A regra `MeVe, PaIg => ReAd` é a regra crítica. A negação de `MeVe` impede que esta regra seja disparada.\n3. **Argumentos Derrotados**: O argumento que sustentava a conclusão `ReAd` torna-se inoperante no AF modificado, pois sua base factual foi removida.\n4. **Justificativa Jurídica**: De acordo com a Definição 4.3, `MeVe` é causa-in-fact porque, na ausência deste evento (contrafactual), a conclusão `ReAd` não é mais derivada pela extensão fundamentada do sistema. O evento é uma condição *sine qua non* para o dano.\n5. **Conclusão**: A relação é de causalidade direta, onde a conduta da farmácia ao vender o produto vencido é condição necessária para o resultado danoso sofrido pelo paciente.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "ReAd",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "MeVe",
+          "PaIg"
+        ],
+        "potential_causes": [
+          "MeVe"
+        ],
+        "target_conclusion": "ReAd"
+      },
+      "got": {
+        "premises": [
+          "MeVe",
+          "PaIg"
+        ],
+        "potential_causes": [
+          "MeVe"
+        ],
+        "target_conclusion": "ReAd"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: MeVe AND PaIg => ReAd"
+        ],
+        "undercutter_rules": []
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: MeVe AND PaIg => ReAd"
+        ],
+        "undercutter_rules": [],
+        "preferences": {
+          "r0": 0.5
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "MeVe": true
+      },
+      "got": {
+        "MeVe": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois a venda do medicamento vencido (`MeVe`) é o fator determinante que, ao ser ingerido pelo paciente, produz diretamente a reação adversa (`ReAd`).\n2. **Regras Críticas**: A regra `MeVe, PaIg => ReAd` é a regra crítica. A negação de `MeVe` impede que esta regra seja disparada.\n3. **Argumentos Derrotados**: O argumento que sustentava a conclusão `ReAd` torna-se inoperante no AF modificado, pois sua base factual foi removida.\n4. **Justificativa Jurídica**: De acordo com a Definição 4.3, `MeVe` é causa-in-fact porque, na ausência deste evento (contrafactual), a conclusão `ReAd` não é mais derivada pela extensão fundamentada do sistema. O evento é uma condição *sine qua non* para o dano.\n5. **Conclusão**: A relação é de causalidade direta, onde a conduta da farmácia ao vender o produto vencido é condição necessária para o resultado danoso sofrido pelo paciente.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "ReAd",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

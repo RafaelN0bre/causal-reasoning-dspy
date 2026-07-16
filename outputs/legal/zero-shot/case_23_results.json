@@ -1,0 +1,283 @@
+{
+  "case": {
+    "id": 23,
+    "name": "Geada e Gafanhotos (Preempção)",
+    "pattern": "preempcao",
+    "case_text": "Uma geada severa atingiu a lavoura e destruiu as plantas (GeDe).\nDias depois, uma nuvem de gafanhotos passou pela região (GaCh), mas a lavoura já estava perdida (LaPe).\nPergunta-se: a geada (GeDe) e os gafanhotos (GaCh) foram causas da perda da safra (SaPe)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "GeDe",
+        "GaCh",
+        "LaPe"
+      ],
+      "potential_causes": [
+        "GeDe",
+        "GaCh"
+      ],
+      "target_conclusion": "SaPe"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: GeDe => SaPe",
+        "r1: GaCh => SaPe"
+      ],
+      "undercutter_rules": [
+        "r2: LaPe => ¬r1"
+      ]
+    },
+    "expected_causal_result": {
+      "GeDe": true,
+      "GaCh": false
+    }
+  },
+  "analysis": {
+    "case_text": "Uma geada severa atingiu a lavoura e destruiu as plantas (GeDe).\nDias depois, uma nuvem de gafanhotos passou pela região (GaCh), mas a lavoura já estava perdida (LaPe).\nPergunta-se: a geada (GeDe) e os gafanhotos (GaCh) foram causas da perda da safra (SaPe)?",
+    "knowledge_base": {
+      "premises": [
+        "GeDe",
+        "GaCh",
+        "LaPe"
+      ],
+      "potential_causes": [
+        "GeDe",
+        "GaCh"
+      ],
+      "target_conclusion": "SaPe"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: GeDe => SaPe",
+        "r1: GaCh => SaPe"
+      ],
+      "undercutter_rules": [
+        "r2: LaPe => ¬r1"
+      ],
+      "preferences": {
+        "r0": 0.8,
+        "r1": 0.7,
+        "r2": 0.9
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "GeDe",
+          "GaCh",
+          "LaPe"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: GeDe => SaPe",
+            "r1: GaCh => SaPe"
+          ],
+          "undercutters": [
+            "r2: LaPe => ¬r1"
+          ]
+        },
+        "preferences": {
+          "r0": 0.8,
+          "r1": 0.7,
+          "r2": 0.9
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "GeDe"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "SaPe",
+          "strength": 0.8
+        },
+        {
+          "id": "A2",
+          "premises": [
+            "GaCh"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r1"
+          ],
+          "conclusion": "SaPe",
+          "strength": 0.7
+        },
+        {
+          "id": "A3",
+          "premises": [
+            "LaPe"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r2"
+          ],
+          "conclusion": "¬r1",
+          "strength": 0.9
+        }
+      ],
+      "attacks": [
+        {
+          "attacker": "A3",
+          "target": "A2",
+          "type": "undercut",
+          "rule": "r1",
+          "succeeds": true
+        }
+      ],
+      "defeats": [
+        {
+          "defeater": "A3",
+          "defeated": "A2",
+          "type": "undercut",
+          "explanation": "Argumento A3 (força 0.9) derrota A2 (força 0.7) ao invalidar a regra r1."
+        }
+      ]
+    },
+    "base_grounded": [
+      "A3",
+      "A1",
+      "A0",
+      "A5",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A3": "SaPe",
+      "A1": "LaPe",
+      "A0": "GeDe",
+      "A5": "¬r1",
+      "A2": "GaCh"
+    },
+    "base_explanations": {
+      "A3": [
+        "A3",
+        "A0"
+      ],
+      "A1": [
+        "A1"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A5": [
+        "A1",
+        "A5"
+      ],
+      "A2": [
+        "A2"
+      ]
+    },
+    "causal_results": {
+      "GeDe": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: A geada (GeDe) é classificada como \"production\", pois sua ocorrência desencadeou diretamente a destruição da lavoura (LaPe), que é a causa imediata da perda da safra (SaPe).\n2. **Regras Críticas**: A regra principal afetada é a que conecta o evento climático (GeDe) ao dano (SaPe). Ao remover GeDe, a cadeia causal é interrompida.\n3. **Argumentos Derrotados**: O argumento A3, que sustentava a conclusão de perda da safra baseada na geada, perde sua validade no framework modificado, pois a premissa fundamental (GeDe) foi removida.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, um evento é causa-in-fact se, na ausência dele, o dano não teria ocorrido (ou ocorreria de forma diferente). Como a geada foi o evento que efetivamente destruiu a lavoura antes da chegada dos gafanhotos, ela é a causa determinante.\n5. **Conclusão**: A geada é causa-in-fact. Note-se que, embora os gafanhotos (GaCh) tenham passado, a lavoura já estava perdida (LaPe), o que caracteriza a geada como a causa primária e os gafanhotos como um evento superveniente ou irrelevante para o dano já consumado.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "SaPe",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      },
+      "GaCh": {
+        "is_cause": false,
+        "explanation": "A análise baseada na Definição 4.3 demonstra que a chegada dos gafanhotos (GaCh) não é causa-in-fact da perda da safra (SaPe). No cenário hipotético em que GaCh é negado (¬GaCh), a conclusão SaPe ainda é derivada através da geada (GeDe), que já havia destruído a lavoura anteriormente. Como a cadeia causal que leva à perda da safra permanece intacta e ativa na ausência de GaCh, a condição de necessidade (conditio sine qua non) não é preenchida. A geada atua como uma causa preexistente que torna a ação dos gafanhotos irrelevante para o resultado final, classificando a relação como \"none\" no contexto de causalidade necessária.",
+        "llm_is_cause": false,
+        "solver_evidence": {
+          "target": "SaPe",
+          "base_has_target": true,
+          "test_has_target": true
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "GeDe",
+          "GaCh",
+          "LaPe"
+        ],
+        "potential_causes": [
+          "GeDe",
+          "GaCh"
+        ],
+        "target_conclusion": "SaPe"
+      },
+      "got": {
+        "premises": [
+          "GeDe",
+          "GaCh",
+          "LaPe"
+        ],
+        "potential_causes": [
+          "GeDe",
+          "GaCh"
+        ],
+        "target_conclusion": "SaPe"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: GeDe => SaPe",
+          "r1: GaCh => SaPe"
+        ],
+        "undercutter_rules": [
+          "r2: LaPe => ¬r1"
+        ]
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: GeDe => SaPe",
+          "r1: GaCh => SaPe"
+        ],
+        "undercutter_rules": [
+          "r2: LaPe => ¬r1"
+        ],
+        "preferences": {
+          "r0": 0.8,
+          "r1": 0.7,
+          "r2": 0.9
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "GeDe": true,
+        "GaCh": false
+      },
+      "got": {
+        "GeDe": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: A geada (GeDe) é classificada como \"production\", pois sua ocorrência desencadeou diretamente a destruição da lavoura (LaPe), que é a causa imediata da perda da safra (SaPe).\n2. **Regras Críticas**: A regra principal afetada é a que conecta o evento climático (GeDe) ao dano (SaPe). Ao remover GeDe, a cadeia causal é interrompida.\n3. **Argumentos Derrotados**: O argumento A3, que sustentava a conclusão de perda da safra baseada na geada, perde sua validade no framework modificado, pois a premissa fundamental (GeDe) foi removida.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, um evento é causa-in-fact se, na ausência dele, o dano não teria ocorrido (ou ocorreria de forma diferente). Como a geada foi o evento que efetivamente destruiu a lavoura antes da chegada dos gafanhotos, ela é a causa determinante.\n5. **Conclusão**: A geada é causa-in-fact. Note-se que, embora os gafanhotos (GaCh) tenham passado, a lavoura já estava perdida (LaPe), o que caracteriza a geada como a causa primária e os gafanhotos como um evento superveniente ou irrelevante para o dano já consumado.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "SaPe",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        },
+        "GaCh": {
+          "is_cause": false,
+          "explanation": "A análise baseada na Definição 4.3 demonstra que a chegada dos gafanhotos (GaCh) não é causa-in-fact da perda da safra (SaPe). No cenário hipotético em que GaCh é negado (¬GaCh), a conclusão SaPe ainda é derivada através da geada (GeDe), que já havia destruído a lavoura anteriormente. Como a cadeia causal que leva à perda da safra permanece intacta e ativa na ausência de GaCh, a condição de necessidade (conditio sine qua non) não é preenchida. A geada atua como uma causa preexistente que torna a ação dos gafanhotos irrelevante para o resultado final, classificando a relação como \"none\" no contexto de causalidade necessária.",
+          "llm_is_cause": false,
+          "solver_evidence": {
+            "target": "SaPe",
+            "base_has_target": true,
+            "test_has_target": true
+          }
+        }
+      }
+    }
+  }
+}

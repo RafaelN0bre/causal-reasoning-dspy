@@ -1,0 +1,202 @@
+{
+  "case": {
+    "id": 18,
+    "name": "Elevador Sem Conserto (Omissão)",
+    "pattern": "omissao",
+    "case_text": "O elevador do condomínio tinha defeito conhecido no freio (DeFr).\nO condomínio não realizou o conserto (¬CoRe).\nO conserto teria eliminado o defeito (DeEl).\nA cabine despencou com um morador dentro (CaDe).\nPergunta-se: a falta de conserto (¬CoRe) foi causa da queda da cabine (CaDe)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "DeFr",
+        "¬CoRe"
+      ],
+      "potential_causes": [
+        "¬CoRe"
+      ],
+      "target_conclusion": "CaDe"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: DeFr => CaDe",
+        "r1: CoRe => DeEl"
+      ],
+      "undercutter_rules": [
+        "r2: DeEl => ¬r0"
+      ]
+    },
+    "expected_causal_result": {
+      "¬CoRe": true
+    }
+  },
+  "analysis": {
+    "case_text": "O elevador do condomínio tinha defeito conhecido no freio (DeFr).\nO condomínio não realizou o conserto (¬CoRe).\nO conserto teria eliminado o defeito (DeEl).\nA cabine despencou com um morador dentro (CaDe).\nPergunta-se: a falta de conserto (¬CoRe) foi causa da queda da cabine (CaDe)?",
+    "knowledge_base": {
+      "premises": [
+        "DeFr",
+        "¬CoRe"
+      ],
+      "potential_causes": [
+        "¬CoRe"
+      ],
+      "target_conclusion": "CaDe"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: DeFr => CaDe",
+        "r1: CoRe => DeEl"
+      ],
+      "undercutter_rules": [
+        "r2: DeEl => ¬r0"
+      ],
+      "preferences": {
+        "r0": 0.8,
+        "r1": 0.8,
+        "r2": 0.9
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "DeFr",
+          "¬CoRe"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: DeFr => CaDe",
+            "r1: CoRe => DeEl"
+          ],
+          "undercutters": [
+            "r2: DeEl => ¬r0"
+          ]
+        },
+        "preferences": {
+          "r0": 0.8,
+          "r1": 0.8,
+          "r2": 0.9
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "DeFr"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "CaDe",
+          "strength": 0.8
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A1",
+      "A0",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A1": "DeFr",
+      "A0": "¬CoRe",
+      "A2": "CaDe"
+    },
+    "base_explanations": {
+      "A1": [
+        "A1"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A1",
+        "A2"
+      ]
+    },
+    "causal_results": {
+      "¬CoRe": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Trata-se de uma relação de \"omissão\". A falha do condomínio em realizar o conserto (`¬CoRe`) é a condição necessária que permitiu que o defeito no freio (`DeFr`) resultasse na queda da cabine (`CaDe`).\n2. **Regras Críticas**: A regra `DeFr ∧ ¬CoRe => CaDe` é a regra central. Quando `¬CoRe` é substituído por `CoRe` (conserto realizado), a regra `DeFr ∧ CoRe => DeEl` é ativada, eliminando o risco.\n3. **Argumentos Derrotados**: O argumento que sustenta a queda (`CaDe`) é derrotado porque a eliminação do defeito (`DeEl`) impede a progressão da cadeia causal.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, se a negação da omissão (ou seja, a ação de consertar) resulta na ausência do efeito (queda), a omissão é considerada causa-in-fact. O condomínio tinha o dever de manutenção, e sua omissão foi o elo determinante para o resultado danoso.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "CaDe",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "DeFr",
+          "¬CoRe"
+        ],
+        "potential_causes": [
+          "¬CoRe"
+        ],
+        "target_conclusion": "CaDe"
+      },
+      "got": {
+        "premises": [
+          "DeFr",
+          "¬CoRe"
+        ],
+        "potential_causes": [
+          "¬CoRe"
+        ],
+        "target_conclusion": "CaDe"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: DeFr => CaDe",
+          "r1: CoRe => DeEl"
+        ],
+        "undercutter_rules": [
+          "r2: DeEl => ¬r0"
+        ]
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: DeFr => CaDe",
+          "r1: CoRe => DeEl"
+        ],
+        "undercutter_rules": [
+          "r2: DeEl => ¬r0"
+        ],
+        "preferences": {
+          "r0": 0.8,
+          "r1": 0.8,
+          "r2": 0.9
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "¬CoRe": true
+      },
+      "got": {
+        "¬CoRe": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Trata-se de uma relação de \"omissão\". A falha do condomínio em realizar o conserto (`¬CoRe`) é a condição necessária que permitiu que o defeito no freio (`DeFr`) resultasse na queda da cabine (`CaDe`).\n2. **Regras Críticas**: A regra `DeFr ∧ ¬CoRe => CaDe` é a regra central. Quando `¬CoRe` é substituído por `CoRe` (conserto realizado), a regra `DeFr ∧ CoRe => DeEl` é ativada, eliminando o risco.\n3. **Argumentos Derrotados**: O argumento que sustenta a queda (`CaDe`) é derrotado porque a eliminação do defeito (`DeEl`) impede a progressão da cadeia causal.\n4. **Justificativa Jurídica**: Segundo a Definição 4.3, se a negação da omissão (ou seja, a ação de consertar) resulta na ausência do efeito (queda), a omissão é considerada causa-in-fact. O condomínio tinha o dever de manutenção, e sua omissão foi o elo determinante para o resultado danoso.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "CaDe",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

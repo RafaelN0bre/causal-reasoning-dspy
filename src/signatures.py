@@ -72,6 +72,23 @@ class TextToKnowledgeBase(dspy.Signature):
     """
     Extrai elementos da base de conhecimento do texto do caso, incluindo premissas ordinárias (Kp),
     causas potenciais para teste e a conclusão alvo.
+
+    Convenções obrigatórias:
+    1. Literais: use EXATAMENTE os símbolos entre parênteses no texto do caso
+       (ex.: se o texto diz "se recusaram a consentir (¬X)", o literal é "¬X").
+       NUNCA invente, traduza ou renomeie literais.
+    2. premises: todos os fatos afirmados como verdadeiros no caso, incluindo
+       alegações das partes, na forma sintática exata (com ¬ quando negativo).
+       Registre cada alegação com a polaridade com que foi alegada (alegação de
+       mau uso vira 'MiUs', nunca '¬MiUs'), mesmo que outra premissa a conteste.
+       EXCEÇÃO: não inclua como premissa um evento que só não ocorreu por causa
+       de uma das causas potenciais (ex.: o tratamento não realizado por causa
+       de uma recusa) — esse evento pertence à cadeia contrafactual das regras.
+    3. potential_causes: SUBCONJUNTO de premises — apenas os fatos que a
+       pergunta do caso ("Pergunta-se: ...") questiona como possíveis causas.
+    4. target_conclusion: o literal do efeito/dano na pergunta do caso.
+       O alvo NUNCA aparece em premises, mesmo que o texto narre que ocorreu:
+       ele deve ser derivado pelas regras causais.
     """
     case_description: str = dspy.InputField(
         desc="Texto completo descrevendo o caso jurídico"
@@ -79,12 +96,12 @@ class TextToKnowledgeBase(dspy.Signature):
     knowledge_base: str = dspy.OutputField(
         desc="""JSON contendo:
         - premises: Lista de literais (positivos ou negativos) de Kp
-        - potential_causes: Lista de fatos para testar como causas
-        - target_conclusion: O efeito/dano a ser analisado
+        - potential_causes: Lista de fatos de Kp para testar como causas (subconjunto de premises)
+        - target_conclusion: O efeito/dano a ser analisado (nunca presente em premises)
         Exemplo: {
-            "premises": ["LeucAtv", "¬ParaPres"],
-            "potential_causes": ["¬PaCo"],
-            "target_conclusion": "ChDi"
+            "premises": ["FaOc", "¬AgIn", "TeSt"],
+            "potential_causes": ["¬AgIn"],
+            "target_conclusion": "DaRe"
         }"""
     )
 
@@ -93,6 +110,47 @@ class ExtractCausalModel(dspy.Signature):
     """
     Extrai tanto regras causais (Rd) quanto regras undercutter que podem derrotá-las.
     Crucial para lidar corretamente com casos de preempção e omissão.
+
+    Convenções obrigatórias:
+    1. Use somente literais da base de conhecimento e literais entre parênteses
+       no texto do caso; nunca invente literais novos. Os literais dos exemplos
+       destas instruções (Doe, Con, Trat, Mor, Ac1, Ac2, JaOc, Res, FaB1, FaB2,
+       AlEx, FaNe) são fictícios: NUNCA os use num caso real.
+    2. Formato de regra: 'rN: Ant1 AND Ant2 => Cons'. Antecedentes múltiplos
+       são separados EXCLUSIVAMENTE por ' AND ' — NUNCA por vírgula.
+    3. O alvo (target_conclusion) DEVE ser derivável das premissas pelas regras
+       no mundo factual: inclua pelo menos uma regra 'premissa(s) => alvo'.
+    4. strict_rules: deixe [] salvo definições logicamente incontestáveis.
+    5. Padrão de OMISSÃO (a causa potencial é um fato negativo ¬X): o literal
+       negativo ¬X NÃO aparece em NENHUMA regra. Modele:
+       (i) a regra que deriva o alvo do estado de fato;
+       (ii) a cadeia que parte do literal POSITIVO X (ela só dispara no mundo
+            contrafactual em que X vale, mesmo que X não seja premissa);
+       (iii) o undercutter '¬rN' em que o fim dessa cadeia derrota (i).
+       Ex.: premissas ["Doe", "¬Con"], alvo "Mor":
+         defeasible_rules: ["r0: Doe => Mor", "r1: Con => Trat"]
+         undercutter_rules: ["r2: Trat => ¬r0"]
+       A cadeia contrafactual DEVE terminar em undercutter contra a regra do
+       alvo ('r2: Trat => ¬r0'), NUNCA em regra que conclui a negação do alvo
+       (ERRADO: 'r2: Trat => ¬Mor').
+       PROIBIDO usar o literal negativo ¬X em qualquer regra, seja como
+       antecedente, seja em undercutter (ERRADO: 'r3: ¬Con => ¬r1'). Exatamente
+       as 3 regras acima bastam — nenhuma regra extra ou redundante.
+    6. Padrão de PREEMPÇÃO (duas causas concorrentes para o mesmo alvo): cada
+       causa recebe sua própria regra '=> alvo'; o fato que mostra que a causa
+       preemptada chegou tarde demais undercutta a regra dela.
+       Ex.: premissas ["Ac1", "Ac2", "JaOc"], alvo "Res":
+         defeasible_rules: ["r0: Ac1 => Res", "r1: Ac2 => Res"]
+         undercutter_rules: ["r2: JaOc => ¬r0"]  # Ac1 chegou tarde: JaOc undercutta r0
+    7. Padrão de EXCLUDENTE (uma alegação tenta afastar o alvo): a alegação
+       recebe uma regra '=> ¬alvo'; o fato que a neutraliza recebe um
+       undercutter contra essa regra.
+       Ex.: premissas ["FaB1", "FaB2", "AlEx", "FaNe"], alvo "Res",
+       causas potenciais ["FaB1", "FaB2"]:
+         defeasible_rules: ["r0: FaB1 AND FaB2 => Res", "r1: AlEx => ¬Res"]
+         undercutter_rules: ["r2: FaNe => ¬r1"]
+    8. preferences: dê aos undercutters preferência maior ou igual à das regras
+       que eles atacam.
     """
     knowledge_base: str = dspy.InputField(
         desc="A base de conhecimento em JSON do TextToKnowledgeBase"
@@ -102,30 +160,26 @@ class ExtractCausalModel(dspy.Signature):
     )
     causal_model: str = dspy.OutputField(
         desc="""JSON contendo:
-        - strict_rules: Lista de regras estritas (Rs) que são incontestáveis 
-          (ex: "rS0: PaCo -> Lesao")
-        - defeasible_rules: Lista de regras causais (Rd) que podem ser derrotadas 
-          (ex: "r0: LeucAtv => Obito")
-        - undercutter_rules: Lista de regras que podem derrotar outras regras 
-          (ex: "r2: Quimio => ¬r0")
+        - strict_rules: Lista de regras estritas (Rs) incontestáveis; normalmente []
+        - defeasible_rules: Lista de regras causais (Rd) que podem ser derrotadas
+          (ex: "r0: Doe => Mor")
+        - undercutter_rules: Lista de regras que podem derrotar outras regras
+          (ex: "r2: Trat => ¬r0")
         - preferences: Mapa de preferências entre regras, com valores entre 0 e 1
           (ex: {"r0": 0.8, "r2": 0.9})
         Exemplo: {
-            "strict_rules": [
-                "rS0: PaCo -> Lesao",
-                "rS1: Morte -> ¬Vida"
-            ],
+            "strict_rules": [],
             "defeasible_rules": [
-                "r0: LeucAtv => Obito",
-                "r1: ParaPres => Quimio"
+                "r0: Doe => Mor",
+                "r1: Con => Trat"
             ],
             "undercutter_rules": [
-                "r2: Quimio => ¬r0"
+                "r2: Trat => ¬r0"
             ],
             "preferences": {
                 "r0": 0.8,
-                "r2": 0.9,
-                "r1": 0.7
+                "r1": 0.7,
+                "r2": 0.9
             }
         }""")
 

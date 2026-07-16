@@ -1,0 +1,188 @@
+{
+  "case": {
+    "id": 8,
+    "name": "Freios Sem Manutenção (Cadeia de Dois Passos)",
+    "case_text": "\n        Uma transportadora manteve em circulação um caminhão sem manutenção nos freios (FrSm).\n        Os freios falharam em uma descida e o caminhão colidiu com um veículo de passeio (CoVe).\n        O motorista do veículo faleceu (MoFa).\n        Pergunta-se: a falta de manutenção dos freios (FrSm) foi causa da morte do motorista (MoFa)?\n        ",
+    "expected_knowledge_base": {
+      "premises": [
+        "FrSm"
+      ],
+      "potential_causes": [
+        "FrSm"
+      ],
+      "target_conclusion": "MoFa"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: FrSm => CoVe",
+        "r1: CoVe => MoFa"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "FrSm": {
+        "is_cause": true,
+        "explanation": "Cadeia de dois passos: FrSm deriva CoVe, que deriva MoFa; negando FrSm a cadeia inteira cai. A colisão (CoVe) é elo intermediário, não premissa."
+      }
+    }
+  },
+  "analysis": {
+    "case_text": "\n        Uma transportadora manteve em circulação um caminhão sem manutenção nos freios (FrSm).\n        Os freios falharam em uma descida e o caminhão colidiu com um veículo de passeio (CoVe).\n        O motorista do veículo faleceu (MoFa).\n        Pergunta-se: a falta de manutenção dos freios (FrSm) foi causa da morte do motorista (MoFa)?\n        ",
+    "knowledge_base": {
+      "premises": [
+        "FrSm",
+        "CoVe"
+      ],
+      "potential_causes": [
+        "FrSm"
+      ],
+      "target_conclusion": "MoFa"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: FrSm AND CoVe => MoFa"
+      ],
+      "undercutter_rules": [],
+      "preferences": {
+        "r0": 0.9
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "FrSm",
+          "CoVe"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: FrSm AND CoVe => MoFa"
+          ],
+          "undercutters": []
+        },
+        "preferences": {
+          "r0": 0.9
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "FrSm",
+            "CoVe"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "MoFa",
+          "strength": 0.9
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A1",
+      "A0",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A1": "CoVe",
+      "A0": "FrSm",
+      "A2": "MoFa"
+    },
+    "base_explanations": {
+      "A1": [
+        "A1"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A1",
+        "A0",
+        "A2"
+      ]
+    },
+    "causal_results": {
+      "FrSm": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"production\". A falta de manutenção dos freios (`FrSm`) é o evento ativo que desencadeou a sequência causal culminando na morte do motorista.\n2. **Regras Críticas**: A regra que conecta a falha mecânica à colisão e, subsequentemente, ao óbito, foi desativada pela negação da premissa `FrSm`.\n3. **Argumentos Derrotados**: O argumento `A2`, que estabelecia a relação causal entre a falta de manutenção e a morte, perdeu sua validade no AF modificado, pois a premissa necessária (`FrSm`) foi substituída por sua negação.\n4. **Justificativa Jurídica**: De acordo com a Definição 4.3, `FrSm` é causa-in-fact porque, \"but-for\" a falta de manutenção, o acidente e a morte não teriam ocorrido. A omissão na manutenção é a causa direta do dano.\n5. **Conclusão**: A falta de manutenção dos freios é a causa determinante do óbito, configurando uma relação de produção causal direta.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "MoFa",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": false,
+      "expected": {
+        "premises": [
+          "FrSm"
+        ],
+        "potential_causes": [
+          "FrSm"
+        ],
+        "target_conclusion": "MoFa"
+      },
+      "got": {
+        "premises": [
+          "FrSm",
+          "CoVe"
+        ],
+        "potential_causes": [
+          "FrSm"
+        ],
+        "target_conclusion": "MoFa"
+      }
+    },
+    "causal_model": {
+      "matches": false,
+      "expected": {
+        "defeasible_rules": [
+          "r0: FrSm => CoVe",
+          "r1: CoVe => MoFa"
+        ],
+        "undercutter_rules": []
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: FrSm AND CoVe => MoFa"
+        ],
+        "undercutter_rules": [],
+        "preferences": {
+          "r0": 0.9
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "FrSm": {
+          "is_cause": true,
+          "explanation": "Cadeia de dois passos: FrSm deriva CoVe, que deriva MoFa; negando FrSm a cadeia inteira cai. A colisão (CoVe) é elo intermediário, não premissa."
+        }
+      },
+      "got": {
+        "FrSm": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"production\". A falta de manutenção dos freios (`FrSm`) é o evento ativo que desencadeou a sequência causal culminando na morte do motorista.\n2. **Regras Críticas**: A regra que conecta a falha mecânica à colisão e, subsequentemente, ao óbito, foi desativada pela negação da premissa `FrSm`.\n3. **Argumentos Derrotados**: O argumento `A2`, que estabelecia a relação causal entre a falta de manutenção e a morte, perdeu sua validade no AF modificado, pois a premissa necessária (`FrSm`) foi substituída por sua negação.\n4. **Justificativa Jurídica**: De acordo com a Definição 4.3, `FrSm` é causa-in-fact porque, \"but-for\" a falta de manutenção, o acidente e a morte não teriam ocorrido. A omissão na manutenção é a causa direta do dano.\n5. **Conclusão**: A falta de manutenção dos freios é a causa determinante do óbito, configurando uma relação de produção causal direta.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "MoFa",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

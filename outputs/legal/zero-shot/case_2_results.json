@@ -1,0 +1,294 @@
+{
+  "case": {
+    "id": 2,
+    "name": "Dlugash Case (Preemption)",
+    "case_text": "\n        Dlugash atirou em uma vítima (DlKi), mas Bush já havia atirado antes (BuKi)\n        e, no momento do disparo de Dlugash, a vítima já estava morta (ViAD).\n        Pergunta-se: o disparo de Dlugash (DlKi) e o disparo de Bush (BuKi) foram causas da morte da vítima (ViDe)?\n        ",
+    "expected_knowledge_base": {
+      "premises": [
+        "DlKi",
+        "BuKi",
+        "ViAD"
+      ],
+      "potential_causes": [
+        "DlKi",
+        "BuKi"
+      ],
+      "target_conclusion": "ViDe"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r1: DlKi => ViDe",
+        "r2: BuKi => ViDe"
+      ],
+      "undercutter_rules": [
+        "r3: ViAD => ¬r1"
+      ]
+    },
+    "expected_causal_result": {
+      "BuKi": {
+        "is_cause": true,
+        "explanation": "O tiro de Bush (BuKi) é causa da morte: no AF base, ViDe é derivado por r2 (r1 está undercuttada por r3, já que a vítima já estava morta ao disparo de Dlugash). Com ¬BuKi como axioma, r2 perde a premissa e r1 segue undercuttada por ViAD (intermediário congelado), removendo ViDe da extensão grounded."
+      },
+      "DlKi": {
+        "is_cause": false,
+        "explanation": "O tiro de Dlugash (DlKi) não é causa da morte: com ¬DlKi como axioma, ViDe continua derivável por r2 (BuKi), logo permanece na extensão grounded."
+      }
+    }
+  },
+  "analysis": {
+    "case_text": "\n        Dlugash atirou em uma vítima (DlKi), mas Bush já havia atirado antes (BuKi)\n        e, no momento do disparo de Dlugash, a vítima já estava morta (ViAD).\n        Pergunta-se: o disparo de Dlugash (DlKi) e o disparo de Bush (BuKi) foram causas da morte da vítima (ViDe)?\n        ",
+    "knowledge_base": {
+      "premises": [
+        "DlKi",
+        "BuKi",
+        "ViAD"
+      ],
+      "potential_causes": [
+        "DlKi",
+        "BuKi"
+      ],
+      "target_conclusion": "ViDe"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: BuKi => ViDe",
+        "r1: DlKi => ViDe"
+      ],
+      "undercutter_rules": [
+        "r2: ViAD => ¬r1"
+      ],
+      "preferences": {
+        "r0": 0.8,
+        "r1": 0.7,
+        "r2": 0.9
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "DlKi",
+          "BuKi",
+          "ViAD"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: BuKi => ViDe",
+            "r1: DlKi => ViDe"
+          ],
+          "undercutters": [
+            "r2: ViAD => ¬r1"
+          ]
+        },
+        "preferences": {
+          "r0": 0.8,
+          "r1": 0.7,
+          "r2": 0.9
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "BuKi"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "ViDe",
+          "strength": 0.8
+        },
+        {
+          "id": "A2",
+          "premises": [
+            "DlKi"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r1"
+          ],
+          "conclusion": "ViDe",
+          "strength": 0.7
+        },
+        {
+          "id": "A3",
+          "premises": [
+            "ViAD"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r2"
+          ],
+          "conclusion": "¬r1",
+          "strength": 0.9
+        }
+      ],
+      "attacks": [
+        {
+          "attacker": "A3",
+          "target": "A2",
+          "type": "undercut",
+          "rule": "r1",
+          "succeeds": true
+        }
+      ],
+      "defeats": [
+        {
+          "defeater": "A3",
+          "defeated": "A2",
+          "type": "undercut",
+          "explanation": "Argumento A3 (força 0.9) derrota a regra r1 (força 0.7) do argumento A2"
+        }
+      ]
+    },
+    "base_grounded": [
+      "A3",
+      "A1",
+      "A0",
+      "A5",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A3": "ViDe",
+      "A1": "BuKi",
+      "A0": "ViAD",
+      "A5": "¬r1",
+      "A2": "DlKi"
+    },
+    "base_explanations": {
+      "A3": [
+        "A1",
+        "A3"
+      ],
+      "A1": [
+        "A1"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A5": [
+        "A0",
+        "A5"
+      ],
+      "A2": [
+        "A2"
+      ]
+    },
+    "causal_results": {
+      "DlKi": {
+        "is_cause": false,
+        "explanation": "1. **Tipo de causa**: A relação é classificada como \"none\" (nenhuma), pois o disparo de Dlugash não é uma causa-em-fato sob o critério contrafactual.\n2. **Regras críticas**: A regra que conecta o disparo de Dlugash à morte (DlKi => ViDe) torna-se inoperante ou irrelevante para a conclusão final quando a premissa é negada, pois a morte já havia sido consolidada por um evento anterior (BuKi).\n3. **Argumentos derrotados**: Nenhum argumento que sustenta a morte (ViDe) foi derrotado pela negação de DlKi. O framework demonstra que a conclusão ViDe é sustentada por caminhos alternativos (neste caso, o disparo de Bush, BuKi, que leva a ViAD - vítima já morta).\n4. **Justificativa jurídica**: De acordo com a Definição 4.3, para que φ seja causa de ψ, a negação de φ deve impedir a derivação de ψ. Como a morte da vítima (ViDe) permanece no `grounded_extension` mesmo após a remoção de DlKi, o disparo de Dlugash não preenche o requisito de causalidade necessária. Trata-se de um caso clássico de \"preempção\" onde o evento de Dlugash é superado por um evento antecedente, tornando-o juridicamente irrelevante para a causa da morte.",
+        "llm_is_cause": false,
+        "solver_evidence": {
+          "target": "ViDe",
+          "base_has_target": true,
+          "test_has_target": true
+        }
+      },
+      "BuKi": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois o disparo de Bush (BuKi) é o evento que inicia a cadeia causal direta que resulta na morte da vítima (ViDe).\n2. **Regras Críticas**: A regra \"BuKi => ViDe\" é a regra crítica. Sem a premissa BuKi, a conclusão ViDe não é alcançada no framework de argumentação modificado.\n3. **Argumentos Derrotados**: O argumento A3, que sustenta a conclusão de morte (ViDe), deixa de ser fundamentado quando BuKi é negado.\n4. **Justificativa Jurídica**: De acordo com a Definição 4.3, BuKi é causa-in-fact porque, na ausência de BuKi, a conclusão ViDe não pertence à extensão fundamentada do AF modificado. Bush foi o primeiro a atirar e sua ação foi a causa eficiente da morte, tornando-o responsável pelo resultado.\n5. **Conceitos**: A análise confirma que BuKi é uma condição *sine qua non* para a morte da vítima no contexto apresentado, diferenciando-o do disparo de Dlugash, que ocorre quando a vítima já está morta (ViAD).",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "ViDe",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "DlKi",
+          "BuKi",
+          "ViAD"
+        ],
+        "potential_causes": [
+          "DlKi",
+          "BuKi"
+        ],
+        "target_conclusion": "ViDe"
+      },
+      "got": {
+        "premises": [
+          "DlKi",
+          "BuKi",
+          "ViAD"
+        ],
+        "potential_causes": [
+          "DlKi",
+          "BuKi"
+        ],
+        "target_conclusion": "ViDe"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r1: DlKi => ViDe",
+          "r2: BuKi => ViDe"
+        ],
+        "undercutter_rules": [
+          "r3: ViAD => ¬r1"
+        ]
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: BuKi => ViDe",
+          "r1: DlKi => ViDe"
+        ],
+        "undercutter_rules": [
+          "r2: ViAD => ¬r1"
+        ],
+        "preferences": {
+          "r0": 0.8,
+          "r1": 0.7,
+          "r2": 0.9
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "BuKi": {
+          "is_cause": true,
+          "explanation": "O tiro de Bush (BuKi) é causa da morte: no AF base, ViDe é derivado por r2 (r1 está undercuttada por r3, já que a vítima já estava morta ao disparo de Dlugash). Com ¬BuKi como axioma, r2 perde a premissa e r1 segue undercuttada por ViAD (intermediário congelado), removendo ViDe da extensão grounded."
+        },
+        "DlKi": {
+          "is_cause": false,
+          "explanation": "O tiro de Dlugash (DlKi) não é causa da morte: com ¬DlKi como axioma, ViDe continua derivável por r2 (BuKi), logo permanece na extensão grounded."
+        }
+      },
+      "got": {
+        "DlKi": {
+          "is_cause": false,
+          "explanation": "1. **Tipo de causa**: A relação é classificada como \"none\" (nenhuma), pois o disparo de Dlugash não é uma causa-em-fato sob o critério contrafactual.\n2. **Regras críticas**: A regra que conecta o disparo de Dlugash à morte (DlKi => ViDe) torna-se inoperante ou irrelevante para a conclusão final quando a premissa é negada, pois a morte já havia sido consolidada por um evento anterior (BuKi).\n3. **Argumentos derrotados**: Nenhum argumento que sustenta a morte (ViDe) foi derrotado pela negação de DlKi. O framework demonstra que a conclusão ViDe é sustentada por caminhos alternativos (neste caso, o disparo de Bush, BuKi, que leva a ViAD - vítima já morta).\n4. **Justificativa jurídica**: De acordo com a Definição 4.3, para que φ seja causa de ψ, a negação de φ deve impedir a derivação de ψ. Como a morte da vítima (ViDe) permanece no `grounded_extension` mesmo após a remoção de DlKi, o disparo de Dlugash não preenche o requisito de causalidade necessária. Trata-se de um caso clássico de \"preempção\" onde o evento de Dlugash é superado por um evento antecedente, tornando-o juridicamente irrelevante para a causa da morte.",
+          "llm_is_cause": false,
+          "solver_evidence": {
+            "target": "ViDe",
+            "base_has_target": true,
+            "test_has_target": true
+          }
+        },
+        "BuKi": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Identificado como \"production\", pois o disparo de Bush (BuKi) é o evento que inicia a cadeia causal direta que resulta na morte da vítima (ViDe).\n2. **Regras Críticas**: A regra \"BuKi => ViDe\" é a regra crítica. Sem a premissa BuKi, a conclusão ViDe não é alcançada no framework de argumentação modificado.\n3. **Argumentos Derrotados**: O argumento A3, que sustenta a conclusão de morte (ViDe), deixa de ser fundamentado quando BuKi é negado.\n4. **Justificativa Jurídica**: De acordo com a Definição 4.3, BuKi é causa-in-fact porque, na ausência de BuKi, a conclusão ViDe não pertence à extensão fundamentada do AF modificado. Bush foi o primeiro a atirar e sua ação foi a causa eficiente da morte, tornando-o responsável pelo resultado.\n5. **Conceitos**: A análise confirma que BuKi é uma condição *sine qua non* para a morte da vítima no contexto apresentado, diferenciando-o do disparo de Dlugash, que ocorre quando a vítima já está morta (ViAD).",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "ViDe",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}

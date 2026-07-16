@@ -1,0 +1,207 @@
+{
+  "case": {
+    "id": 4,
+    "name": "Eletrocardiograma Não Solicitado (Omissão)",
+    "case_text": "\n        Um paciente chegou ao pronto-socorro com dor torácica típica de infarto (DoTo).\n        O médico não solicitou o eletrocardiograma exigido pelo protocolo (¬EcSo).\n        O exame teria revelado o infarto e permitido o tratamento imediato (TrIm).\n        O paciente faleceu (PaFa).\n        Pergunta-se: a não solicitação do exame (¬EcSo) foi causa da morte do paciente (PaFa)?\n        ",
+    "expected_knowledge_base": {
+      "premises": [
+        "DoTo",
+        "¬EcSo"
+      ],
+      "potential_causes": [
+        "¬EcSo"
+      ],
+      "target_conclusion": "PaFa"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: DoTo => PaFa",
+        "r1: EcSo => TrIm"
+      ],
+      "undercutter_rules": [
+        "r2: TrIm => ¬r0"
+      ]
+    },
+    "expected_causal_result": {
+      "¬EcSo": {
+        "is_cause": true,
+        "explanation": "No mundo contrafactual em que o exame é solicitado (EcSo), o tratamento imediato (TrIm) undercutta a regra que deriva a morte, removendo PaFa da extensão."
+      }
+    }
+  },
+  "analysis": {
+    "case_text": "\n        Um paciente chegou ao pronto-socorro com dor torácica típica de infarto (DoTo).\n        O médico não solicitou o eletrocardiograma exigido pelo protocolo (¬EcSo).\n        O exame teria revelado o infarto e permitido o tratamento imediato (TrIm).\n        O paciente faleceu (PaFa).\n        Pergunta-se: a não solicitação do exame (¬EcSo) foi causa da morte do paciente (PaFa)?\n        ",
+    "knowledge_base": {
+      "premises": [
+        "DoTo",
+        "¬EcSo"
+      ],
+      "potential_causes": [
+        "¬EcSo"
+      ],
+      "target_conclusion": "PaFa"
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: DoTo => PaFa",
+        "r1: EcSo => TrIm"
+      ],
+      "undercutter_rules": [
+        "r2: TrIm => ¬r0"
+      ],
+      "preferences": {
+        "r0": 0.7,
+        "r1": 0.8,
+        "r2": 0.9
+      }
+    },
+    "base_framework": {
+      "knowledge": {
+        "axioms": [],
+        "premises": [
+          "DoTo",
+          "¬EcSo"
+        ],
+        "rules": {
+          "strict": [],
+          "defeasible": [
+            "r0: DoTo => PaFa",
+            "r1: EcSo => TrIm"
+          ],
+          "undercutters": [
+            "r2: TrIm => ¬r0"
+          ]
+        },
+        "preferences": {
+          "r0": 0.7,
+          "r1": 0.8,
+          "r2": 0.9
+        }
+      },
+      "arguments": [
+        {
+          "id": "A1",
+          "premises": [
+            "DoTo"
+          ],
+          "strict_rules": [],
+          "defeasible_rules": [
+            "r0"
+          ],
+          "conclusion": "PaFa",
+          "strength": 0.7
+        }
+      ],
+      "attacks": [],
+      "defeats": []
+    },
+    "base_grounded": [
+      "A1",
+      "A0",
+      "A2"
+    ],
+    "base_grounded_conclusions": {
+      "A1": "¬EcSo",
+      "A0": "DoTo",
+      "A2": "PaFa"
+    },
+    "base_explanations": {
+      "A1": [
+        "A1"
+      ],
+      "A0": [
+        "A0"
+      ],
+      "A2": [
+        "A2",
+        "A0"
+      ]
+    },
+    "causal_results": {
+      "¬EcSo": {
+        "is_cause": true,
+        "explanation": "1. **Tipo de Causa**: Identificada como \"omission\" (omissão). A falha em realizar o exame (`¬EcSo`) é a causa da morte, pois a sua ausência impediu a intervenção médica necessária.\n2. **Regras Críticas**: A regra `DoTo ∧ ¬TrIm => PaFa` é a regra crítica. No cenário original, a falta do exame (`¬EcSo`) sustenta a premissa `¬TrIm`.\n3. **Argumentos Derrotados**: O argumento que sustenta o óbito (`PaFa`) é derrotado no cenário contrafactual, pois a realização do exame (`EcSo`) permite a conclusão `TrIm`, que quebra a cadeia causal que levava ao óbito.\n4. **Justificativa Jurídica**: De acordo com a Definição 4.3, a omissão é causa-in-fact se, ao introduzir o evento omitido (o exame), a conclusão indesejada (morte) deixa de ser sustentada pelo framework argumentativo. Como a presença de `EcSo` no teste resulta em `TrIm` e remove `PaFa` da extensão fundamentada, a omissão é causalmente relevante.\n5. **Conclusão**: A não solicitação do exame foi um fator determinante, pois o protocolo médico estabelece que o exame teria revelado o infarto e permitido o tratamento, evitando o desfecho fatal.",
+        "llm_is_cause": true,
+        "solver_evidence": {
+          "target": "PaFa",
+          "base_has_target": true,
+          "test_has_target": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "knowledge_base": {
+      "matches": true,
+      "expected": {
+        "premises": [
+          "DoTo",
+          "¬EcSo"
+        ],
+        "potential_causes": [
+          "¬EcSo"
+        ],
+        "target_conclusion": "PaFa"
+      },
+      "got": {
+        "premises": [
+          "DoTo",
+          "¬EcSo"
+        ],
+        "potential_causes": [
+          "¬EcSo"
+        ],
+        "target_conclusion": "PaFa"
+      }
+    },
+    "causal_model": {
+      "matches": true,
+      "expected": {
+        "defeasible_rules": [
+          "r0: DoTo => PaFa",
+          "r1: EcSo => TrIm"
+        ],
+        "undercutter_rules": [
+          "r2: TrIm => ¬r0"
+        ]
+      },
+      "got": {
+        "strict_rules": [],
+        "defeasible_rules": [
+          "r0: DoTo => PaFa",
+          "r1: EcSo => TrIm"
+        ],
+        "undercutter_rules": [
+          "r2: TrIm => ¬r0"
+        ],
+        "preferences": {
+          "r0": 0.7,
+          "r1": 0.8,
+          "r2": 0.9
+        }
+      }
+    },
+    "causal_results": {
+      "matches": true,
+      "expected": {
+        "¬EcSo": {
+          "is_cause": true,
+          "explanation": "No mundo contrafactual em que o exame é solicitado (EcSo), o tratamento imediato (TrIm) undercutta a regra que deriva a morte, removendo PaFa da extensão."
+        }
+      },
+      "got": {
+        "¬EcSo": {
+          "is_cause": true,
+          "explanation": "1. **Tipo de Causa**: Identificada como \"omission\" (omissão). A falha em realizar o exame (`¬EcSo`) é a causa da morte, pois a sua ausência impediu a intervenção médica necessária.\n2. **Regras Críticas**: A regra `DoTo ∧ ¬TrIm => PaFa` é a regra crítica. No cenário original, a falta do exame (`¬EcSo`) sustenta a premissa `¬TrIm`.\n3. **Argumentos Derrotados**: O argumento que sustenta o óbito (`PaFa`) é derrotado no cenário contrafactual, pois a realização do exame (`EcSo`) permite a conclusão `TrIm`, que quebra a cadeia causal que levava ao óbito.\n4. **Justificativa Jurídica**: De acordo com a Definição 4.3, a omissão é causa-in-fact se, ao introduzir o evento omitido (o exame), a conclusão indesejada (morte) deixa de ser sustentada pelo framework argumentativo. Como a presença de `EcSo` no teste resulta em `TrIm` e remove `PaFa` da extensão fundamentada, a omissão é causalmente relevante.\n5. **Conclusão**: A não solicitação do exame foi um fator determinante, pois o protocolo médico estabelece que o exame teria revelado o infarto e permitido o tratamento, evitando o desfecho fatal.",
+          "llm_is_cause": true,
+          "solver_evidence": {
+            "target": "PaFa",
+            "base_has_target": true,
+            "test_has_target": false
+          }
+        }
+      }
+    }
+  }
+}
