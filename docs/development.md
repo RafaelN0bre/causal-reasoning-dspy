@@ -43,7 +43,7 @@ repo/
 ├── outputs-observability/               # Amostras (5 casos × 4 estratégias) p/ análise Langfuse
 │   ├── baseline/ | zero-shot/ | few-shot/ | mipro/
 │
-├── logs/                                # Logs por execução (gitignored)
+├── logs/                                # Logs por execução (versionados)
 │
 └── docs/                                # Documentação
     ├── architecture.md

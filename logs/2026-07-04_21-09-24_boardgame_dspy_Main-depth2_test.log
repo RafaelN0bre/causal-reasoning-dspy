@@ -1,0 +1,170 @@
+2026-07-04 21:09:24,224 INFO __main__: Log file: /Users/nobre/Documents/UnB/TCC/repo/logs/2026-07-04_21-09-24_boardgame_dspy_Main-depth2_test.log
+2026-07-04 21:09:24,224 INFO __main__: Command : main.py -b -d Main-depth2 -s test -n 5 --optimizer few-shot -o outputs-observability/few-shot --session-suffix observability
+2026-07-04 21:09:24,224 INFO __main__: === Pipeline starting ===
+2026-07-04 21:09:24,224 INFO __main__: Mode       : boardgame
+2026-07-04 21:09:24,224 INFO __main__: Model      : gemini-3.1-flash-lite
+2026-07-04 21:09:24,224 INFO __main__: Max tokens : 16000
+2026-07-04 21:09:24,224 INFO __main__: Pipeline   : DSPy + ASPIC+
+2026-07-04 21:09:24,225 INFO __main__: Optimizer  : few-shot
+2026-07-04 21:09:24,225 INFO __main__: Compiled   : compiled/few-shot/boardgame_Main-depth2.json
+2026-07-04 21:09:24,225 INFO __main__: Dataset    : Main-depth2
+2026-07-04 21:09:24,225 INFO __main__: Split      : test
+2026-07-04 21:09:24,225 INFO __main__: Limit      : 5
+2026-07-04 21:09:24,225 INFO __main__: Output dir : outputs-observability/few-shot
+2026-07-04 21:51:48,396 INFO __main__: Pipeline    : compilado (carregando compiled/few-shot/boardgame_Main-depth2.json)
+2026-07-04 21:51:53,508 INFO src.pipeline: 🎲 Loading BoardgameQA dataset: Main-depth2 (test)
+2026-07-04 21:51:57,030 INFO src.pipeline: 📊 Loaded 5 test cases (limit: 5)
+2026-07-04 21:58:06,965 INFO src.observability: Langfuse habilitado (host=http://localhost:3010)
+2026-07-04 21:58:06,966 INFO src.observability: Langfuse DSPy callback registered — LM calls will appear as child generations in each trace.
+2026-07-04 21:58:13,741 INFO src.boardgame_module: [BG 1/3] Extracting KB (goal='(swan, swear, woodpecker)')...
+2026-07-04 21:58:17,211 INFO src.boardgame_module: [BG 1/3] KB: premises=['WolfDoesNotTakeOverEmperorOfSnake', 'WolfAcquiresPhotographOfSwan', 'SeahorseInIstanbul', 'SeahorseSurrendersToSwan'] | target=SwanSwearsToWoodpecker
+2026-07-04 21:58:17,212 INFO src.boardgame_module: [BG 2/3] Extracting rules...
+2026-07-04 21:58:17,220 INFO src.boardgame_module: [BG 2/3] Rules: 4 defeasible, 0 undercutters
+2026-07-04 21:58:17,220 INFO src.boardgame_module: [BG 3/3] Building AF and running solver...
+2026-07-04 21:58:17,220 INFO ASPIC+: Initializing ArgumentationFramework...
+2026-07-04 21:58:17,220 INFO ASPIC+: Loaded knowledge base: 4 premises, 0 axioms
+2026-07-04 21:58:17,220 INFO ASPIC+: Parsing rules from causal model...
+2026-07-04 21:58:17,220 INFO ASPIC+: Found 4 defeasible rules
+2026-07-04 21:58:17,221 INFO ASPIC+: Found 0 undercutter rules
+2026-07-04 21:58:17,221 INFO ASPIC+: Starting argument construction...
+2026-07-04 21:58:17,221 INFO ASPIC+: Creating atomic arguments from 4 premises
+2026-07-04 21:58:17,221 INFO ASPIC+: Loaded 4 rules total
+2026-07-04 21:58:17,221 INFO ASPIC+: Starting iteration 1, current arguments: 4
+2026-07-04 21:58:17,221 INFO ASPIC+: Starting iteration 2, current arguments: 10
+2026-07-04 21:58:17,221 INFO ASPIC+: No new conclusions generated, stopping construction
+2026-07-04 21:58:17,221 INFO ASPIC+: Argument construction complete: 10 arguments built | conclusions: ['WolfAcquiresPhotographOfSwan', 'WolfDoesNotTakeOverEmperorOfSnake', 'SeahorseInIstanbul', 'SeahorseSurrendersToSwan', 'WolfAcquiresPhotographOfSwan', 'SeahorseSurrendersToSwan', 'SwanSwearsToWoodpecker', 'SwanSwearsToWoodpecker', 'SwanSwearsToWoodpecker', 'SwanSwearsToWoodpecker']
+2026-07-04 21:58:17,221 INFO ASPIC+: Identifying attacks among 10 arguments...
+2026-07-04 21:58:17,221 INFO ASPIC+: Attacks identified: 0 total | undermine=0, undercut=0, rebut=0
+2026-07-04 21:58:17,221 INFO ASPIC+: Computing defeats from 0 attacks...
+2026-07-04 21:58:17,221 INFO ASPIC+: Defeats computed: 0 out of 0 attacks succeeded
+2026-07-04 21:58:17,221 INFO ASPIC+: Computing defeats from 0 attacks...
+2026-07-04 21:58:17,221 INFO ASPIC+: Defeats computed: 0 out of 0 attacks succeeded
+2026-07-04 21:58:17,221 INFO ASPIC+: Computing grounded extension: 10 arguments, 0 defeats
+2026-07-04 21:58:17,221 INFO ASPIC+: Grounded extension computed in 2 iteration(s): 10 argument(s) accepted | conclusions: ['SeahorseInIstanbul', 'SwanSwearsToWoodpecker', 'WolfAcquiresPhotographOfSwan', 'SwanSwearsToWoodpecker', 'SwanSwearsToWoodpecker', 'SwanSwearsToWoodpecker', 'WolfDoesNotTakeOverEmperorOfSnake', 'SeahorseSurrendersToSwan', 'SeahorseSurrendersToSwan', 'WolfAcquiresPhotographOfSwan']
+2026-07-04 21:58:17,221 INFO src.boardgame_module: [BG 3/3] Grounded: 10 args | conclusions: ['SeahorseInIstanbul', 'SwanSwearsToWoodpecker', 'WolfAcquiresPhotographOfSwan', 'SwanSwearsToWoodpecker', 'SwanSwearsToWoodpecker', 'SwanSwearsToWoodpecker', 'WolfDoesNotTakeOverEmperorOfSnake', 'SeahorseSurrendersToSwan', 'SeahorseSurrendersToSwan', 'WolfAcquiresPhotographOfSwan']
+2026-07-04 21:58:17,222 INFO src.boardgame_module: [BG] label=proved | reason: conclusion 'SwanSwearsToWoodpecker' (arg A8) matched 'swanswearstowoodpecker'; negated=False → proved
+2026-07-04 21:58:17,224 INFO src.boardgame_module: [BG 1/3] Extracting KB (goal='(crow, tear, dolphin)')...
+2026-07-04 21:58:17,230 INFO src.boardgame_module: [BG 1/3] KB: premises=['FinchHasEightFriends', 'ButterflyWantsToSeeFrog', 'FinchWillNotShoutAtCrow', 'BeaverDestroysWallBuiltByCrow'] | target=CrowTearsDownCastleOfDolphin
+2026-07-04 21:58:17,230 INFO src.boardgame_module: [BG 2/3] Extracting rules...
+2026-07-04 21:58:17,233 INFO src.boardgame_module: [BG 2/3] Rules: 3 defeasible, 0 undercutters
+2026-07-04 21:58:17,234 INFO src.boardgame_module: [BG 3/3] Building AF and running solver...
+2026-07-04 21:58:17,234 INFO ASPIC+: Initializing ArgumentationFramework...
+2026-07-04 21:58:17,234 INFO ASPIC+: Loaded knowledge base: 4 premises, 0 axioms
+2026-07-04 21:58:17,234 INFO ASPIC+: Parsing rules from causal model...
+2026-07-04 21:58:17,234 INFO ASPIC+: Found 3 defeasible rules
+2026-07-04 21:58:17,234 INFO ASPIC+: Found 0 undercutter rules
+2026-07-04 21:58:17,234 INFO ASPIC+: Starting argument construction...
+2026-07-04 21:58:17,234 INFO ASPIC+: Creating atomic arguments from 4 premises
+2026-07-04 21:58:17,234 INFO ASPIC+: Loaded 3 rules total
+2026-07-04 21:58:17,234 INFO ASPIC+: Starting iteration 1, current arguments: 4
+2026-07-04 21:58:17,234 INFO ASPIC+: Starting iteration 2, current arguments: 6
+2026-07-04 21:58:17,234 INFO ASPIC+: No new conclusions generated, stopping construction
+2026-07-04 21:58:17,234 INFO ASPIC+: Argument construction complete: 7 arguments built | conclusions: ['FinchWillNotShoutAtCrow', 'FinchHasEightFriends', 'BeaverDestroysWallBuiltByCrow', 'ButterflyWantsToSeeFrog', '¬CrowTearsDownCastleOfDolphin', 'BeaverDestroysWallBuiltByCrow', '¬CrowTearsDownCastleOfDolphin']
+2026-07-04 21:58:17,234 INFO ASPIC+: Identifying attacks among 7 arguments...
+2026-07-04 21:58:17,234 INFO ASPIC+: Attacks identified: 0 total | undermine=0, undercut=0, rebut=0
+2026-07-04 21:58:17,234 INFO ASPIC+: Computing defeats from 0 attacks...
+2026-07-04 21:58:17,234 INFO ASPIC+: Defeats computed: 0 out of 0 attacks succeeded
+2026-07-04 21:58:17,234 INFO ASPIC+: Computing defeats from 0 attacks...
+2026-07-04 21:58:17,234 INFO ASPIC+: Defeats computed: 0 out of 0 attacks succeeded
+2026-07-04 21:58:17,234 INFO ASPIC+: Computing grounded extension: 7 arguments, 0 defeats
+2026-07-04 21:58:17,234 INFO ASPIC+: Grounded extension computed in 2 iteration(s): 7 argument(s) accepted | conclusions: ['BeaverDestroysWallBuiltByCrow', 'BeaverDestroysWallBuiltByCrow', 'FinchWillNotShoutAtCrow', 'FinchHasEightFriends', 'ButterflyWantsToSeeFrog', '¬CrowTearsDownCastleOfDolphin', '¬CrowTearsDownCastleOfDolphin']
+2026-07-04 21:58:17,234 INFO src.boardgame_module: [BG 3/3] Grounded: 7 args | conclusions: ['BeaverDestroysWallBuiltByCrow', 'BeaverDestroysWallBuiltByCrow', 'FinchWillNotShoutAtCrow', 'FinchHasEightFriends', 'ButterflyWantsToSeeFrog', '¬CrowTearsDownCastleOfDolphin', '¬CrowTearsDownCastleOfDolphin']
+2026-07-04 21:58:17,234 INFO src.boardgame_module: [BG] label=disproved | reason: conclusion '¬CrowTearsDownCastleOfDolphin' (arg A6) matched 'crowtearsdowncastleofdolphin'; negated=True → disproved
+2026-07-04 21:58:17,235 INFO src.boardgame_module: [BG 1/3] Extracting KB (goal='(flamingo, call, bear)')...
+2026-07-04 21:58:17,241 INFO src.boardgame_module: [BG 1/3] KB: premises=['MonkeyHasMoreMoneyThanWolfAndOwlCombined', 'MonkeyDoesNotConvinceFlamingo'] | target=FlamingoCallsBear
+2026-07-04 21:58:17,241 INFO src.boardgame_module: [BG 2/3] Extracting rules...
+2026-07-04 21:58:17,246 INFO src.boardgame_module: [BG 2/3] Rules: 3 defeasible, 0 undercutters
+2026-07-04 21:58:17,246 INFO src.boardgame_module: [BG 3/3] Building AF and running solver...
+2026-07-04 21:58:17,246 INFO ASPIC+: Initializing ArgumentationFramework...
+2026-07-04 21:58:17,246 INFO ASPIC+: Loaded knowledge base: 2 premises, 0 axioms
+2026-07-04 21:58:17,246 INFO ASPIC+: Parsing rules from causal model...
+2026-07-04 21:58:17,246 INFO ASPIC+: Found 3 defeasible rules
+2026-07-04 21:58:17,246 INFO ASPIC+: Found 0 undercutter rules
+2026-07-04 21:58:17,246 INFO ASPIC+: Starting argument construction...
+2026-07-04 21:58:17,247 INFO ASPIC+: Creating atomic arguments from 2 premises
+2026-07-04 21:58:17,247 INFO ASPIC+: Loaded 3 rules total
+2026-07-04 21:58:17,247 INFO ASPIC+: Starting iteration 1, current arguments: 2
+2026-07-04 21:58:17,247 INFO ASPIC+: Starting iteration 2, current arguments: 3
+2026-07-04 21:58:17,247 INFO ASPIC+: No new conclusions generated, stopping construction
+2026-07-04 21:58:17,247 INFO ASPIC+: Argument construction complete: 3 arguments built | conclusions: ['MonkeyDoesNotConvinceFlamingo', 'MonkeyHasMoreMoneyThanWolfAndOwlCombined', '¬MonkeyConvincesFlamingo']
+2026-07-04 21:58:17,247 INFO ASPIC+: Identifying attacks among 3 arguments...
+2026-07-04 21:58:17,247 INFO ASPIC+: Attacks identified: 0 total | undermine=0, undercut=0, rebut=0
+2026-07-04 21:58:17,247 INFO ASPIC+: Computing defeats from 0 attacks...
+2026-07-04 21:58:17,247 INFO ASPIC+: Defeats computed: 0 out of 0 attacks succeeded
+2026-07-04 21:58:17,247 INFO ASPIC+: Computing defeats from 0 attacks...
+2026-07-04 21:58:17,247 INFO ASPIC+: Defeats computed: 0 out of 0 attacks succeeded
+2026-07-04 21:58:17,247 INFO ASPIC+: Computing grounded extension: 3 arguments, 0 defeats
+2026-07-04 21:58:17,247 INFO ASPIC+: Grounded extension computed in 2 iteration(s): 3 argument(s) accepted | conclusions: ['¬MonkeyConvincesFlamingo', 'MonkeyHasMoreMoneyThanWolfAndOwlCombined', 'MonkeyDoesNotConvinceFlamingo']
+2026-07-04 21:58:17,247 INFO src.boardgame_module: [BG 3/3] Grounded: 3 args | conclusions: ['¬MonkeyConvincesFlamingo', 'MonkeyHasMoreMoneyThanWolfAndOwlCombined', 'MonkeyDoesNotConvinceFlamingo']
+2026-07-04 21:58:17,247 INFO src.boardgame_module: [BG] label=unknown | reason: no grounded conclusion matched goal='(flamingo, call, bear)' or target='FlamingoCallsBear'. Grounded: ['¬MonkeyConvincesFlamingo', 'MonkeyHasMoreMoneyThanWolfAndOwlCombined', 'MonkeyDoesNotConvinceFlamingo']
+2026-07-04 21:58:17,248 INFO src.boardgame_module: [BG 1/3] Extracting KB (goal='(badger, fall, mouse)')...
+2026-07-04 21:58:17,251 INFO src.boardgame_module: [BG 1/3] KB: premises=['CougarSmilesAtBeetle', 'CougarConvincesOstrich', 'CougarNegotiatesDealWithBadger', 'PelikanHas8Friends', 'PelikanShoutsAtBadger'] | target=BadgerFallsOnSquareOfMouse
+2026-07-04 21:58:17,252 INFO src.boardgame_module: [BG 2/3] Extracting rules...
+2026-07-04 21:58:17,256 INFO src.boardgame_module: [BG 2/3] Rules: 4 defeasible, 0 undercutters
+2026-07-04 21:58:17,256 INFO src.boardgame_module: [BG 3/3] Building AF and running solver...
+2026-07-04 21:58:17,256 INFO ASPIC+: Initializing ArgumentationFramework...
+2026-07-04 21:58:17,256 INFO ASPIC+: Loaded knowledge base: 5 premises, 0 axioms
+2026-07-04 21:58:17,256 INFO ASPIC+: Parsing rules from causal model...
+2026-07-04 21:58:17,256 INFO ASPIC+: Found 4 defeasible rules
+2026-07-04 21:58:17,256 INFO ASPIC+: Found 0 undercutter rules
+2026-07-04 21:58:17,256 INFO ASPIC+: Starting argument construction...
+2026-07-04 21:58:17,256 INFO ASPIC+: Creating atomic arguments from 5 premises
+2026-07-04 21:58:17,256 INFO ASPIC+: Loaded 4 rules total
+2026-07-04 21:58:17,256 INFO ASPIC+: Starting iteration 1, current arguments: 5
+2026-07-04 21:58:17,256 INFO ASPIC+: Starting iteration 2, current arguments: 8
+2026-07-04 21:58:17,256 INFO ASPIC+: No new conclusions generated, stopping construction
+2026-07-04 21:58:17,256 INFO ASPIC+: Argument construction complete: 8 arguments built | conclusions: ['PelikanHas8Friends', 'CougarSmilesAtBeetle', 'PelikanShoutsAtBadger', 'CougarNegotiatesDealWithBadger', 'CougarConvincesOstrich', 'CougarNegotiatesDealWithBadger', 'BadgerFallsOnSquareOfMouse', 'BadgerFallsOnSquareOfMouse']
+2026-07-04 21:58:17,256 INFO ASPIC+: Identifying attacks among 8 arguments...
+2026-07-04 21:58:17,256 INFO ASPIC+: Attacks identified: 0 total | undermine=0, undercut=0, rebut=0
+2026-07-04 21:58:17,256 INFO ASPIC+: Computing defeats from 0 attacks...
+2026-07-04 21:58:17,256 INFO ASPIC+: Defeats computed: 0 out of 0 attacks succeeded
+2026-07-04 21:58:17,256 INFO ASPIC+: Computing defeats from 0 attacks...
+2026-07-04 21:58:17,256 INFO ASPIC+: Defeats computed: 0 out of 0 attacks succeeded
+2026-07-04 21:58:17,256 INFO ASPIC+: Computing grounded extension: 8 arguments, 0 defeats
+2026-07-04 21:58:17,256 INFO ASPIC+: Grounded extension computed in 2 iteration(s): 8 argument(s) accepted | conclusions: ['PelikanShoutsAtBadger', 'PelikanHas8Friends', 'BadgerFallsOnSquareOfMouse', 'BadgerFallsOnSquareOfMouse', 'CougarSmilesAtBeetle', 'CougarNegotiatesDealWithBadger', 'CougarNegotiatesDealWithBadger', 'CougarConvincesOstrich']
+2026-07-04 21:58:17,256 INFO src.boardgame_module: [BG 3/3] Grounded: 8 args | conclusions: ['PelikanShoutsAtBadger', 'PelikanHas8Friends', 'BadgerFallsOnSquareOfMouse', 'BadgerFallsOnSquareOfMouse', 'CougarSmilesAtBeetle', 'CougarNegotiatesDealWithBadger', 'CougarNegotiatesDealWithBadger', 'CougarConvincesOstrich']
+2026-07-04 21:58:17,257 INFO src.boardgame_module: [BG] label=proved | reason: conclusion 'BadgerFallsOnSquareOfMouse' (arg A7) matched 'badgerfallsonsquareofmouse'; negated=False → proved
+2026-07-04 21:58:17,257 INFO src.boardgame_module: [BG 1/3] Extracting KB (goal='(ostrich, refuse, coyote)')...
+2026-07-04 21:58:17,261 INFO src.boardgame_module: [BG 1/3] KB: premises=['BulldogCallsOtter', 'ButterflyNeglectsOstrich', 'OstrichDoesNotRefuseToHelpCoyote'] | target=OstrichRefusesToHelpCoyote
+2026-07-04 21:58:17,261 INFO src.boardgame_module: [BG 2/3] Extracting rules...
+2026-07-04 21:58:17,269 INFO src.boardgame_module: [BG 2/3] Rules: 2 defeasible, 0 undercutters
+2026-07-04 21:58:17,269 INFO src.boardgame_module: [BG 3/3] Building AF and running solver...
+2026-07-04 21:58:17,270 INFO ASPIC+: Initializing ArgumentationFramework...
+2026-07-04 21:58:17,270 INFO ASPIC+: Loaded knowledge base: 3 premises, 0 axioms
+2026-07-04 21:58:17,270 INFO ASPIC+: Parsing rules from causal model...
+2026-07-04 21:58:17,270 INFO ASPIC+: Found 2 defeasible rules
+2026-07-04 21:58:17,271 INFO ASPIC+: Found 0 undercutter rules
+2026-07-04 21:58:17,271 INFO ASPIC+: Starting argument construction...
+2026-07-04 21:58:17,271 INFO ASPIC+: Creating atomic arguments from 3 premises
+2026-07-04 21:58:17,271 INFO ASPIC+: Loaded 2 rules total
+2026-07-04 21:58:17,272 INFO ASPIC+: Starting iteration 1, current arguments: 3
+2026-07-04 21:58:17,272 INFO ASPIC+: Starting iteration 2, current arguments: 6
+2026-07-04 21:58:17,272 INFO ASPIC+: No new conclusions generated, stopping construction
+2026-07-04 21:58:17,272 INFO ASPIC+: Argument construction complete: 6 arguments built | conclusions: ['ButterflyNeglectsOstrich', 'OstrichDoesNotRefuseToHelpCoyote', 'BulldogCallsOtter', 'ButterflyNeglectsOstrich', '¬OstrichRefusesToHelpCoyote', '¬OstrichRefusesToHelpCoyote']
+2026-07-04 21:58:17,272 INFO ASPIC+: Identifying attacks among 6 arguments...
+2026-07-04 21:58:17,272 INFO ASPIC+: Attacks identified: 0 total | undermine=0, undercut=0, rebut=0
+2026-07-04 21:58:17,272 INFO ASPIC+: Computing defeats from 0 attacks...
+2026-07-04 21:58:17,272 INFO ASPIC+: Defeats computed: 0 out of 0 attacks succeeded
+2026-07-04 21:58:17,272 INFO ASPIC+: Computing defeats from 0 attacks...
+2026-07-04 21:58:17,272 INFO ASPIC+: Defeats computed: 0 out of 0 attacks succeeded
+2026-07-04 21:58:17,272 INFO ASPIC+: Computing grounded extension: 6 arguments, 0 defeats
+2026-07-04 21:58:17,272 INFO ASPIC+: Grounded extension computed in 2 iteration(s): 6 argument(s) accepted | conclusions: ['BulldogCallsOtter', 'ButterflyNeglectsOstrich', 'OstrichDoesNotRefuseToHelpCoyote', 'ButterflyNeglectsOstrich', '¬OstrichRefusesToHelpCoyote', '¬OstrichRefusesToHelpCoyote']
+2026-07-04 21:58:17,272 INFO src.boardgame_module: [BG 3/3] Grounded: 6 args | conclusions: ['BulldogCallsOtter', 'ButterflyNeglectsOstrich', 'OstrichDoesNotRefuseToHelpCoyote', 'ButterflyNeglectsOstrich', '¬OstrichRefusesToHelpCoyote', '¬OstrichRefusesToHelpCoyote']
+2026-07-04 21:58:17,272 INFO src.boardgame_module: [BG] label=disproved | reason: conclusion '¬OstrichRefusesToHelpCoyote' (arg A5) matched 'ostrichrefusestohelpcoyote'; negated=True → disproved
+2026-07-04 21:58:17,274 INFO src.pipeline: 💾 Results saved to: outputs-observability/few-shot/Main-depth2_test_results.json
+2026-07-04 21:58:17,274 INFO src.pipeline: 🔍 Full trace saved to: outputs-observability/few-shot/Main-depth2_test_trace.jsonl
+2026-07-04 21:58:18,150 INFO src.pipeline: ==================================================
+2026-07-04 21:58:18,150 INFO src.pipeline: 🎲 BoardgameQA Results: Main-depth2 (test)
+2026-07-04 21:58:18,150 INFO src.pipeline: ==================================================
+2026-07-04 21:58:18,150 INFO src.pipeline: Total cases: 5
+2026-07-04 21:58:18,150 INFO src.pipeline: Errored (excluded): 0
+2026-07-04 21:58:18,150 INFO src.pipeline: Accuracy: 100.00%
+2026-07-04 21:58:18,150 INFO src.pipeline: Correct: 5/5
+2026-07-04 21:58:18,150 INFO src.pipeline: --------------------------------------------------
+2026-07-04 21:58:18,150 INFO src.pipeline: Per-label breakdown:
+2026-07-04 21:58:18,150 INFO src.pipeline:   proved: 2/2 (100.00%)
+2026-07-04 21:58:18,150 INFO src.pipeline:   disproved: 2/2 (100.00%)
+2026-07-04 21:58:18,150 INFO src.pipeline:   unknown: 1/1 (100.00%)
+2026-07-04 21:58:18,150 INFO src.pipeline: --------------------------------------------------
+2026-07-04 21:58:18,150 INFO src.pipeline: Time: 10.31s (0.49 cases/sec)
+2026-07-04 21:58:18,150 INFO src.pipeline: ==================================================

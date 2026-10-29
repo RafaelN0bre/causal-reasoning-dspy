@@ -1,0 +1,830 @@
+[
+  {
+    "id": 1,
+    "name": "Dose Errada (Produção Simples)",
+    "pattern": "producao",
+    "case_text": "\n        Um médico administrou a um paciente uma dose dez vezes maior que a prescrita (DoEr).\n        O paciente morreu horas depois (PaMo).\n        Pergunta-se: a dose errada (DoEr) foi causa da morte do paciente (PaMo)?\n        ",
+    "expected_knowledge_base": {
+      "premises": [
+        "DoEr"
+      ],
+      "potential_causes": [
+        "DoEr"
+      ],
+      "target_conclusion": "PaMo"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: DoEr => PaMo"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "DoEr": true
+    }
+  },
+  {
+    "id": 2,
+    "name": "Infecção Alimentar (Produção com Conjunção)",
+    "pattern": "producao",
+    "case_text": "\n        Um restaurante serviu alimento estragado (AlEs) e o cliente o consumiu (ClCo).\n        O cliente desenvolveu infecção alimentar grave (ClIn).\n        Pergunta-se: servir o alimento estragado (AlEs) foi causa da infecção do cliente (ClIn)?\n        ",
+    "expected_knowledge_base": {
+      "premises": [
+        "AlEs",
+        "ClCo"
+      ],
+      "potential_causes": [
+        "AlEs"
+      ],
+      "target_conclusion": "ClIn"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: AlEs AND ClCo => ClIn"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "AlEs": true
+    }
+  },
+  {
+    "id": 3,
+    "name": "Salva-vidas Ausente (Omissão)",
+    "pattern": "omissao",
+    "case_text": "\n        Um nadador entrou em perigo na área funda da piscina (NaPe).\n        O salva-vidas de plantão não estava vigiando a piscina (¬SaVi).\n        Um salva-vidas que vigiasse teria realizado o resgate (ReSg).\n        O nadador morreu afogado (NaMo).\n        Pergunta-se: a falta de vigilância do salva-vidas (¬SaVi) foi causa da morte do nadador (NaMo)?\n        ",
+    "expected_knowledge_base": {
+      "premises": [
+        "NaPe",
+        "¬SaVi"
+      ],
+      "potential_causes": [
+        "¬SaVi"
+      ],
+      "target_conclusion": "NaMo"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: NaPe => NaMo",
+        "r1: SaVi => ReSg"
+      ],
+      "undercutter_rules": [
+        "r2: ReSg => ¬r0"
+      ]
+    },
+    "expected_causal_result": {
+      "¬SaVi": true
+    }
+  },
+  {
+    "id": 4,
+    "name": "Receita Não Conferida (Omissão)",
+    "pattern": "omissao",
+    "case_text": "\n        Uma receita continha erro grave de prescrição (ErPr).\n        O farmacêutico não conferiu a receita antes de dispensar o medicamento (¬FaCo).\n        A conferência teria detectado o erro (ErDe).\n        O paciente tomou o medicamento e sofreu intoxicação grave (PaIx).\n        Pergunta-se: a falta de conferência da receita (¬FaCo) foi causa da intoxicação do paciente (PaIx)?\n        ",
+    "expected_knowledge_base": {
+      "premises": [
+        "ErPr",
+        "¬FaCo"
+      ],
+      "potential_causes": [
+        "¬FaCo"
+      ],
+      "target_conclusion": "PaIx"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: ErPr => PaIx",
+        "r1: FaCo => ErDe"
+      ],
+      "undercutter_rules": [
+        "r2: ErDe => ¬r0"
+      ]
+    },
+    "expected_causal_result": {
+      "¬FaCo": true
+    }
+  },
+  {
+    "id": 5,
+    "name": "Dois Incêndios (Preempção)",
+    "pattern": "preempcao",
+    "case_text": "\n        O réu ateou fogo a uma plantação e o incêndio alcançou a casa da vítima (InRe).\n        Um incêndio de origem natural avançava na mesma direção (InNa), mas,\n        quando ele chegou, a casa já estava destruída pelo primeiro incêndio (CaJa).\n        Pergunta-se: o incêndio ateado pelo réu (InRe) e o incêndio natural (InNa)\n        foram causas da destruição da casa (CaDe)?\n        ",
+    "expected_knowledge_base": {
+      "premises": [
+        "InRe",
+        "InNa",
+        "CaJa"
+      ],
+      "potential_causes": [
+        "InRe",
+        "InNa"
+      ],
+      "target_conclusion": "CaDe"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: InRe => CaDe",
+        "r1: InNa => CaDe"
+      ],
+      "undercutter_rules": [
+        "r2: CaJa => ¬r1"
+      ]
+    },
+    "expected_causal_result": {
+      "InRe": true,
+      "InNa": false
+    }
+  },
+  {
+    "id": 6,
+    "name": "Veneno e Disparo (Preempção)",
+    "pattern": "preempcao",
+    "case_text": "\n        Um agressor envenenou a bebida da vítima (EnVe).\n        Antes de o veneno fazer efeito, um segundo agressor baleou a vítima, que morreu na hora (TiBa).\n        No momento do disparo, o veneno ainda não havia agido (VeNa).\n        Pergunta-se: o disparo (TiBa) e o envenenamento (EnVe) foram causas da morte da vítima (ViMo)?\n        ",
+    "expected_knowledge_base": {
+      "premises": [
+        "EnVe",
+        "TiBa",
+        "VeNa"
+      ],
+      "potential_causes": [
+        "TiBa",
+        "EnVe"
+      ],
+      "target_conclusion": "ViMo"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: TiBa => ViMo",
+        "r1: EnVe => ViMo"
+      ],
+      "undercutter_rules": [
+        "r2: VeNa => ¬r1"
+      ]
+    },
+    "expected_causal_result": {
+      "TiBa": true,
+      "EnVe": false
+    }
+  },
+  {
+    "id": 7,
+    "name": "Sinal Vermelho (Excludente Afastada)",
+    "pattern": "excludente",
+    "case_text": "\n        Um motorista avançou o sinal vermelho (AvSi) e atropelou um pedestre, que ficou gravemente ferido.\n        O motorista alega culpa exclusiva da vítima por travessia fora da faixa (FoFa),\n        mas o pedestre atravessava com o semáforo de pedestres verde (SeVe).\n        Pergunta-se: o avanço do sinal vermelho (AvSi) foi causa da responsabilização civil do motorista (MoRe)?\n        ",
+    "expected_knowledge_base": {
+      "premises": [
+        "AvSi",
+        "FoFa",
+        "SeVe"
+      ],
+      "potential_causes": [
+        "AvSi"
+      ],
+      "target_conclusion": "MoRe"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: AvSi => MoRe",
+        "r1: FoFa => ¬MoRe"
+      ],
+      "undercutter_rules": [
+        "r2: SeVe => ¬r1"
+      ]
+    },
+    "expected_causal_result": {
+      "AvSi": true
+    }
+  },
+  {
+    "id": 8,
+    "name": "Bateria em Garantia (Excludente Afastada)",
+    "pattern": "excludente",
+    "case_text": "\n        Um notebook apresentou defeito na bateria (BaDe) dentro do prazo de garantia (GaVi).\n        O fabricante alega uso de carregador não original (CaNo),\n        mas a perícia comprovou que o carregador era o original do produto (CaOr).\n        Pergunta-se: o defeito na bateria (BaDe) e a vigência da garantia (GaVi)\n        foram causas da responsabilização do fabricante (FaRe)?\n        ",
+    "expected_knowledge_base": {
+      "premises": [
+        "BaDe",
+        "GaVi",
+        "CaNo",
+        "CaOr"
+      ],
+      "potential_causes": [
+        "BaDe",
+        "GaVi"
+      ],
+      "target_conclusion": "FaRe"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: BaDe AND GaVi => FaRe",
+        "r1: CaNo => ¬FaRe"
+      ],
+      "undercutter_rules": [
+        "r2: CaOr => ¬r1"
+      ]
+    },
+    "expected_causal_result": {
+      "BaDe": true,
+      "GaVi": true
+    }
+  },
+  {
+    "id": 9,
+    "name": "Muro e Chuva (Fator Irrelevante)",
+    "pattern": "nao_causa",
+    "case_text": "\n        Um muro apresentava grave falha construtiva (MuMa) e desabou.\n        No dia do desabamento chovia forte (ChFo), mas a perícia concluiu que a falha\n        construtiva bastava para o desabamento, com ou sem chuva.\n        Pergunta-se: a falha construtiva (MuMa) e a chuva forte (ChFo) foram causas\n        do desabamento do muro (MuDe)?\n        ",
+    "expected_knowledge_base": {
+      "premises": [
+        "MuMa",
+        "ChFo"
+      ],
+      "potential_causes": [
+        "MuMa",
+        "ChFo"
+      ],
+      "target_conclusion": "MuDe"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: MuMa => MuDe"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "MuMa": true,
+      "ChFo": false
+    }
+  },
+  {
+    "id": 10,
+    "name": "Direção Embriagada (Produção Simples)",
+    "pattern": "producao",
+    "case_text": "Um motorista dirigiu embriagado em via movimentada (DiEm) e atropelou um pedestre na faixa.\nO pedestre morreu no local (MoPd).\nPergunta-se: a direção embriagada (DiEm) foi causa da morte do pedestre (MoPd)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "DiEm"
+      ],
+      "potential_causes": [
+        "DiEm"
+      ],
+      "target_conclusion": "MoPd"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: DiEm => MoPd"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "DiEm": true
+    }
+  },
+  {
+    "id": 11,
+    "name": "Fumaça Tóxica (Produção Simples)",
+    "pattern": "producao",
+    "case_text": "Uma fábrica operou sem o filtro de exaustão obrigatório e emitiu fumaça tóxica sobre o bairro (FuTo).\nMoradores sofreram crises respiratórias (CrRe).\nPergunta-se: a emissão de fumaça tóxica (FuTo) foi causa das crises respiratórias (CrRe)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "FuTo"
+      ],
+      "potential_causes": [
+        "FuTo"
+      ],
+      "target_conclusion": "CrRe"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: FuTo => CrRe"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "FuTo": true
+    }
+  },
+  {
+    "id": 12,
+    "name": "Venda de Bebida a Menor (Produção Simples)",
+    "pattern": "producao",
+    "case_text": "Um comerciante vendeu bebida destilada a um adolescente (VeMe).\nO adolescente sofreu intoxicação alcoólica aguda (InAl).\nPergunta-se: a venda da bebida ao menor (VeMe) foi causa da intoxicação (InAl)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "VeMe"
+      ],
+      "potential_causes": [
+        "VeMe"
+      ],
+      "target_conclusion": "InAl"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: VeMe => InAl"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "VeMe": true
+    }
+  },
+  {
+    "id": 13,
+    "name": "Fiação Exposta no Mercado (Produção com Conjunção)",
+    "pattern": "producao",
+    "case_text": "Um mercado mantinha fiação elétrica exposta na altura das gôndolas (FiEx) e o piso estava lavado e molhado (PiLa).\nUm cliente sofreu choque elétrico (ChCl).\nPergunta-se: a fiação exposta (FiEx) foi causa do choque no cliente (ChCl)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "FiEx",
+        "PiLa"
+      ],
+      "potential_causes": [
+        "FiEx"
+      ],
+      "target_conclusion": "ChCl"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: FiEx AND PiLa => ChCl"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "FiEx": true
+    }
+  },
+  {
+    "id": 14,
+    "name": "Peça Solta no Brinquedo (Produção com Conjunção)",
+    "pattern": "producao",
+    "case_text": "Um brinquedo infantil foi vendido com peça pequena solta (PeSo) e uma criança a levou à boca (CrBo).\nA criança engasgou e precisou de socorro (CrEn).\nPergunta-se: a peça solta (PeSo) foi causa do engasgo da criança (CrEn)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "PeSo",
+        "CrBo"
+      ],
+      "potential_causes": [
+        "PeSo"
+      ],
+      "target_conclusion": "CrEn"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: PeSo AND CrBo => CrEn"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "PeSo": true
+    }
+  },
+  {
+    "id": 15,
+    "name": "Pneus Carecas (Cadeia de Dois Passos)",
+    "pattern": "cadeia",
+    "case_text": "Um veículo circulava com pneus carecas (PnCa).\nNa chuva, o carro derrapou (CaDp) e colidiu com o muro de uma residência (CoMu).\nPergunta-se: os pneus carecas (PnCa) foram causa da colisão com o muro (CoMu)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "PnCa"
+      ],
+      "potential_causes": [
+        "PnCa"
+      ],
+      "target_conclusion": "CoMu"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: PnCa => CaDp",
+        "r1: CaDp => CoMu"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "PnCa": true
+    }
+  },
+  {
+    "id": 16,
+    "name": "Rótulo com Dosagem Errada (Cadeia de Dois Passos)",
+    "pattern": "cadeia",
+    "case_text": "Um lote de medicamento saiu de fábrica com o rótulo indicando o dobro da dose (RoEr).\nSeguindo o rótulo, o paciente tomou superdosagem (SuDo) e precisou ser internado (PaIt).\nPergunta-se: o rótulo com dosagem errada (RoEr) foi causa da internação do paciente (PaIt)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "RoEr"
+      ],
+      "potential_causes": [
+        "RoEr"
+      ],
+      "target_conclusion": "PaIt"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: RoEr => SuDo",
+        "r1: SuDo => PaIt"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "RoEr": true
+    }
+  },
+  {
+    "id": 17,
+    "name": "Barragem Sem Dreno (Cadeia de Dois Passos)",
+    "pattern": "cadeia",
+    "case_text": "A mineradora manteve a barragem sem o sistema de drenagem previsto (BaSd).\nA estrutura saturou e rompeu (BaRo), alagando a vila a jusante (AlVi).\nPergunta-se: a falta do sistema de drenagem (BaSd) foi causa do alagamento da vila (AlVi)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "BaSd"
+      ],
+      "potential_causes": [
+        "BaSd"
+      ],
+      "target_conclusion": "AlVi"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: BaSd => BaRo",
+        "r1: BaRo => AlVi"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "BaSd": true
+    }
+  },
+  {
+    "id": 18,
+    "name": "Freio de Mão (Omissão)",
+    "pattern": "omissao",
+    "case_text": "Um carro foi estacionado em ladeira íngreme (CaLa).\nO motorista não acionou o freio de mão (¬FrAc).\nO freio acionado teria mantido o carro imobilizado (CaIm).\nO carro desceu a ladeira e atingiu outro veículo (VeAt).\nPergunta-se: a falta do freio de mão (¬FrAc) foi causa da colisão com o outro veículo (VeAt)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "CaLa",
+        "¬FrAc"
+      ],
+      "potential_causes": [
+        "¬FrAc"
+      ],
+      "target_conclusion": "VeAt"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: CaLa => VeAt",
+        "r1: FrAc => CaIm"
+      ],
+      "undercutter_rules": [
+        "r2: CaIm => ¬r0"
+      ]
+    },
+    "expected_causal_result": {
+      "¬FrAc": true
+    }
+  },
+  {
+    "id": 19,
+    "name": "Operador Sem Treinamento (Omissão)",
+    "pattern": "omissao",
+    "case_text": "Um operador manobrava carga pesada com a empilhadeira (CaPe).\nA empresa não forneceu o treinamento obrigatório (¬TrFo).\nO treinamento teria assegurado a manobra segura (MaSe).\nA carga caiu sobre um colega do operador (CaCa).\nPergunta-se: a falta de treinamento (¬TrFo) foi causa da queda da carga sobre o colega (CaCa)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "CaPe",
+        "¬TrFo"
+      ],
+      "potential_causes": [
+        "¬TrFo"
+      ],
+      "target_conclusion": "CaCa"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: CaPe => CaCa",
+        "r1: TrFo => MaSe"
+      ],
+      "undercutter_rules": [
+        "r2: MaSe => ¬r0"
+      ]
+    },
+    "expected_causal_result": {
+      "¬TrFo": true
+    }
+  },
+  {
+    "id": 20,
+    "name": "Amostras Sem Refrigeração (Omissão)",
+    "pattern": "omissao",
+    "case_text": "Amostras de sangue foram coletadas para exame de compatibilidade (AmCo).\nO laboratório não refrigerou as amostras (¬AmRe).\nA refrigeração teria preservado o material (AmPr).\nO exame retornou inválido e o transplante foi adiado (TrAd).\nPergunta-se: a falta de refrigeração (¬AmRe) foi causa do adiamento do transplante (TrAd)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "AmCo",
+        "¬AmRe"
+      ],
+      "potential_causes": [
+        "¬AmRe"
+      ],
+      "target_conclusion": "TrAd"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: AmCo => TrAd",
+        "r1: AmRe => AmPr"
+      ],
+      "undercutter_rules": [
+        "r2: AmPr => ¬r0"
+      ]
+    },
+    "expected_causal_result": {
+      "¬AmRe": true
+    }
+  },
+  {
+    "id": 21,
+    "name": "Piso Molhado Sem Aviso (Omissão)",
+    "pattern": "omissao",
+    "case_text": "O saguão do condomínio estava com o piso recém-lavado e molhado (PiMo).\nO funcionário não colocou a placa de sinalização (¬PlSi).\nA placa teria alertado os moradores (MoAl).\nUma condômina escorregou e fraturou o punho (CoFr).\nPergunta-se: a falta de sinalização (¬PlSi) foi causa da fratura da condômina (CoFr)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "PiMo",
+        "¬PlSi"
+      ],
+      "potential_causes": [
+        "¬PlSi"
+      ],
+      "target_conclusion": "CoFr"
+      
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: PiMo => CoFr",
+        "r1: PlSi => MoAl"
+      ],
+      "undercutter_rules": [
+        "r2: MoAl => ¬r0"
+      ]
+    },
+    "expected_causal_result": {
+      "¬PlSi": true
+    }
+  },
+  {
+    "id": 22,
+    "name": "Raio e Caminhão (Preempção)",
+    "pattern": "preempcao",
+    "case_text": "Um raio incendiou o celeiro da fazenda (RaIn).\nMais tarde, um caminhão desgovernado atingiu o que restava da construção (CaBa), que já estava consumida pelo fogo (CeJa).\nPergunta-se: o raio (RaIn) e o caminhão (CaBa) foram causas da destruição do celeiro (CeDe)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "RaIn",
+        "CaBa",
+        "CeJa"
+      ],
+      "potential_causes": [
+        "RaIn",
+        "CaBa"
+      ],
+      "target_conclusion": "CeDe"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: RaIn => CeDe",
+        "r1: CaBa => CeDe"
+      ],
+      "undercutter_rules": [
+        "r2: CeJa => ¬r1"
+      ]
+    },
+    "expected_causal_result": {
+      "RaIn": true,
+      "CaBa": false
+    }
+  },
+  {
+    "id": 23,
+    "name": "Dois Lotes Contaminados (Preempção)",
+    "pattern": "preempcao",
+    "case_text": "Um restaurante serviu no almoço o lote A de frango contaminado (LoA) e os clientes passaram mal.\nO lote B, também contaminado (LoB), só foi servido no jantar, quando os clientes já estavam intoxicados (ClJa).\nPergunta-se: o lote A (LoA) e o lote B (LoB) foram causas da intoxicação dos clientes (ClIx)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "LoA",
+        "LoB",
+        "ClJa"
+      ],
+      "potential_causes": [
+        "LoA",
+        "LoB"
+      ],
+      "target_conclusion": "ClIx"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: LoA => ClIx",
+        "r1: LoB => ClIx"
+      ],
+      "undercutter_rules": [
+        "r2: ClJa => ¬r1"
+      ]
+    },
+    "expected_causal_result": {
+      "LoA": true,
+      "LoB": false
+    }
+  },
+  {
+    "id": 24,
+    "name": "Cabos Cortados e Tempestade (Preempção)",
+    "pattern": "preempcao",
+    "case_text": "Vândalos cortaram os cabos da antena da emissora (VaCo) e a transmissão caiu.\nUma tempestade na madrugada seguinte (TeMa) derrubaria a antena, mas o sinal já estava interrompido (SiJa).\nPergunta-se: o vandalismo (VaCo) e a tempestade (TeMa) foram causas da interrupção do sinal (SiIn)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "VaCo",
+        "TeMa",
+        "SiJa"
+      ],
+      "potential_causes": [
+        "VaCo",
+        "TeMa"
+      ],
+      "target_conclusion": "SiIn"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: VaCo => SiIn",
+        "r1: TeMa => SiIn"
+      ],
+      "undercutter_rules": [
+        "r2: SiJa => ¬r1"
+      ]
+    },
+    "expected_causal_result": {
+      "VaCo": true,
+      "TeMa": false
+    }
+  },
+  {
+    "id": 25,
+    "name": "Peça Falsificada (Excludente Afastada)",
+    "pattern": "excludente",
+    "case_text": "Uma oficina instalou peça falsificada no motor do cliente (PeFa) e o motor fundiu.\nA oficina alega manutenção atrasada pelo dono (MaAt), mas o histórico comprova revisões em dia (ReDi).\nPergunta-se: a instalação da peça falsificada (PeFa) foi causa da responsabilização da oficina (OfRe)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "PeFa",
+        "MaAt",
+        "ReDi"
+      ],
+      "potential_causes": [
+        "PeFa"
+      ],
+      "target_conclusion": "OfRe"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: PeFa => OfRe",
+        "r1: MaAt => ¬OfRe"
+      ],
+      "undercutter_rules": [
+        "r2: ReDi => ¬r1"
+      ]
+    },
+    "expected_causal_result": {
+      "PeFa": true
+    }
+  },
+  {
+    "id": 26,
+    "name": "Cofre do Hotel (Excludente Afastada)",
+    "pattern": "excludente",
+    "case_text": "Joias guardadas no cofre do quarto de hotel desapareceram (JoDe).\nO hotel alega que o hóspede deixou a porta do quarto aberta (PoAb), mas a fechadura do cofre foi encontrada arrombada (FeAr).\nPergunta-se: o desaparecimento das joias do cofre (JoDe) foi causa do dever de indenizar do hotel (HoIn)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "JoDe",
+        "PoAb",
+        "FeAr"
+      ],
+      "potential_causes": [
+        "JoDe"
+      ],
+      "target_conclusion": "HoIn"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: JoDe => HoIn",
+        "r1: PoAb => ¬HoIn"
+      ],
+      "undercutter_rules": [
+        "r2: FeAr => ¬r1"
+      ]
+    },
+    "expected_causal_result": {
+      "JoDe": true
+    }
+  },
+  {
+    "id": 27,
+    "name": "Cobertura de Urgência Negada (Excludente Afastada)",
+    "pattern": "excludente",
+    "case_text": "Um plano de saúde negou atendimento de urgência ao paciente (NeAt) e o quadro clínico se agravou.\nO plano alega prazo de carência (PrCa), mas a lei dispensa carência em atendimentos de urgência (UrLe).\nPergunta-se: a negativa de atendimento (NeAt) foi causa da responsabilização do plano (PlRe)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "NeAt",
+        "PrCa",
+        "UrLe"
+      ],
+      "potential_causes": [
+        "NeAt"
+      ],
+      "target_conclusion": "PlRe"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: NeAt => PlRe",
+        "r1: PrCa => ¬PlRe"
+      ],
+      "undercutter_rules": [
+        "r2: UrLe => ¬r1"
+      ]
+    },
+    "expected_causal_result": {
+      "NeAt": true
+    }
+  },
+  {
+    "id": 28,
+    "name": "Dois Caçadores (Sobredeterminação)",
+    "pattern": "sobredeterminacao",
+    "case_text": "Dois caçadores atiraram simultaneamente na vítima (TiA e TiB).\nCada disparo, sozinho, seria letal. A vítima morreu no local.\nPergunta-se: o disparo do primeiro caçador (TiA) e o do segundo (TiB) foram causas da morte da vítima (MoVi)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "TiA",
+        "TiB"
+      ],
+      "potential_causes": [
+        "TiA",
+        "TiB"
+      ],
+      "target_conclusion": "MoVi"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: TiA => MoVi",
+        "r1: TiB => MoVi"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "TiA": false,
+      "TiB": false
+    }
+  },
+  {
+    "id": 29,
+    "name": "Duas Faíscas (Sobredeterminação)",
+    "pattern": "sobredeterminacao",
+    "case_text": "Durante um vazamento de solvente no galpão, a faísca da solda (FaSo) e a faísca da fiação exposta (FaFi) ocorreram no mesmo instante,\ncada uma suficiente para iniciar o fogo. O galpão incendiou.\nPergunta-se: a faísca da solda (FaSo) e a faísca da fiação (FaFi) foram causas do incêndio do galpão (GaIn)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "FaSo",
+        "FaFi"
+      ],
+      "potential_causes": [
+        "FaSo",
+        "FaFi"
+      ],
+      "target_conclusion": "GaIn"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: FaSo => GaIn",
+        "r1: FaFi => GaIn"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "FaSo": false,
+      "FaFi": false
+    }
+  },
+  {
+    "id": 30,
+    "name": "Curto-Circuito e Extintores (Concausa Irrelevante)",
+    "pattern": "nao_causa",
+    "case_text": "Uma loja pegou fogo por curto-circuito na fiação (CuFi).\nOs extintores do local estavam vencidos (ExVe), mas o laudo concluiu que o fogo se alastrou rápido demais para ser contido por extintores, válidos ou não.\nA loja foi destruída.\nPergunta-se: o curto-circuito (CuFi) e os extintores vencidos (ExVe) foram causas da destruição da loja (LoDe)?",
+    "expected_knowledge_base": {
+      "premises": [
+        "CuFi",
+        "ExVe"
+      ],
+      "potential_causes": [
+        "CuFi",
+        "ExVe"
+      ],
+      "target_conclusion": "LoDe"
+    },
+    "expected_causal_model": {
+      "defeasible_rules": [
+        "r0: CuFi => LoDe"
+      ],
+      "undercutter_rules": []
+    },
+    "expected_causal_result": {
+      "CuFi": true,
+      "ExVe": false
+    }
+  }
+]

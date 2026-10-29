@@ -16,12 +16,14 @@ wheels/
 .cache/
 
 # Dados / Datasets
-data/
+# O BoardgameQA é de terceiros e baixado à parte (docs/dataset.md). O conjunto
+# pré-rotulado (data/legal/) e o caso real (data/caso-real/) são versionados.
+data/BoardgameQA/
 .claude
+.DS_Store
 
 # Programas DSPy compilados (regeneráveis via scripts/optimize_fewshot.py)
 compiled/*.json
 
-# Log files
-logs/
+# Rascunho antigo da monografia (a versão vigente fica fora do repositório)
 monografia/

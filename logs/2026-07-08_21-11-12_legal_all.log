@@ -1,0 +1,262 @@
+2026-07-08 21:11:12,641 INFO __main__: Log file: /Users/nobre/Documents/UnB/TCC/repo/logs/2026-07-08_21-11-12_legal_all.log
+2026-07-08 21:11:12,641 INFO __main__: Command : main.py --legal
+2026-07-08 21:11:12,641 INFO __main__: === Pipeline starting ===
+2026-07-08 21:11:12,641 INFO __main__: Mode       : legal
+2026-07-08 21:11:12,641 INFO __main__: Model      : gemini-3.1-flash-lite
+2026-07-08 21:11:12,641 INFO __main__: Max tokens : 16000
+2026-07-08 21:11:12,641 INFO __main__: Case ID    : all
+2026-07-08 21:11:15,503 INFO src.pipeline: 📚 Available cases:
+2026-07-08 21:11:15,503 INFO src.pipeline: 1. Caso da Leucemia (Omissão)
+2026-07-08 21:11:15,503 INFO src.pipeline: 2. Dlugash Case (Preemption)
+2026-07-08 21:11:15,503 INFO src.pipeline: 3. Celular à Prova D'água (Consumer Law)
+2026-07-08 21:11:15,503 INFO src.pipeline: 📋 Analyzing case 1: Caso da Leucemia (Omissão)...
+2026-07-08 21:11:15,561 INFO src.modules: [1/5] Extracting knowledge base via LLM...
+2026-07-08 21:11:15,564 INFO src.modules: [1/5] Knowledge base extracted: premises=['ChLe', '¬Chem'] | potential_causes=['¬PaCo'] | target=ChDi
+2026-07-08 21:11:15,564 INFO src.modules: [2/5] Extracting causal model via LLM...
+2026-07-08 21:11:15,566 INFO src.modules: [2/5] Causal model extracted: 2 defeasible rules, 1 undercutter rules | rules: ['r0: ¬PaCo => ¬Chem', 'r1: ChLe => Chem', 'r2: ¬PaCo => ¬r1']
+2026-07-08 21:11:15,566 INFO src.modules: [3/5] Building base argumentation framework via LLM...
+2026-07-08 21:11:15,568 INFO src.modules: [3/5] Base AF built, invoking solver...
+2026-07-08 21:11:15,568 INFO src.modules: [4/5] Running solver on base framework...
+2026-07-08 21:11:15,568 INFO ASPIC+: Initializing ArgumentationFramework...
+2026-07-08 21:11:15,568 INFO ASPIC+: Loaded knowledge base: 2 premises, 0 axioms
+2026-07-08 21:11:15,568 INFO ASPIC+: Parsing rules from causal model...
+2026-07-08 21:11:15,568 INFO ASPIC+: Found 1 strict rules
+2026-07-08 21:11:15,568 INFO ASPIC+: Found 2 defeasible rules
+2026-07-08 21:11:15,568 INFO ASPIC+: Found 1 undercutter rules
+2026-07-08 21:11:15,568 INFO ASPIC+: Starting argument construction...
+2026-07-08 21:11:15,568 INFO ASPIC+: Creating atomic arguments from 2 premises and 0 axioms
+2026-07-08 21:11:15,568 INFO ASPIC+: Loaded 4 rules total
+2026-07-08 21:11:15,568 INFO ASPIC+: Starting iteration 1, current arguments: 2
+2026-07-08 21:11:15,568 INFO ASPIC+: Starting iteration 2, current arguments: 4
+2026-07-08 21:11:15,569 INFO ASPIC+: No new conclusions generated, stopping construction
+2026-07-08 21:11:15,569 INFO ASPIC+: Argument construction complete: 4 arguments built | conclusions: ['¬Chem', 'ChLe', 'ChDi', 'Chem']
+2026-07-08 21:11:15,569 INFO ASPIC+: Identifying attacks among 4 arguments...
+2026-07-08 21:11:15,569 INFO ASPIC+: Attacks identified: 3 total | undermine=2, undercut=0, rebut=1
+2026-07-08 21:11:15,569 INFO ASPIC+: Computing defeats from 3 attacks...
+2026-07-08 21:11:15,569 INFO ASPIC+: Defeats computed: 3 out of 3 attacks succeeded
+2026-07-08 21:11:15,569 INFO ASPIC+: Computing grounded extension: 4 arguments, 3 defeats
+2026-07-08 21:11:15,569 INFO ASPIC+: Grounded extension computed in 2 iteration(s): 1 argument(s) accepted | conclusions: ['ChLe']
+2026-07-08 21:11:15,569 INFO src.modules: [4/5] Base grounded extension: 1 argument(s) | conclusions: ['ChLe']
+2026-07-08 21:11:15,569 INFO src.modules: [5/5] Running counterfactual tests for 1 potential cause(s): ['¬PaCo']
+2026-07-08 21:11:15,569 WARNING src.modules: [5/5] Target 'ChDi' is NOT in the base grounded extension — Definition 4.3 precondition fails; no potential cause can qualify.
+2026-07-08 21:11:15,569 INFO src.modules: [5/5]   Testing cause: '¬PaCo'
+2026-07-08 21:11:15,569 INFO src.modules: [5/5]     Counterfactual axiom: 'PaCo'
+2026-07-08 21:11:15,569 INFO ASPIC+: Initializing ArgumentationFramework...
+2026-07-08 21:11:15,569 INFO ASPIC+: Loaded knowledge base: 2 premises, 1 axioms
+2026-07-08 21:11:15,569 INFO ASPIC+: Parsing rules from causal model...
+2026-07-08 21:11:15,569 INFO ASPIC+: Found 1 strict rules
+2026-07-08 21:11:15,569 INFO ASPIC+: Found 2 defeasible rules
+2026-07-08 21:11:15,569 INFO ASPIC+: Found 1 undercutter rules
+2026-07-08 21:11:15,569 INFO ASPIC+: Starting argument construction...
+2026-07-08 21:11:15,569 INFO ASPIC+: Creating atomic arguments from 2 premises and 1 axioms
+2026-07-08 21:11:15,569 INFO ASPIC+: Loaded 4 rules total
+2026-07-08 21:11:15,569 INFO ASPIC+: Starting iteration 1, current arguments: 3
+2026-07-08 21:11:15,569 INFO ASPIC+: Starting iteration 2, current arguments: 5
+2026-07-08 21:11:15,569 INFO ASPIC+: No new conclusions generated, stopping construction
+2026-07-08 21:11:15,569 INFO ASPIC+: Argument construction complete: 5 arguments built | conclusions: ['¬Chem', 'ChLe', 'PaCo', 'ChDi', 'Chem']
+2026-07-08 21:11:15,569 INFO ASPIC+: Identifying attacks among 5 arguments...
+2026-07-08 21:11:15,569 INFO ASPIC+: Attacks identified: 3 total | undermine=2, undercut=0, rebut=1
+2026-07-08 21:11:15,569 INFO ASPIC+: Computing defeats from 3 attacks...
+2026-07-08 21:11:15,569 INFO ASPIC+: Defeats computed: 3 out of 3 attacks succeeded
+2026-07-08 21:11:15,570 INFO ASPIC+: Computing grounded extension: 5 arguments, 3 defeats
+2026-07-08 21:11:15,570 INFO ASPIC+: Grounded extension computed in 2 iteration(s): 2 argument(s) accepted | conclusions: ['ChLe', 'PaCo']
+2026-07-08 21:11:15,570 INFO src.modules: [5/5]     Counterfactual grounded extension: 2 argument(s) | conclusions: ['ChLe', 'PaCo']
+2026-07-08 21:11:15,570 INFO src.modules: [5/5]     Solver verdict for '¬PaCo': is_cause=False (base_has_target=False, test_has_target=False)
+2026-07-08 21:11:19,816 WARNING src.modules: [5/5]     LLM verdict (True) disagrees with solver verdict (False) for '¬PaCo' — keeping solver verdict
+2026-07-08 21:11:19,816 INFO src.modules: [5/5]     Result for '¬PaCo': is_cause=False | 1. **Tipo de Causa**: Identificado como "omission". A recusa dos pais (¬PaCo) constitui uma omissão de consentimento que impede a intervenção médica necessária (quimioterapia).
+2. **Regras Críticas**: A regra "¬PaCo => ¬Chem" é a peça central. Ao negar a causa (assumindo PaCo), a regra é desativada, permitindo que o tratamento ocorra.
+3. **Argumentos Derrotados**: O argumento que sustenta a conclusão "ChDi" (morte) depende da cadeia de omissão. Sem a premissa ¬PaCo, o argumento para a morte perde sua base factual.
+4. **Justificativa Jurídica**: De acordo com a Definição 4.3, a causa é considerada "cause-in-fact" porque, no mundo contrafactual onde o consentimento é dado (PaCo), a cadeia causal que leva à morte (ChDi) é interrompida. A omissão dos pais é, portanto, uma condição *sine qua non* para o resultado fatal.
+2026-07-08 21:11:19,817 INFO src.pipeline: 🔍 Validation Results:
+2026-07-08 21:11:19,817 INFO src.pipeline: ❌ knowledge_base
+2026-07-08 21:11:19,817 INFO src.pipeline: ❌ causal_model
+2026-07-08 21:11:19,817 INFO src.pipeline: ❌ causal_results
+2026-07-08 21:11:19,817 INFO src.pipeline: 💾 Detailed results saved to: outputs/legal/case_1_results.json
+2026-07-08 21:11:19,817 INFO src.pipeline: 📋 Analyzing case 2: Dlugash Case (Preemption)...
+2026-07-08 21:11:19,818 INFO src.modules: [1/5] Extracting knowledge base via LLM...
+2026-07-08 21:11:19,821 INFO src.modules: [1/5] Knowledge base extracted: premises=['DlKi', 'BuKi', 'ViDe'] | potential_causes=['DlKi', 'BuKi'] | target=HomicidioConsumado
+2026-07-08 21:11:19,821 INFO src.modules: [2/5] Extracting causal model via LLM...
+2026-07-08 21:11:19,823 INFO src.modules: [2/5] Causal model extracted: 2 defeasible rules, 1 undercutter rules | rules: ['r0: BuKi => ViDe', 'r1: DlKi => HomicidioConsumado', 'r2: ViDe => ¬r1']
+2026-07-08 21:11:19,823 INFO src.modules: [3/5] Building base argumentation framework via LLM...
+2026-07-08 21:11:19,826 INFO src.modules: [3/5] Base AF built, invoking solver...
+2026-07-08 21:11:19,826 INFO src.modules: [4/5] Running solver on base framework...
+2026-07-08 21:11:19,826 INFO ASPIC+: Initializing ArgumentationFramework...
+2026-07-08 21:11:19,826 INFO ASPIC+: Loaded knowledge base: 3 premises, 0 axioms
+2026-07-08 21:11:19,826 INFO ASPIC+: Parsing rules from causal model...
+2026-07-08 21:11:19,826 INFO ASPIC+: Found 1 strict rules
+2026-07-08 21:11:19,826 INFO ASPIC+: Found 2 defeasible rules
+2026-07-08 21:11:19,826 INFO ASPIC+: Found 1 undercutter rules
+2026-07-08 21:11:19,826 INFO ASPIC+: Starting argument construction...
+2026-07-08 21:11:19,826 INFO ASPIC+: Creating atomic arguments from 3 premises and 0 axioms
+2026-07-08 21:11:19,826 INFO ASPIC+: Loaded 4 rules total
+2026-07-08 21:11:19,826 INFO ASPIC+: Starting iteration 1, current arguments: 3
+2026-07-08 21:11:19,826 INFO ASPIC+: Starting iteration 2, current arguments: 8
+2026-07-08 21:11:19,826 INFO ASPIC+: No new conclusions generated, stopping construction
+2026-07-08 21:11:19,826 INFO ASPIC+: Argument construction complete: 9 arguments built | conclusions: ['DlKi', 'BuKi', 'ViDe', 'HomicidioConsumado', 'ViDe', 'HomicidioConsumado', '¬r1', '¬r1', 'HomicidioConsumado']
+2026-07-08 21:11:19,826 INFO ASPIC+: Identifying attacks among 9 arguments...
+2026-07-08 21:11:19,826 INFO ASPIC+: Attacks identified: 2 total | undermine=0, undercut=2, rebut=0
+2026-07-08 21:11:19,826 INFO ASPIC+: Computing defeats from 2 attacks...
+2026-07-08 21:11:19,826 INFO ASPIC+: Defeats computed: 2 out of 2 attacks succeeded
+2026-07-08 21:11:19,826 INFO ASPIC+: Computing grounded extension: 9 arguments, 2 defeats
+2026-07-08 21:11:19,826 INFO ASPIC+: Grounded extension computed in 2 iteration(s): 8 argument(s) accepted | conclusions: ['HomicidioConsumado', 'ViDe', 'BuKi', 'DlKi', 'HomicidioConsumado', '¬r1', 'ViDe', '¬r1']
+2026-07-08 21:11:19,826 INFO src.modules: [4/5] Base grounded extension: 8 argument(s) | conclusions: ['HomicidioConsumado', 'ViDe', 'BuKi', 'DlKi', 'HomicidioConsumado', '¬r1', 'ViDe', '¬r1']
+2026-07-08 21:11:19,826 INFO src.modules: [5/5] Running counterfactual tests for 2 potential cause(s): ['DlKi', 'BuKi']
+2026-07-08 21:11:19,826 INFO src.modules: [5/5]   Testing cause: 'DlKi'
+2026-07-08 21:11:19,826 INFO src.modules: [5/5]     Counterfactual axiom: '¬DlKi'
+2026-07-08 21:11:19,826 INFO ASPIC+: Initializing ArgumentationFramework...
+2026-07-08 21:11:19,826 INFO ASPIC+: Loaded knowledge base: 3 premises, 1 axioms
+2026-07-08 21:11:19,826 INFO ASPIC+: Parsing rules from causal model...
+2026-07-08 21:11:19,826 INFO ASPIC+: Found 1 strict rules
+2026-07-08 21:11:19,827 INFO ASPIC+: Found 2 defeasible rules
+2026-07-08 21:11:19,827 INFO ASPIC+: Found 1 undercutter rules
+2026-07-08 21:11:19,827 INFO ASPIC+: Starting argument construction...
+2026-07-08 21:11:19,827 INFO ASPIC+: Creating atomic arguments from 3 premises and 1 axioms
+2026-07-08 21:11:19,827 INFO ASPIC+: Loaded 4 rules total
+2026-07-08 21:11:19,827 INFO ASPIC+: Starting iteration 1, current arguments: 4
+2026-07-08 21:11:19,827 INFO ASPIC+: Starting iteration 2, current arguments: 9
+2026-07-08 21:11:19,827 INFO ASPIC+: No new conclusions generated, stopping construction
+2026-07-08 21:11:19,827 INFO ASPIC+: Argument construction complete: 10 arguments built | conclusions: ['DlKi', 'BuKi', 'ViDe', '¬DlKi', 'HomicidioConsumado', 'ViDe', 'HomicidioConsumado', '¬r1', '¬r1', 'HomicidioConsumado']
+2026-07-08 21:11:19,827 INFO ASPIC+: Identifying attacks among 10 arguments...
+2026-07-08 21:11:19,827 INFO ASPIC+: Attacks identified: 4 total | undermine=2, undercut=2, rebut=0
+2026-07-08 21:11:19,827 INFO ASPIC+: Computing defeats from 4 attacks...
+2026-07-08 21:11:19,827 INFO ASPIC+: Defeats computed: 4 out of 4 attacks succeeded
+2026-07-08 21:11:19,827 INFO ASPIC+: Computing grounded extension: 10 arguments, 4 defeats
+2026-07-08 21:11:19,827 INFO ASPIC+: Grounded extension computed in 2 iteration(s): 8 argument(s) accepted | conclusions: ['¬r1', 'ViDe', 'HomicidioConsumado', 'BuKi', '¬DlKi', '¬r1', 'HomicidioConsumado', 'ViDe']
+2026-07-08 21:11:19,827 INFO src.modules: [5/5]     Counterfactual grounded extension: 8 argument(s) | conclusions: ['¬r1', 'ViDe', 'HomicidioConsumado', 'BuKi', '¬DlKi', '¬r1', 'HomicidioConsumado', 'ViDe']
+2026-07-08 21:11:19,827 INFO src.modules: [5/5]     Solver verdict for 'DlKi': is_cause=False (base_has_target=True, test_has_target=True)
+2026-07-08 21:11:22,448 INFO src.modules: [5/5]     Result for 'DlKi': is_cause=False | 1. **Tipo de relação**: Identificada como "none" (não é causa-in-fact).
+2. **Regras críticas**: A regra que conecta o disparo de Dlugash (DlKi) ao homicídio foi neutralizada pela negação da premissa, mas isso não alterou o resultado final.
+3. **Argumentos derrotados**: O argumento A8, que atribuía a responsabilidade a Dlugash, perde sua base factual. No entanto, o argumento A4 (baseado no disparo de Bush - BuKi) permanece ativo na extensão fundamentada.
+4. **Justificativa jurídica**: Segundo a Definição 4.3, para que φ seja causa de ψ, a negação de φ deve resultar na ausência de ψ. Como a morte da vítima (HomicidioConsumado) é sobredeterminada pelo disparo anterior de Bush (BuKi), a ação de Dlugash não é uma condição necessária para o resultado. Portanto, Dlugash não é causa-in-fact do homicídio consumado, configurando um caso de preempção onde o primeiro agente (Bush) é o responsável causal.
+2026-07-08 21:11:22,448 INFO src.modules: [5/5]   Testing cause: 'BuKi'
+2026-07-08 21:11:22,448 INFO src.modules: [5/5]     Counterfactual axiom: '¬BuKi'
+2026-07-08 21:11:22,449 INFO ASPIC+: Initializing ArgumentationFramework...
+2026-07-08 21:11:22,449 INFO ASPIC+: Loaded knowledge base: 3 premises, 1 axioms
+2026-07-08 21:11:22,449 INFO ASPIC+: Parsing rules from causal model...
+2026-07-08 21:11:22,449 INFO ASPIC+: Found 1 strict rules
+2026-07-08 21:11:22,449 INFO ASPIC+: Found 2 defeasible rules
+2026-07-08 21:11:22,449 INFO ASPIC+: Found 1 undercutter rules
+2026-07-08 21:11:22,449 INFO ASPIC+: Starting argument construction...
+2026-07-08 21:11:22,449 INFO ASPIC+: Creating atomic arguments from 3 premises and 1 axioms
+2026-07-08 21:11:22,449 INFO ASPIC+: Loaded 4 rules total
+2026-07-08 21:11:22,449 INFO ASPIC+: Starting iteration 1, current arguments: 4
+2026-07-08 21:11:22,449 INFO ASPIC+: Starting iteration 2, current arguments: 9
+2026-07-08 21:11:22,449 INFO ASPIC+: No new conclusions generated, stopping construction
+2026-07-08 21:11:22,449 INFO ASPIC+: Argument construction complete: 10 arguments built | conclusions: ['DlKi', 'BuKi', 'ViDe', '¬BuKi', 'HomicidioConsumado', 'ViDe', 'HomicidioConsumado', '¬r1', '¬r1', 'HomicidioConsumado']
+2026-07-08 21:11:22,449 INFO ASPIC+: Identifying attacks among 10 arguments...
+2026-07-08 21:11:22,449 INFO ASPIC+: Attacks identified: 6 total | undermine=4, undercut=2, rebut=0
+2026-07-08 21:11:22,449 INFO ASPIC+: Computing defeats from 6 attacks...
+2026-07-08 21:11:22,449 INFO ASPIC+: Defeats computed: 6 out of 6 attacks succeeded
+2026-07-08 21:11:22,449 INFO ASPIC+: Computing grounded extension: 10 arguments, 6 defeats
+2026-07-08 21:11:22,449 INFO ASPIC+: Grounded extension computed in 2 iteration(s): 5 argument(s) accepted | conclusions: ['DlKi', '¬BuKi', '¬r1', 'HomicidioConsumado', 'ViDe']
+2026-07-08 21:11:22,449 INFO src.modules: [5/5]     Counterfactual grounded extension: 5 argument(s) | conclusions: ['DlKi', '¬BuKi', '¬r1', 'HomicidioConsumado', 'ViDe']
+2026-07-08 21:11:22,449 INFO src.modules: [5/5]     Solver verdict for 'BuKi': is_cause=False (base_has_target=True, test_has_target=True)
+2026-07-08 21:11:25,604 WARNING src.modules: [5/5]     LLM verdict (True) disagrees with solver verdict (False) for 'BuKi' — keeping solver verdict
+2026-07-08 21:11:25,604 INFO src.modules: [5/5]     Result for 'BuKi': is_cause=False | 1. **Tipo de Causa**: Identificado como "preemption" (preempção). Embora o teste contrafactual simples (condição sine qua non) possa parecer falhar se considerarmos apenas a conclusão final "HomicidioConsumado" (que ocorreria de qualquer forma por Dlugash), a ação de Bush (BuKi) é a causa jurídica, pois ela efetivamente causou a morte (ViDe) antes que o segundo tiro pudesse ter efeito.
+2. **Regras Críticas**: A regra que conecta o disparo de Bush à morte da vítima (ViDe) é a regra crítica. Ao remover BuKi, a cadeia causal que leva à morte da vítima por Bush é interrompida.
+3. **Argumentos Derrotados**: O argumento A6, que vincula a ação de Bush ao resultado consumado, é o principal afetado.
+4. **Justificativa Jurídica**: A preempção ocorre quando um agente causa o resultado antes que outro agente possa fazê-lo. A ação de Bush é causa-in-fact porque ela é a causa eficiente que consumou o homicídio, tornando a ação subsequente de Dlugash irrelevante para a consumação do crime (embora Dlugash responda por tentativa).
+5. **Definição 4.3**: A análise confirma que, embora a conclusão ψ (HomicidioConsumado) seja mantida por uma cadeia alternativa (DlKi), a cadeia causal original (BuKi) é a que efetivamente produziu o resultado, caracterizando a preempção.
+2026-07-08 21:11:25,605 INFO src.pipeline: 🔍 Validation Results:
+2026-07-08 21:11:25,605 INFO src.pipeline: ❌ knowledge_base
+2026-07-08 21:11:25,605 INFO src.pipeline: ❌ causal_model
+2026-07-08 21:11:25,605 INFO src.pipeline: ❌ causal_results
+2026-07-08 21:11:25,605 INFO src.pipeline: 💾 Detailed results saved to: outputs/legal/case_2_results.json
+2026-07-08 21:11:25,605 INFO src.pipeline: 📋 Analyzing case 3: Celular à Prova D'água (Consumer Law)...
+2026-07-08 21:11:25,606 INFO src.modules: [1/5] Extracting knowledge base via LLM...
+2026-07-08 21:11:25,609 INFO src.modules: [1/5] Knowledge base extracted: premises=['PhWp', 'PoFa'] | potential_causes=['MiUs', 'NoUs'] | target=DeFa
+2026-07-08 21:11:25,609 INFO src.modules: [2/5] Extracting causal model via LLM...
+2026-07-08 21:11:25,611 INFO src.modules: [2/5] Causal model extracted: 2 defeasible rules, 1 undercutter rules | rules: ['r0: MiUs => DeFa', 'r1: NoUs => ¬DeFa', 'r2: CondicaoNormal => ¬r0']
+2026-07-08 21:11:25,611 INFO src.modules: [3/5] Building base argumentation framework via LLM...
+2026-07-08 21:11:25,613 INFO src.modules: [3/5] Base AF built, invoking solver...
+2026-07-08 21:11:25,613 INFO src.modules: [4/5] Running solver on base framework...
+2026-07-08 21:11:25,613 INFO ASPIC+: Initializing ArgumentationFramework...
+2026-07-08 21:11:25,613 INFO ASPIC+: Loaded knowledge base: 2 premises, 0 axioms
+2026-07-08 21:11:25,613 INFO ASPIC+: Parsing rules from causal model...
+2026-07-08 21:11:25,613 INFO ASPIC+: Found 2 strict rules
+2026-07-08 21:11:25,613 INFO ASPIC+: Found 2 defeasible rules
+2026-07-08 21:11:25,613 INFO ASPIC+: Found 1 undercutter rules
+2026-07-08 21:11:25,613 INFO ASPIC+: Starting argument construction...
+2026-07-08 21:11:25,613 INFO ASPIC+: Creating atomic arguments from 2 premises and 0 axioms
+2026-07-08 21:11:25,613 INFO ASPIC+: Loaded 5 rules total
+2026-07-08 21:11:25,613 INFO ASPIC+: Starting iteration 1, current arguments: 2
+2026-07-08 21:11:25,613 INFO ASPIC+: No new conclusions generated, stopping construction
+2026-07-08 21:11:25,613 INFO ASPIC+: Argument construction complete: 2 arguments built | conclusions: ['PoFa', 'PhWp']
+2026-07-08 21:11:25,613 INFO ASPIC+: Identifying attacks among 2 arguments...
+2026-07-08 21:11:25,613 INFO ASPIC+: Attacks identified: 0 total | undermine=0, undercut=0, rebut=0
+2026-07-08 21:11:25,613 INFO ASPIC+: Computing defeats from 0 attacks...
+2026-07-08 21:11:25,613 INFO ASPIC+: Defeats computed: 0 out of 0 attacks succeeded
+2026-07-08 21:11:25,613 INFO ASPIC+: Computing defeats from 0 attacks...
+2026-07-08 21:11:25,613 INFO ASPIC+: Defeats computed: 0 out of 0 attacks succeeded
+2026-07-08 21:11:25,613 INFO ASPIC+: Computing grounded extension: 2 arguments, 0 defeats
+2026-07-08 21:11:25,613 INFO ASPIC+: Grounded extension computed in 2 iteration(s): 2 argument(s) accepted | conclusions: ['PhWp', 'PoFa']
+2026-07-08 21:11:25,613 INFO src.modules: [4/5] Base grounded extension: 2 argument(s) | conclusions: ['PhWp', 'PoFa']
+2026-07-08 21:11:25,614 INFO src.modules: [5/5] Running counterfactual tests for 2 potential cause(s): ['MiUs', 'NoUs']
+2026-07-08 21:11:25,614 WARNING src.modules: [5/5] Target 'DeFa' is NOT in the base grounded extension — Definition 4.3 precondition fails; no potential cause can qualify.
+2026-07-08 21:11:25,614 INFO src.modules: [5/5]   Testing cause: 'MiUs'
+2026-07-08 21:11:25,614 INFO src.modules: [5/5]     Counterfactual axiom: '¬MiUs'
+2026-07-08 21:11:25,614 INFO ASPIC+: Initializing ArgumentationFramework...
+2026-07-08 21:11:25,614 INFO ASPIC+: Loaded knowledge base: 2 premises, 1 axioms
+2026-07-08 21:11:25,614 INFO ASPIC+: Parsing rules from causal model...
+2026-07-08 21:11:25,614 INFO ASPIC+: Found 2 strict rules
+2026-07-08 21:11:25,614 INFO ASPIC+: Found 2 defeasible rules
+2026-07-08 21:11:25,614 INFO ASPIC+: Found 1 undercutter rules
+2026-07-08 21:11:25,614 INFO ASPIC+: Starting argument construction...
+2026-07-08 21:11:25,614 INFO ASPIC+: Creating atomic arguments from 2 premises and 1 axioms
+2026-07-08 21:11:25,614 INFO ASPIC+: Loaded 5 rules total
+2026-07-08 21:11:25,614 INFO ASPIC+: Starting iteration 1, current arguments: 3
+2026-07-08 21:11:25,614 INFO ASPIC+: No new conclusions generated, stopping construction
+2026-07-08 21:11:25,614 INFO ASPIC+: Argument construction complete: 3 arguments built | conclusions: ['PoFa', 'PhWp', '¬MiUs']
+2026-07-08 21:11:25,614 INFO ASPIC+: Identifying attacks among 3 arguments...
+2026-07-08 21:11:25,614 INFO ASPIC+: Attacks identified: 0 total | undermine=0, undercut=0, rebut=0
+2026-07-08 21:11:25,614 INFO ASPIC+: Computing defeats from 0 attacks...
+2026-07-08 21:11:25,614 INFO ASPIC+: Defeats computed: 0 out of 0 attacks succeeded
+2026-07-08 21:11:25,614 INFO ASPIC+: Computing defeats from 0 attacks...
+2026-07-08 21:11:25,614 INFO ASPIC+: Defeats computed: 0 out of 0 attacks succeeded
+2026-07-08 21:11:25,614 INFO ASPIC+: Computing grounded extension: 3 arguments, 0 defeats
+2026-07-08 21:11:25,614 INFO ASPIC+: Grounded extension computed in 2 iteration(s): 3 argument(s) accepted | conclusions: ['PhWp', 'PoFa', '¬MiUs']
+2026-07-08 21:11:25,614 INFO src.modules: [5/5]     Counterfactual grounded extension: 3 argument(s) | conclusions: ['PhWp', 'PoFa', '¬MiUs']
+2026-07-08 21:11:25,614 INFO src.modules: [5/5]     Solver verdict for 'MiUs': is_cause=False (base_has_target=False, test_has_target=False)
+2026-07-08 21:11:28,323 WARNING src.modules: [5/5]     LLM verdict (True) disagrees with solver verdict (False) for 'MiUs' — keeping solver verdict
+2026-07-08 21:11:28,324 INFO src.modules: [5/5]     Result for 'MiUs': is_cause=False | 1. **Tipo de Causa**: Identificado como "production", pois a alegação de mau uso (MiUs) é o fator determinante que, no modelo, conecta o evento ao defeito (DeFa).
+2. **Regras Críticas**: A regra "MiUs => DeFa" é a regra crítica. Ao assumir ¬MiUs, a premissa necessária para disparar esta regra deixa de existir.
+3. **Argumentos Derrotados**: O argumento que sustentava "DeFa" foi derrotado porque sua premissa fundamental (MiUs) foi negada pelo novo axioma. Sem a premissa, a cadeia causal é interrompida.
+4. **Justificativa Jurídica**: Segundo a Definição 4.3, se a negação de φ (¬MiUs) resulta na ausência de ψ (DeFa) na extensão fundamentada, φ é considerado causa-em-fato. O caso demonstra que, sem o mau uso, o defeito não é derivável, tornando o mau uso a causa direta do dano sob a ótica da responsabilidade civil.
+2026-07-08 21:11:28,324 INFO src.modules: [5/5]   Testing cause: 'NoUs'
+2026-07-08 21:11:28,324 INFO src.modules: [5/5]     Counterfactual axiom: '¬NoUs'
+2026-07-08 21:11:28,324 INFO ASPIC+: Initializing ArgumentationFramework...
+2026-07-08 21:11:28,324 INFO ASPIC+: Loaded knowledge base: 2 premises, 1 axioms
+2026-07-08 21:11:28,324 INFO ASPIC+: Parsing rules from causal model...
+2026-07-08 21:11:28,324 INFO ASPIC+: Found 2 strict rules
+2026-07-08 21:11:28,324 INFO ASPIC+: Found 2 defeasible rules
+2026-07-08 21:11:28,324 INFO ASPIC+: Found 1 undercutter rules
+2026-07-08 21:11:28,324 INFO ASPIC+: Starting argument construction...
+2026-07-08 21:11:28,324 INFO ASPIC+: Creating atomic arguments from 2 premises and 1 axioms
+2026-07-08 21:11:28,324 INFO ASPIC+: Loaded 5 rules total
+2026-07-08 21:11:28,324 INFO ASPIC+: Starting iteration 1, current arguments: 3
+2026-07-08 21:11:28,324 INFO ASPIC+: No new conclusions generated, stopping construction
+2026-07-08 21:11:28,324 INFO ASPIC+: Argument construction complete: 3 arguments built | conclusions: ['PoFa', 'PhWp', '¬NoUs']
+2026-07-08 21:11:28,324 INFO ASPIC+: Identifying attacks among 3 arguments...
+2026-07-08 21:11:28,324 INFO ASPIC+: Attacks identified: 0 total | undermine=0, undercut=0, rebut=0
+2026-07-08 21:11:28,324 INFO ASPIC+: Computing defeats from 0 attacks...
+2026-07-08 21:11:28,324 INFO ASPIC+: Defeats computed: 0 out of 0 attacks succeeded
+2026-07-08 21:11:28,324 INFO ASPIC+: Computing defeats from 0 attacks...
+2026-07-08 21:11:28,324 INFO ASPIC+: Defeats computed: 0 out of 0 attacks succeeded
+2026-07-08 21:11:28,324 INFO ASPIC+: Computing grounded extension: 3 arguments, 0 defeats
+2026-07-08 21:11:28,324 INFO ASPIC+: Grounded extension computed in 2 iteration(s): 3 argument(s) accepted | conclusions: ['PhWp', 'PoFa', '¬NoUs']
+2026-07-08 21:11:28,324 INFO src.modules: [5/5]     Counterfactual grounded extension: 3 argument(s) | conclusions: ['PhWp', 'PoFa', '¬NoUs']
+2026-07-08 21:11:28,324 INFO src.modules: [5/5]     Solver verdict for 'NoUs': is_cause=False (base_has_target=False, test_has_target=False)
+2026-07-08 21:11:31,408 WARNING src.modules: [5/5]     LLM verdict (True) disagrees with solver verdict (False) for 'NoUs' — keeping solver verdict
+2026-07-08 21:11:31,408 INFO src.modules: [5/5]     Result for 'NoUs': is_cause=False | 1. **Tipo de Causa**: Identificado como "production" (no sentido de que a presença do uso normal é o fator que sustenta a garantia de funcionamento do produto à prova d'água).
+2. **Regras Críticas**: A regra que conecta a característica "à prova d'água" (PhWp) e o "uso normal" (NoUs) à ausência de defeito (¬DeFa) é a regra central. Ao negar "NoUs", essa regra deixa de ser aplicada.
+3. **Argumentos Derrotados**: O argumento que sustenta a ausência de defeito (ou a cobertura da garantia) é derrotado pela introdução do axioma de "mau uso" (¬NoUs).
+4. **Justificativa Jurídica**: Sob a ótica da Definição 4.3, "NoUs" é uma causa-in-fact porque, na sua ausência (mundo contrafactual), a conclusão de que o produto deveria funcionar (ou não apresentar defeito por mau uso) é alterada. O uso normal é a condição necessária para que a característica de "à prova d'água" gere a expectativa de não-defeito.
+5. **Conceito**: A negação do fator causal "NoUs" altera o grounded extension, demonstrando que ele é um elo indispensável na cadeia de responsabilidade do fabricante.
+2026-07-08 21:11:31,409 INFO src.pipeline: 🔍 Validation Results:
+2026-07-08 21:11:31,409 INFO src.pipeline: ❌ knowledge_base
+2026-07-08 21:11:31,409 INFO src.pipeline: ❌ causal_model
+2026-07-08 21:11:31,409 INFO src.pipeline: ❌ causal_results
+2026-07-08 21:11:31,409 INFO src.pipeline: 💾 Detailed results saved to: outputs/legal/case_3_results.json
+2026-07-08 21:11:31,409 INFO src.pipeline: 📊 Resultados Gerais:
+2026-07-08 21:11:31,409 INFO src.pipeline: ✅ 0/3 casos passaram em todas as validações
+2026-07-08 21:11:31,410 INFO src.pipeline: 💾 Resumo salvo em: outputs/legal/analysis_summary.json

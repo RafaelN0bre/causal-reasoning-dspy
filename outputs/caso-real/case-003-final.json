@@ -1,0 +1,342 @@
+{
+  "caso": {
+    "id": "case-003-final",
+    "titulo": "Caso 003 — Responsabilidade do Estado por crime de foragido (formalização final, por votos; qualificação antes dos fatos: LRC → CIF → LRC)",
+    "ordem_das_camadas": "lrc_first",
+    "pergunta_central": "A omissão do Estado na custódia do preso é causa juridicamente relevante dos danos sofridos pela família da vítima?",
+    "origem": "jurix26 / data/translated (formalização manual do RE 608.880/MT)",
+    "source_sha256": "5e3e5f027a98021ecbdcac897c1eedbfc72a0d781e36aca6d8d6d890d0250a6d"
+  },
+  "solver": "src/solver.py (esta monografia), sem modificação",
+  "mapa_de_regras": {
+    "r0": "r0",
+    "r1": "r1",
+    "r2": "r2",
+    "r3": "r3",
+    "r4": "r4",
+    "dvesp_q0": "r5",
+    "suca_q3": "r6",
+    "u_corte": "r7",
+    "suca_q4": "r8",
+    "q_reab": "r9",
+    "cf2lrc_q5": "r10",
+    "sc_q6": "r11",
+    "dvpre_q8": "r12",
+    "og_q9": "r13",
+    "og_q10": "r14",
+    "q11": "r15"
+  },
+  "camada_causa_de_fato": {
+    "knowledge_base": {
+      "premises": [
+        "OmiEstatal",
+        "RegFechado"
+      ],
+      "axioms": [
+        "AtoTerceiro",
+        "DeverEspec",
+        "OmissaoGen"
+      ],
+      "preferences": {}
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r0: OmiEstatal => FugaPreso",
+        "r1: OmiEstatal AND RegFechado => FugaPreso",
+        "r2: FugaPreso => Latrocinio",
+        "r3: Latrocinio => MorteVitima",
+        "r4: MorteVitima => Danos"
+      ],
+      "undercutter_rules": []
+    },
+    "argumentos": 13,
+    "ataques": 0,
+    "derrotas": 0,
+    "extensao_fundamentada": [
+      "A0",
+      "A1",
+      "A10",
+      "A11",
+      "A12",
+      "A2",
+      "A3",
+      "A4",
+      "A5",
+      "A6",
+      "A7",
+      "A8",
+      "A9"
+    ],
+    "conclusoes_fundamentadas": [
+      "AtoTerceiro",
+      "Danos",
+      "DeverEspec",
+      "FugaPreso",
+      "Latrocinio",
+      "MorteVitima",
+      "OmiEstatal",
+      "OmissaoGen",
+      "RegFechado"
+    ],
+    "pares_causais": [
+      {
+        "phi": "OmiEstatal",
+        "psi": "Danos",
+        "ness": true,
+        "but_for": true
+      },
+      {
+        "phi": "RegFechado",
+        "psi": "Danos",
+        "ness": true,
+        "but_for": false
+      },
+      {
+        "phi": "FugaPreso",
+        "psi": "Danos",
+        "ness": true,
+        "but_for": false
+      },
+      {
+        "phi": "Latrocinio",
+        "psi": "Danos",
+        "ness": true,
+        "but_for": false
+      }
+    ]
+  },
+  "ponte": {
+    "notacao_usada": "ness",
+    "literais": [
+      "CaFa_OmiEstatal_Danos",
+      "ButFor_OmiEstatal_Danos",
+      "CaFa_RegFechado_Danos",
+      "CaFa_FugaPreso_Danos",
+      "CaFa_Latrocinio_Danos"
+    ],
+    "literais_sob_but_for": [
+      "CaFa_OmiEstatal_Danos",
+      "ButFor_OmiEstatal_Danos"
+    ],
+    "literais_na_origem": [
+      "CaFa_OmiEstatal_Danos",
+      "ButFor_OmiEstatal_Danos",
+      "CaFa_RegFechado_Danos",
+      "CaFa_FugaPreso_Danos",
+      "ButFor_FugaPreso_Danos",
+      "CaFa_Latrocinio_Danos",
+      "ButFor_Latrocinio_Danos"
+    ],
+    "reproduz_origem": false,
+    "ausentes_em_relacao_a_origem": [
+      "ButFor_FugaPreso_Danos",
+      "ButFor_Latrocinio_Danos"
+    ],
+    "excedentes_em_relacao_a_origem": []
+  },
+  "camada_relevancia_juridica": {
+    "knowledge_base": {
+      "premises": [
+        "OmiEstatal",
+        "RegFechado",
+        "LapsoTemp",
+        "FormacaoQuad",
+        "Latrocinio",
+        "¬ProvCabiveis"
+      ],
+      "axioms": [
+        "CaFa_OmiEstatal_Danos",
+        "ButFor_OmiEstatal_Danos",
+        "CaFa_RegFechado_Danos",
+        "CaFa_FugaPreso_Danos",
+        "CaFa_Latrocinio_Danos"
+      ],
+      "preferences": {}
+    },
+    "causal_model": {
+      "strict_rules": [],
+      "defeasible_rules": [
+        "r5: RegFechado => DeverEspec",
+        "r6: LapsoTemp => AtoTerceiro",
+        "r8: Latrocinio AND LapsoTemp AND FormacaoQuad => AtoTerceiro",
+        "r10: CaFa_OmiEstatal_Danos => LeReCa_OmiEstatal_Danos",
+        "r13: OmiEstatal AND LapsoTemp AND FormacaoQuad => OmissaoGen"
+      ],
+      "undercutter_rules": [
+        "r7: LapsoTemp => ¬r6",
+        "r9: PremedAlvo AND SeqImediata => ¬r8",
+        "r11: AtoTerceiro => ¬r10",
+        "r12: DeverEspec => ¬r11",
+        "r14: OmissaoGen => ¬r10",
+        "r15: ¬ProvCabiveis => ¬r6"
+      ]
+    },
+    "argumentos": 22,
+    "ataques": 9,
+    "derrotas": 9,
+    "extensao_fundamentada": [
+      "A0",
+      "A1",
+      "A10",
+      "A11",
+      "A13",
+      "A15",
+      "A16",
+      "A19",
+      "A2",
+      "A20",
+      "A21",
+      "A3",
+      "A4",
+      "A5",
+      "A6",
+      "A7",
+      "A8",
+      "A9"
+    ],
+    "conclusoes_fundamentadas": [
+      "AtoTerceiro",
+      "ButFor_OmiEstatal_Danos",
+      "CaFa_FugaPreso_Danos",
+      "CaFa_Latrocinio_Danos",
+      "CaFa_OmiEstatal_Danos",
+      "CaFa_RegFechado_Danos",
+      "DeverEspec",
+      "FormacaoQuad",
+      "LapsoTemp",
+      "Latrocinio",
+      "OmiEstatal",
+      "OmissaoGen",
+      "RegFechado",
+      "¬ProvCabiveis",
+      "¬r10",
+      "¬r11",
+      "¬r6"
+    ],
+    "relevancia": [
+      {
+        "alvo": "LeReCa_OmiEstatal_Danos",
+        "justificada": false,
+        "derivavel": true,
+        "situacao": "afastada",
+        "bloqueada_por": [
+          {
+            "regra_undercut": "cf2lrc_q5",
+            "atacante": "A20",
+            "regras_do_atacante": [
+              "og_q10",
+              "og_q9"
+            ],
+            "argumento_atacado": "A14",
+            "tipo_de_ataque": "undercut"
+          }
+        ]
+      }
+    ]
+  },
+  "comparacao": {
+    "consultas": [
+      {
+        "phi": "OmiEstatal",
+        "psi": "Danos",
+        "pergunta_pt": "A omissão do Estado na custódia do preso causou os danos sofridos pela família da vítima?",
+        "corte": "rejeitada",
+        "razao_da_corte_pt": "A tese vencedora entendeu que o lapso de três meses e a execução do crime em concurso de agentes rompem o nexo: o que restava ao Estado era o dever genérico de segurança pública.",
+        "relevancia_juridica": false,
+        "but_for": {
+          "causa_de_fato": true,
+          "rotulo_pt": "é causa de fato, mas não juridicamente relevante",
+          "veredito": "rejeitada",
+          "acordo": "match"
+        },
+        "ness": {
+          "causa_de_fato": true,
+          "rotulo_pt": "é causa de fato, mas não juridicamente relevante",
+          "veredito": "rejeitada",
+          "acordo": "match"
+        },
+        "origem": {
+          "ness": true,
+          "but_for": true,
+          "relevancia_juridica": false,
+          "veredito": "rejeitada",
+          "acordo": "match",
+          "reproduz_ness": true,
+          "reproduz_but_for": true
+        }
+      },
+      {
+        "phi": "FugaPreso",
+        "psi": "Danos",
+        "pergunta_pt": "A fuga do detento causou os danos sofridos pela família da vítima?",
+        "corte": "rejeitada",
+        "razao_da_corte_pt": "Mesma razão de decidir: o crime praticado três meses depois, por quadrilha, é ato de terceiro.",
+        "relevancia_juridica": null,
+        "but_for": {
+          "causa_de_fato": false,
+          "rotulo_pt": "não é causa de fato",
+          "veredito": "rejeitada",
+          "acordo": "match"
+        },
+        "ness": {
+          "causa_de_fato": true,
+          "rotulo_pt": "é causa de fato",
+          "veredito": "acolhida",
+          "acordo": "mismatch"
+        },
+        "origem": {
+          "ness": true,
+          "but_for": true,
+          "relevancia_juridica": null,
+          "veredito": "acolhida",
+          "acordo": "mismatch",
+          "reproduz_ness": true,
+          "reproduz_but_for": false
+        }
+      },
+      {
+        "phi": "Latrocinio",
+        "psi": "Danos",
+        "pergunta_pt": "O latrocínio praticado pela quadrilha causou os danos sofridos pela família da vítima?",
+        "corte": "acolhida",
+        "razao_da_corte_pt": "Ponto incontroverso: é o crime que produz a morte e, com ela, os danos.",
+        "relevancia_juridica": null,
+        "but_for": {
+          "causa_de_fato": false,
+          "rotulo_pt": "não é causa de fato",
+          "veredito": "rejeitada",
+          "acordo": "mismatch"
+        },
+        "ness": {
+          "causa_de_fato": true,
+          "rotulo_pt": "é causa de fato",
+          "veredito": "acolhida",
+          "acordo": "match"
+        },
+        "origem": {
+          "ness": true,
+          "but_for": true,
+          "relevancia_juridica": null,
+          "veredito": "acolhida",
+          "acordo": "match",
+          "reproduz_ness": true,
+          "reproduz_but_for": false
+        }
+      }
+    ],
+    "acordo_but_for": {
+      "match": 2,
+      "mismatch": 1,
+      "indefinido": 0,
+      "taxa_de_acordo": 0.667
+    },
+    "acordo_ness": {
+      "match": 2,
+      "mismatch": 1,
+      "indefinido": 0,
+      "taxa_de_acordo": 0.667
+    }
+  },
+  "nota_sobre_o_conjunto_suporte": "O conjunto-suporte usado no diagnóstico NESS é o fecho de subargumentos que `_get_explanation` expõe. Ele coincide com as explicações da Definição 3.3 quando a camada não tem derrotas; a camada de causa de fato deste caso tem 0 derrota(s)."
+}

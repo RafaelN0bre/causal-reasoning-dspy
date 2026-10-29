@@ -1,0 +1,25 @@
+2026-07-04 13:50:32,045 INFO __main__: Log file: /Users/nobre/Documents/UnB/TCC/repo/logs/2026-07-04_13-50-32_boardgame_baseline_Main-depth2_test.log
+2026-07-04 13:50:32,045 INFO __main__: Command : main.py -b -d Main-depth2 -s test -n 5 --baseline -o outputs-observability/baseline/sample-1 --session-suffix sample-1
+2026-07-04 13:50:32,046 INFO __main__: === Pipeline starting ===
+2026-07-04 13:50:32,046 INFO __main__: Mode       : boardgame
+2026-07-04 13:50:32,046 INFO __main__: Model      : gemini-3.1-flash-lite
+2026-07-04 13:50:32,046 INFO __main__: Max tokens : 16000
+2026-07-04 13:50:32,046 INFO __main__: Pipeline   : baseline (raw LLM)
+2026-07-04 13:50:32,046 INFO __main__: Dataset    : Main-depth2
+2026-07-04 13:50:32,046 INFO __main__: Split      : test
+2026-07-04 13:50:32,046 INFO __main__: Limit      : 5
+2026-07-04 13:50:32,046 INFO __main__: Output dir : outputs-observability/baseline/sample-1
+2026-07-04 14:55:30,526 INFO src.baseline: Loading BoardgameQA: Main-depth2 (test split)
+2026-07-04 14:55:34,218 INFO src.baseline: Loaded 5 cases (limit=5)
+2026-07-04 14:57:08,915 INFO src.observability: Langfuse habilitado (host=http://localhost:3010)
+2026-07-04 14:57:28,647 INFO src.baseline: Results → outputs-observability/baseline/sample-1/Main-depth2_test_results.json
+2026-07-04 14:57:28,648 INFO src.baseline: Trace   → outputs-observability/baseline/sample-1/Main-depth2_test_trace.jsonl
+2026-07-04 14:57:29,063 INFO src.baseline: ==================================================
+2026-07-04 14:57:29,064 INFO src.baseline: Baseline LLM Results: Main-depth2 (test)
+2026-07-04 14:57:29,064 INFO src.baseline: ==================================================
+2026-07-04 14:57:29,064 INFO src.baseline: Total: 5 | Correct: 1 | Accuracy: 20.00%
+2026-07-04 14:57:29,064 INFO src.baseline:   proved: 0/2 (0.00%)
+2026-07-04 14:57:29,064 INFO src.baseline:   disproved: 1/2 (50.00%)
+2026-07-04 14:57:29,064 INFO src.baseline:   unknown: 0/1 (0.00%)
+2026-07-04 14:57:29,064 INFO src.baseline: Time: 19.73s (0.25 cases/sec)
+2026-07-04 14:57:29,064 INFO src.baseline: ==================================================

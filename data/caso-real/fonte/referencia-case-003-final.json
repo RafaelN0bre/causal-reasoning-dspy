@@ -1,0 +1,60 @@
+{
+  "ok": true,
+  "errors": [],
+  "warnings": [],
+  "comparison": [
+    {
+      "phi": "OmiEstatal",
+      "psi": "Danos",
+      "question_pt": "A omissão do Estado na custódia do preso causou os danos sofridos pela família da vítima?",
+      "ness": true,
+      "but_for": true,
+      "legally_relevant": false,
+      "solver_label_pt": "é causa de fato, mas não juridicamente relevante",
+      "solver_verdict": "rejeitada",
+      "court_verdict": "rejeitada",
+      "court_rationale_pt": "A tese vencedora entendeu que o lapso de três meses e a execução do crime em concurso de agentes rompem o nexo: o que restava ao Estado era o dever genérico de segurança pública.",
+      "agreement": "match"
+    },
+    {
+      "phi": "FugaPreso",
+      "psi": "Danos",
+      "question_pt": "A fuga do detento causou os danos sofridos pela família da vítima?",
+      "ness": true,
+      "but_for": true,
+      "legally_relevant": null,
+      "solver_label_pt": "é causa de fato",
+      "solver_verdict": "acolhida",
+      "court_verdict": "rejeitada",
+      "court_rationale_pt": "Mesma razão de decidir: o crime praticado três meses depois, por quadrilha, é ato de terceiro.",
+      "agreement": "mismatch"
+    },
+    {
+      "phi": "Latrocinio",
+      "psi": "Danos",
+      "question_pt": "O latrocínio praticado pela quadrilha causou os danos sofridos pela família da vítima?",
+      "ness": true,
+      "but_for": true,
+      "legally_relevant": null,
+      "solver_label_pt": "é causa de fato",
+      "solver_verdict": "acolhida",
+      "court_verdict": "acolhida",
+      "court_rationale_pt": "Ponto incontroverso: é o crime que produz a morte e, com ela, os danos.",
+      "agreement": "match"
+    }
+  ],
+  "summary": {
+    "case_id": "case-003-final",
+    "atoms": 15,
+    "premises": 2,
+    "rules": 5,
+    "queries": 3,
+    "has_lrc": true,
+    "agreement": {
+      "match": 2,
+      "mismatch": 1,
+      "indefinido": 0
+    },
+    "agreement_rate": 0.667
+  }
+}

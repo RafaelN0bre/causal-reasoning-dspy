@@ -1,0 +1,319 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="901pt" height="1442pt" viewBox="0.00 0.00 901.00 1442.00">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 1438.11)">
+<title>Adjudicacao</title>
+<text xml:space="preserve" text-anchor="middle" x="446.62" y="-1415.86" font-family="Helvetica,sans-Serif" font-size="15.00" fill="#8a8a8a">Case 003 — State liability for a fugitive's crime — adjudication</text>
+<g id="clust1" class="cluster">
+<title>cluster_lane_ADJUDICATORS</title>
+<polygon fill="none" stroke="#999999" stroke-dasharray="5,2" points="409,-784.36 409,-1402.36 837,-1402.36 837,-784.36 409,-784.36" />
+<text xml:space="preserve" text-anchor="middle" x="468.38" y="-1386.01" font-family="Helvetica,sans-Serif" font-size="13.00" fill="#8a8a8a">ADJUDICATORS</text>
+</g>
+<g id="clust2" class="cluster">
+<title>cluster_p_relator</title>
+<polygon fill="none" stroke="#bbbbbb" stroke-dasharray="5,2" points="545,-1260.84 545,-1372.86 666,-1372.86 666,-1260.84 545,-1260.84" />
+<text xml:space="preserve" text-anchor="middle" x="605.88" y="-1358.41" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#8a8a8a">REPORTING JUDGE</text>
+</g>
+<g id="clust3" class="cluster">
+<title>cluster_p_voto_convergente</title>
+<polygon fill="none" stroke="#bbbbbb" stroke-dasharray="5,2" points="534,-1134.74 534,-1230.84 676,-1230.84 676,-1134.74 534,-1134.74" />
+<text xml:space="preserve" text-anchor="middle" x="605.38" y="-1216.39" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#8a8a8a">CONCURRING OPINION</text>
+</g>
+<g id="clust4" class="cluster">
+<title>cluster_p_voto_divergente</title>
+<polygon fill="none" stroke="#bbbbbb" stroke-dasharray="5,2" points="417,-792.36 417,-1104.74 829,-1104.74 829,-792.36 417,-792.36" />
+<text xml:space="preserve" text-anchor="middle" x="483.88" y="-1090.29" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#8a8a8a">DISSENTING OPINION</text>
+</g>
+<g id="clust5" class="cluster">
+<title>cluster_lane_PARTIES</title>
+<polygon fill="none" stroke="#999999" stroke-dasharray="5,2" points="153,-465.54 153,-932.81 401,-932.81 401,-465.54 153,-465.54" />
+<text xml:space="preserve" text-anchor="middle" x="188.38" y="-916.46" font-family="Helvetica,sans-Serif" font-size="13.00" fill="#8a8a8a">PARTIES</text>
+</g>
+<g id="clust6" class="cluster">
+<title>cluster_p_recorrente</title>
+<polygon fill="none" stroke="#bbbbbb" stroke-dasharray="5,2" points="273,-643.35 273,-903.31 393,-903.31 393,-643.35 273,-643.35" />
+<text xml:space="preserve" text-anchor="middle" x="313.25" y="-888.86" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#8a8a8a">APPELLANT</text>
+</g>
+<g id="clust7" class="cluster">
+<title>cluster_p_recorrido</title>
+<polygon fill="none" stroke="#bbbbbb" stroke-dasharray="5,2" points="161,-473.54 161,-599.35 393,-599.35 393,-473.54 161,-473.54" />
+<text xml:space="preserve" text-anchor="middle" x="208" y="-584.9" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#8a8a8a">RESPONDENT</text>
+</g>
+<g id="clust8" class="cluster">
+<title>cluster_lane_comum</title>
+<polygon fill="none" stroke="#bbbbbb" stroke-dasharray="1,5" points="179,-339 179,-434.79 375,-434.79 375,-339 179,-339" />
+<text xml:space="preserve" text-anchor="middle" x="227.12" y="-419.39" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#8a8a8a">UNDISPUTED</text>
+</g>
+<g id="clust9" class="cluster">
+<title>cluster_legenda</title>
+<polygon fill="none" stroke="#bbbbbb" stroke-dasharray="1,5" points="8,-8 8,-309 546,-309 546,-8 8,-8" />
+<text xml:space="preserve" text-anchor="middle" x="109" y="-295.5" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#8a8a8a">LEGEND — ATTACKS AND OUTCOMES</text>
+</g>
+
+<g id="node1" class="node argnode rulenode arg-dvpre_q8 layer-lrc standing">
+<title>dvpre_q8</title>
+<g id="a_node1"><a xlink:title="dvpre_q8: dvpre_q8: SpecDuty =&gt; ¬sc_q6&#10;&#10;If the specific duty of custody stands, the third-party-act defence fails: the realized risk is precisely what that duty was intended to prevent.&#10;&#10;Also supported by: Concurring opinion&#10;&#10;Supported by dvesp_q0: A prisoner under a closed regime is subject to the State's specific duty of custody, rather than its general duty of public security.">
+<ellipse fill="#f4f0fa" stroke="#444444" cx="605" cy="-1306.85" rx="42.6" ry="38.01" />
+<text xml:space="preserve" text-anchor="middle" x="605" y="-1320.22" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">dvpre_q8</text>
+<text xml:space="preserve" text-anchor="middle" x="605" y="-1308.97" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">SpecDuty</text>
+<text xml:space="preserve" text-anchor="middle" x="605" y="-1297.72" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">⇒ defeats</text>
+<text xml:space="preserve" text-anchor="middle" x="605" y="-1285.72" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">(2 voices)</text>
+</a>
+</g>
+</g>
+
+<g id="node2" class="node argnode rulenode arg-q11 layer-lrc standing">
+<title>q11</title>
+<g id="a_node2"><a xlink:title="q11: q11: ¬DueMeasures =&gt; ¬suca_q3&#10;&#10;Without evidence of due precautions by the State, its claim of a third-party act fails.">
+<ellipse fill="#f4f0fa" stroke="#444444" cx="605" cy="-1172.79" rx="58.51" ry="30.05" />
+<text xml:space="preserve" text-anchor="middle" x="605" y="-1180.54" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">q11</text>
+<text xml:space="preserve" text-anchor="middle" x="605" y="-1169.29" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">¬DueMeasures</text>
+<text xml:space="preserve" text-anchor="middle" x="605" y="-1158.04" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">⇒ defeats</text>
+</a>
+</g>
+</g>
+
+
+<g id="node8" class="node argnode rulenode arg-sc_q6 layer-lrc defeated">
+<title>sc_q6</title>
+<g id="a_node8"><a xlink:title="sc_q6: sc_q6: ThirdParty =&gt; ¬cf2lrc_q5&#10;&#10;If the crime is a third-party act, it breaks the legally relevant causal connection between the omission and the damages.&#10;&#10;Also supported by: Dissenting opinion">
+<ellipse fill="#fdecea" stroke="#c0392b" stroke-width="1.8" cx="342" cy="-689.35" rx="43.13" ry="38.01" />
+<text xml:space="preserve" text-anchor="middle" x="342" y="-702.73" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">sc_q6</text>
+<text xml:space="preserve" text-anchor="middle" x="342" y="-691.48" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">ThirdParty</text>
+<text xml:space="preserve" text-anchor="middle" x="342" y="-680.23" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">⇒ defeats</text>
+<text xml:space="preserve" text-anchor="middle" x="342" y="-668.23" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">(2 voices)</text>
+</a>
+</g>
+</g>
+
+<g id="edge10" class="edge argedge defeat from-dvpre_q8 to-sc_q6 between-adjudicators">
+<title>dvpre_q8-&gt;sc_q6</title>
+<g id="a_edge10"><a xlink:title="② dvpre_q8 ⇏ sc_q6&#10;&#10;Reporting judge, Concurring opinion → Appellant, Dissenting opinion&#10;&#10;If the specific duty of custody stands, the third-party-act defence fails: the realized risk is precisely what that duty was intended to prevent.&#10;&#10;Outcome: prevails: defeats sc_q6">
+<path fill="none" stroke="#c0392b" stroke-width="2.6" d="M647.81,-1304.22C724.88,-1298.77 879,-1275.18 879,-1173.79 879,-1173.79 879,-1173.79 879,-844.26 879,-811.49 863.62,-801.99 836,-784.36 761.82,-737.01 498.09,-705.93 389.38,-694.87" />
+<polygon fill="#c0392b" stroke="#c0392b" stroke-width="2.6" points="386.47,-698.59 387.27,-690.63 388.86,-690.8 388.06,-698.75 386.47,-698.59" />
+<polyline fill="none" stroke="#c0392b" stroke-width="2.6" points="386.07,-694.53 390.05,-694.94" />
+</a>
+</g>
+<text xml:space="preserve" text-anchor="middle" x="886.12" y="-1024.98" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#c0392b">②</text>
+</g>
+
+<g id="node3" class="node argnode rulenode arg-u_corte layer-lrc standing">
+<title>u_corte</title>
+<g id="a_node3"><a xlink:title="u_corte: u_corte: TimeLapse =&gt; ¬suca_q3&#10;&#10;The court expressly rejects the claim that time alone breaks causation: elapsed time does not by itself establish a superseding third-party act.">
+<ellipse fill="#f4f0fa" stroke="#444444" cx="605" cy="-1030.78" rx="45.25" ry="30.05" />
+<text xml:space="preserve" text-anchor="middle" x="605" y="-1038.53" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">u_corte</text>
+<text xml:space="preserve" text-anchor="middle" x="605" y="-1027.28" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">TimeLapse</text>
+<text xml:space="preserve" text-anchor="middle" x="605" y="-1016.03" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">⇒ defeats</text>
+</a>
+</g>
+</g>
+
+
+<g id="node7" class="node argnode rulenode arg-suca_q3 layer-lrc defeated">
+<title>suca_q3</title>
+<g id="a_node7"><a xlink:title="suca_q3: suca_q3: TimeLapse =&gt; ThirdParty&#10;&#10;Party claim: after three months, the crime is a third-party act. It prevails in the preliminary phase by dialectical default, with no effective reply, rather than on doctrinal merits.">
+<ellipse fill="#fdecea" stroke="#c0392b" stroke-width="1.8" cx="333" cy="-845.26" rx="51.62" ry="30.05" />
+<text xml:space="preserve" text-anchor="middle" x="333" y="-853.01" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">suca_q3</text>
+<text xml:space="preserve" text-anchor="middle" x="333" y="-841.76" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">TimeLapse</text>
+<text xml:space="preserve" text-anchor="middle" x="333" y="-830.51" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">⇒ ThirdParty</text>
+</a>
+</g>
+</g>
+
+<g id="edge11" class="edge argedge defeat from-q11 to-suca_q3">
+<title>q11-&gt;suca_q3</title>
+<g id="a_edge11"><a xlink:title="③ q11 ⇏ suca_q3&#10;&#10;Concurring opinion → Appellant&#10;&#10;Without evidence of due precautions by the State, its claim of a third-party act fails.&#10;&#10;Outcome: prevails: defeats suca_q3">
+<path fill="none" stroke="#c0392b" stroke-width="2" d="M546.66,-1168.31C499.44,-1162.34 434.6,-1146.49 395.75,-1104.74 337.38,-1042.01 330.66,-934.43 331.38,-879.96" />
+<polygon fill="#c0392b" stroke="#c0392b" stroke-width="2" points="327.43,-877.07 335.43,-877.2 335.4,-878.8 327.4,-878.67 327.43,-877.07" />
+<polyline fill="none" stroke="#c0392b" stroke-width="2" points="331.44,-876.34 331.37,-880.33" />
+</a>
+</g>
+<text xml:space="preserve" text-anchor="middle" x="402.88" y="-1024.98" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#c0392b">③</text>
+</g>
+
+
+<g id="edge12" class="edge argedge defeat from-u_corte to-suca_q3">
+<title>u_corte-&gt;suca_q3</title>
+<g id="a_edge12"><a xlink:title="④ u_corte ⇏ suca_q3&#10;&#10;Dissenting opinion → Appellant&#10;&#10;The court expressly rejects the claim that time alone breaks causation: elapsed time does not by itself establish a superseding third-party act.&#10;&#10;Outcome: prevails: defeats suca_q3">
+<path fill="none" stroke="#c0392b" stroke-width="2" d="M576.89,-1006.82C567.33,-999.43 556.43,-991.45 546,-984.81 510.45,-962.18 502.04,-953.97 462,-940.81 439.79,-933.51 430.54,-943.99 410,-932.81 386.09,-919.81 365.94,-896.36 352.26,-877.15" />
+<polygon fill="#c0392b" stroke="#c0392b" stroke-width="2" points="347.59,-877.47 354.13,-872.86 355.05,-874.17 348.51,-878.78 347.59,-877.47" />
+<polyline fill="none" stroke="#c0392b" stroke-width="2" points="350.4,-874.51 352.7,-877.78" />
+</a>
+</g>
+<text xml:space="preserve" text-anchor="middle" x="505.75" y="-942.51" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#c0392b">④</text>
+</g>
+
+<g id="node4" class="node argnode rulenode arg-suca_q4 layer-lrc standing">
+<title>suca_q4</title>
+<g id="a_node4"><a xlink:title="suca_q4: suca_q4: RobHomicide AND TimeLapse AND GangForm =&gt; ThirdParty&#10;&#10;Ratio decidendi: elapsed time together with subsequent, independent joint action constitutes a third-party act.&#10;&#10;Supported by r2: The prisoner's escape led to the robbery-homicide against the victim.">
+<ellipse fill="#f4f0fa" stroke="#444444" cx="623" cy="-845.26" rx="106.24" ry="44.9" />
+<text xml:space="preserve" text-anchor="middle" x="623" y="-863.51" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">suca_q4</text>
+<text xml:space="preserve" text-anchor="middle" x="623" y="-852.26" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">RobHomicide AND TimeLapse</text>
+<text xml:space="preserve" text-anchor="middle" x="623" y="-841.01" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">AND GangForm</text>
+<text xml:space="preserve" text-anchor="middle" x="623" y="-829.76" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">⇒</text>
+<text xml:space="preserve" text-anchor="middle" x="623" y="-819.26" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">ThirdParty</text>
+</a>
+</g>
+</g>
+
+<g id="edge7" class="edge argedge support from-suca_q4 to-sc_q6">
+<title>suca_q4-&gt;sc_q6</title>
+<g id="a_edge7"><a xlink:title="suca_q4 supports sc_q6">
+<path fill="none" stroke="#b0b0b0" stroke-dasharray="5,2" d="M558.89,-809.14C505.67,-780 431.44,-739.34 385.08,-713.95" />
+<polygon fill="#b0b0b0" stroke="#b0b0b0" points="386.33,-712.24 380.06,-711.2 384.31,-715.92 386.33,-712.24" />
+</a>
+</g>
+</g>
+
+<g id="node5" class="node argnode rulenode arg-q_reab layer-lrc standing">
+<title>q_reab</title>
+<g id="a_node5"><a xlink:title="q_reab: q_reab: TargetPremed AND ImmedSeq =&gt; ¬suca_q4&#10;&#10;Distinguishing RE 136.247: premeditation against a specific target and an immediate sequence between escape and crime would defeat the characterization as a third-party act.&#10;&#10;Inert: the antecedents were never satisfied.">
+<ellipse fill="#f4f0fa" stroke="#444444" cx="750" cy="-1030.78" rx="71.24" ry="45.96" />
+<text xml:space="preserve" text-anchor="middle" x="750" y="-1049.78" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">q_reab</text>
+<text xml:space="preserve" text-anchor="middle" x="750" y="-1038.53" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">TargetPremed AND</text>
+<text xml:space="preserve" text-anchor="middle" x="750" y="-1027.28" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">ImmedSeq</text>
+<text xml:space="preserve" text-anchor="middle" x="750" y="-1016.03" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">⇒ defeats</text>
+<text xml:space="preserve" text-anchor="middle" x="750" y="-1004.03" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">(inert)</text>
+</a>
+</g>
+</g>
+
+<g id="edge13" class="edge argedge defeat from-q_reab to-suca_q4 between-adjudicators">
+<title>q_reab-&gt;suca_q4</title>
+<g id="a_edge13"><a xlink:title="⑤ q_reab ⇏ suca_q4&#10;&#10;Dissenting opinion → Dissenting opinion&#10;&#10;Distinguishing RE 136.247: premeditation against a specific target and an immediate sequence between escape and crime would defeat the characterization as a third-party act.&#10;&#10;Outcome: inert: TargetPremed, ImmedSeq outside the factual base; no argument">
+<path fill="none" stroke="#8a8a8a" stroke-width="1.2" stroke-dasharray="1,5" d="M721.5,-988.59C701.6,-959.84 675.03,-921.45 654.51,-891.79" />
+<polygon fill="#8a8a8a" stroke="#8a8a8a" stroke-width="1.2" points="649.45,-891.52 656.03,-886.96 656.94,-888.28 650.36,-892.83 649.45,-891.52" />
+<polyline fill="none" stroke="#8a8a8a" stroke-width="1.2" points="652.29,-888.58 654.56,-891.87" />
+</a>
+</g>
+<text xml:space="preserve" text-anchor="middle" x="705" y="-942.51" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#8a8a8a">⑤</text>
+</g>
+
+<g id="node6" class="node argnode rulenode arg-og_q10 layer-lrc standing">
+<title>og_q10</title>
+<g id="a_node6"><a xlink:title="og_q10: og_q10: GenOmission =&gt; ¬cf2lrc_q5&#10;&#10;Generic omission is neither a necessary nor a determining link to the outcome: it does not sustain the presumption of legal relevance.&#10;&#10;Supported by og_q9: After elapsed time and the gang's autonomous deliberation, the State's omission is no longer specific to that outcome: it is qualified as generic.">
+<ellipse fill="#f4f0fa" stroke="#444444" cx="478" cy="-1030.78" rx="53.21" ry="30.05" />
+<text xml:space="preserve" text-anchor="middle" x="478" y="-1038.53" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">og_q10</text>
+<text xml:space="preserve" text-anchor="middle" x="478" y="-1027.28" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">GenOmission</text>
+<text xml:space="preserve" text-anchor="middle" x="478" y="-1016.03" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">⇒ defeats</text>
+</a>
+</g>
+</g>
+
+<g id="node9" class="node argnode rulenode arg-cf2lrc_q5 layer-lrc defeated">
+<title>cf2lrc_q5</title>
+<g id="a_node9"><a xlink:title="cf2lrc_q5: cf2lrc_q5: CaFa_StateOmis_Damages =&gt; LeReCa_StateOmis_Damages&#10;&#10;If the State's omission is a cause in fact of the damages, it is presumed to be a legally relevant cause.&#10;&#10;Also supported by: Reporting judge, Concurring opinion">
+<ellipse fill="#fdecea" stroke="#c0392b" stroke-width="1.8" cx="277" cy="-526.44" rx="107.83" ry="44.9" />
+<text xml:space="preserve" text-anchor="middle" x="277" y="-544.69" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">cf2lrc_q5</text>
+<text xml:space="preserve" text-anchor="middle" x="277" y="-533.44" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">CaFa(StateOmis, Damages)</text>
+<text xml:space="preserve" text-anchor="middle" x="277" y="-522.19" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">⇒</text>
+<text xml:space="preserve" text-anchor="middle" x="277" y="-511.69" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">LeReCa(StateOmis, Damages)</text>
+<text xml:space="preserve" text-anchor="middle" x="277" y="-500.44" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">(3 voices)</text>
+</a>
+</g>
+</g>
+
+<g id="edge14" class="edge argedge defeat from-og_q10 to-cf2lrc_q5 between-adjudicators decisive">
+<title>og_q10-&gt;cf2lrc_q5</title>
+<g id="a_edge14"><a xlink:title="⑥ og_q10 ⇏ cf2lrc_q5&#10;&#10;Dissenting opinion → Respondent, Reporting judge, Concurring opinion&#10;&#10;Generic omission is neither a necessary nor a determining link to the outcome: it does not sustain the presumption of legal relevance.&#10;&#10;Outcome: decisive: defeats cf2lrc_q5 without a reply — LeReCa(StateOmis, Damages) leaves the grounded extension">
+<path fill="none" stroke="#c0392b" stroke-width="3.4" d="M448.79,-1005.45C439.08,-998.15 427.95,-990.56 417,-984.81 354.15,-951.82 309.72,-988.73 266,-932.81 184.42,-828.47 228.69,-658.56 257.89,-575.81" />
+<polygon fill="#c0392b" stroke="#c0392b" stroke-width="3.4" points="255.1,-571.71 262.64,-574.39 262.1,-575.9 254.57,-573.22 255.1,-571.71" />
+<polyline fill="none" stroke="#c0392b" stroke-width="3.4" points="259.14,-572.3 257.8,-576.07" />
+</a>
+</g>
+<text xml:space="preserve" text-anchor="middle" x="226.88" y="-758.06" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#c0392b">⑥</text>
+</g>
+
+<g id="edge6" class="edge argedge support from-suca_q3 to-sc_q6">
+<title>suca_q3-&gt;sc_q6</title>
+<g id="a_edge6"><a xlink:title="suca_q3 supports sc_q6">
+<path fill="none" stroke="#b0b0b0" stroke-dasharray="5,2" d="M334.74,-814.59C336.05,-792.17 337.87,-761 339.36,-735.5" />
+<polygon fill="#b0b0b0" stroke="#b0b0b0" points="341.45,-735.75 339.7,-729.64 337.26,-735.5 341.45,-735.75" />
+</a>
+</g>
+</g>
+
+
+<g id="edge9" class="edge argedge defeat from-sc_q6 to-cf2lrc_q5 between-adjudicators">
+<title>sc_q6-&gt;cf2lrc_q5</title>
+<g id="a_edge9"><a xlink:title="① sc_q6 ⇏ cf2lrc_q5&#10;&#10;Appellant, Dissenting opinion → Respondent, Reporting judge, Concurring opinion&#10;&#10;If the crime is a third-party act, it breaks the legally relevant causal connection between the omission and the damages.&#10;&#10;Outcome: prevails unanswered during argumentation; defeated during decision by ②">
+<path fill="none" stroke="#c0392b" stroke-width="1.4" stroke-dasharray="5,2" d="M327.57,-652.64C318.34,-629.79 306.26,-599.87 296.21,-575.01" />
+<polygon fill="#c0392b" stroke="#c0392b" stroke-width="1.4" points="291.34,-573.62 298.76,-570.62 299.35,-572.1 291.94,-575.1 291.34,-573.62" />
+<polyline fill="none" stroke="#c0392b" stroke-width="1.4" points="294.75,-571.38 296.25,-575.09" />
+</a>
+</g>
+<text xml:space="preserve" text-anchor="middle" x="322.45" y="-609.05" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#c0392b">①</text>
+</g>
+
+<g id="node10" class="node argnode factnode">
+<title>__fato__</title>
+<g id="a_node10"><a xlink:title="The cause-in-fact layer contains no attacks; all controversy concerns legal attribution. Its rules:&#10;r0: r0: StateOmis =&gt; PrisEscape — Respondent&#10;r1: r1: StateOmis AND ClosedReg =&gt; PrisEscape — Reporting judge, Concurring opinion, Dissenting opinion&#10;r2: r2: PrisEscape =&gt; RobHomicide — undisputed&#10;r3: r3: RobHomicide =&gt; VictimDeath — undisputed&#10;r4: r4: VictimDeath =&gt; Damages — undisputed">
+<ellipse fill="#ffffff" stroke="#999999" stroke-dasharray="5,2" cx="277" cy="-376.52" rx="89.8" ry="29.52" />
+<text xml:space="preserve" text-anchor="middle" x="277" y="-383.9" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">cause-in-fact layer</text>
+<text xml:space="preserve" text-anchor="middle" x="277" y="-372.65" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">causal chain to Damages</text>
+<text xml:space="preserve" text-anchor="middle" x="277" y="-361.4" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#222222">(no attacks)</text>
+</a>
+</g>
+</g>
+
+
+<g id="edge8" class="edge argedge support bridge to-cf2lrc_q5">
+<title>__fato__-&gt;cf2lrc_q5</title>
+<g id="a_edge8"><a xlink:title="The cause in fact justified in the factual layer enters as an axiom in the antecedent of cf2lrc_q5.">
+<path fill="none" stroke="#b0b0b0" stroke-dasharray="5,2" d="M285.6,-406.16C288.58,-417.47 291.53,-430.63 293,-442.79 294.21,-452.83 293.6,-463.49 292.06,-473.69" />
+<polygon fill="#b0b0b0" stroke="#b0b0b0" points="290.01,-473.26 291.05,-479.53 294.14,-473.97 290.01,-473.26" />
+</a>
+</g>
+<text xml:space="preserve" text-anchor="middle" x="306.75" y="-443.99" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#8a8a8a">bridge</text>
+</g>
+
+<g id="node11" class="node legendnode">
+<title>__legenda__</title>
+<polygon fill="#ffffff" stroke="none" points="23.75,-20 23.75,-277.75 530.25,-277.75 530.25,-20 23.75,-20" />
+<text xml:space="preserve" text-anchor="start" x="28.75" y="-266.15" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="8.00" fill="#222222">No.</text>
+<text xml:space="preserve" text-anchor="start" x="50.25" y="-266.15" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="8.00" fill="#222222">mover</text>
+<text xml:space="preserve" text-anchor="start" x="224" y="-266.15" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="8.00" fill="#222222">move</text>
+<text xml:space="preserve" text-anchor="start" x="302.5" y="-266.15" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="8.00" fill="#222222">outcome in the grounded extension</text>
+<text xml:space="preserve" text-anchor="start" x="28.75" y="-243.28" font-family="Helvetica,sans-Serif" font-size="8.00" fill="#222222">①</text>
+<text xml:space="preserve" text-anchor="start" x="50.25" y="-247.78" font-family="Helvetica,sans-Serif" font-size="8.00" fill="#222222">Appellant (argumentation); Dissenting</text>
+<text xml:space="preserve" text-anchor="start" x="60.75" y="-238.78" font-family="Helvetica,sans-Serif" font-size="8.00" fill="#222222">opinion (adopts during decision)</text>
+<text xml:space="preserve" text-anchor="start" x="224" y="-244.03" font-family="Helvetica,sans-Serif" font-size="8.00" fill="#222222">sc_q6 ⇏ cf2lrc_q5</text>
+<text xml:space="preserve" text-anchor="start" x="302.5" y="-248.15" font-family="Helvetica,sans-Serif" font-size="8.00" fill="#222222">prevails unanswered during argumentation; defeated during</text>
+<text xml:space="preserve" text-anchor="start" x="384.25" y="-238.4" font-family="Helvetica,sans-Serif" font-size="8.00" fill="#222222">decision by ②</text>
+<text xml:space="preserve" text-anchor="start" x="28.75" y="-220.65" font-family="Helvetica,sans-Serif" font-size="8.00" fill="#222222">②</text>
+<text xml:space="preserve" text-anchor="start" x="50.25" y="-220.65" font-family="Helvetica,sans-Serif" font-size="8.00" fill="#222222">Reporting judge, Concurring opinion (decision)</text>
+<text xml:space="preserve" text-anchor="start" x="224" y="-221.4" font-family="Helvetica,sans-Serif" font-size="8.00" fill="#222222">dvpre_q8 ⇏ sc_q6</text>
+<text xml:space="preserve" text-anchor="start" x="302.5" y="-220.65" font-family="Helvetica,sans-Serif" font-size="8.00" fill="#222222">prevails: defeats sc_q6</text>
+<text xml:space="preserve" text-anchor="start" x="28.75" y="-202.15" font-family="Helvetica,sans-Serif" font-size="8.00" fill="#222222">③</text>
+<text xml:space="preserve" text-anchor="start" x="50.25" y="-202.15" font-family="Helvetica,sans-Serif" font-size="8.00" fill="#222222">Concurring opinion (decision)</text>
+<text xml:space="preserve" text-anchor="start" x="224" y="-202.9" font-family="Helvetica,sans-Serif" font-size="8.00" fill="#222222">q11 ⇏ suca_q3</text>
+<text xml:space="preserve" text-anchor="start" x="302.5" y="-202.15" font-family="Helvetica,sans-Serif" font-size="8.00" fill="#222222">prevails: defeats suca_q3</text>
+<text xml:space="preserve" text-anchor="start" x="28.75" y="-183.65" font-family="Helvetica,sans-Serif" font-size="8.00" fill="#222222">④</text>
+<text xml:space="preserve" text-anchor="start" x="50.25" y="-183.65" font-family="Helvetica,sans-Serif" font-size="8.00" fill="#222222">Dissenting opinion (decision)</text>
+<text xml:space="preserve" text-anchor="start" x="224" y="-184.4" font-family="Helvetica,sans-Serif" font-size="8.00" fill="#222222">u_corte ⇏ suca_q3</text>
+<text xml:space="preserve" text-anchor="start" x="302.5" y="-183.65" font-family="Helvetica,sans-Serif" font-size="8.00" fill="#222222">prevails: defeats suca_q3</text>
+<text xml:space="preserve" text-anchor="start" x="28.75" y="-161.4" font-family="Helvetica,sans-Serif" font-size="8.00" fill="#222222">⑤</text>
+<text xml:space="preserve" text-anchor="start" x="50.25" y="-161.4" font-family="Helvetica,sans-Serif" font-size="8.00" fill="#222222">Dissenting opinion (decision)</text>
+<text xml:space="preserve" text-anchor="start" x="224" y="-162.15" font-family="Helvetica,sans-Serif" font-size="8.00" fill="#222222">q_reab ⇏ suca_q4</text>
+<text xml:space="preserve" text-anchor="start" x="302.5" y="-165.9" font-family="Helvetica,sans-Serif" font-size="8.00" fill="#222222">inert: TargetPremed, ImmedSeq outside the factual base; no</text>
+<text xml:space="preserve" text-anchor="start" x="392.5" y="-156.9" font-family="Helvetica,sans-Serif" font-size="8.00" fill="#222222">argument</text>
+<text xml:space="preserve" text-anchor="start" x="28.75" y="-135.4" font-family="Helvetica,sans-Serif" font-size="8.00" fill="#222222">⑥</text>
+<text xml:space="preserve" text-anchor="start" x="50.25" y="-135.4" font-family="Helvetica,sans-Serif" font-size="8.00" fill="#222222">Dissenting opinion (decision)</text>
+<text xml:space="preserve" text-anchor="start" x="224" y="-136.15" font-family="Helvetica,sans-Serif" font-size="8.00" fill="#222222">og_q10 ⇏ cf2lrc_q5</text>
+<text xml:space="preserve" text-anchor="start" x="302.5" y="-139.9" font-family="Helvetica,sans-Serif" font-size="8.00" fill="#222222">decisive: defeats cf2lrc_q5 without a reply —</text>
+<text xml:space="preserve" text-anchor="start" x="302.5" y="-130.9" font-family="Helvetica,sans-Serif" font-size="8.00" fill="#222222">LeReCa(StateOmis, Damages) leaves the grounded extension</text>
+<g class="legend-symbol standing"><path d="M 55.989999999999995,-112.55 L 71.99,-112.55" fill="none" stroke="#c0392b" stroke-width="2.0" /><path d="M 71.99,-112.55 L 79.99,-112.55" fill="none" stroke="#c0392b" stroke-width="2.0" /><path d="M 79.99,-116.55 L 79.99,-108.55" fill="none" stroke="#c0392b" stroke-width="2.0" /></g><text xml:space="preserve" text-anchor="start" x="109.12" y="-109.97" font-family="Helvetica,sans-Serif" font-size="7.00" fill="#666666">Standing attack</text>
+<g class="legend-symbol decisive"><path d="M 226.24,-112.55 L 242.24,-112.55" fill="none" stroke="#c0392b" stroke-width="3.4" /><path d="M 242.24,-112.55 L 250.24,-112.55" fill="none" stroke="#c0392b" stroke-width="3.4" /><path d="M 250.24,-116.55 L 250.24,-108.55" fill="none" stroke="#c0392b" stroke-width="3.4" /></g><text xml:space="preserve" text-anchor="start" x="274.12" y="-109.97" font-family="Helvetica,sans-Serif" font-size="7.00" fill="#666666">Decisive attack</text>
+<g class="legend-symbol neutralised"><path d="M 376.42,-112.55 L 392.42,-112.55" fill="none" stroke="#c0392b" stroke-width="1.4" stroke-dasharray="5,2" /><path d="M 392.42,-112.55 L 400.42,-112.55" fill="none" stroke="#c0392b" stroke-width="1.4" /><path d="M 400.42,-116.55 L 400.42,-108.55" fill="none" stroke="#c0392b" stroke-width="1.4" /></g><text xml:space="preserve" text-anchor="start" x="420" y="-109.97" font-family="Helvetica,sans-Serif" font-size="7.00" fill="#666666">Attacking move defeated</text>
+<g class="legend-symbol inert"><path d="M 59.18000000000001,-94.55 L 75.18,-94.55" fill="none" stroke="#8a8a8a" stroke-width="1.2" stroke-dasharray="1,5" /><path d="M 75.18,-94.55 L 83.18,-94.55" fill="none" stroke="#8a8a8a" stroke-width="1.2" /><path d="M 83.18,-98.55 L 83.18,-90.55" fill="none" stroke="#8a8a8a" stroke-width="1.2" /></g><text xml:space="preserve" text-anchor="start" x="115.5" y="-91.97" font-family="Helvetica,sans-Serif" font-size="7.00" fill="#666666">Inert attack</text>
+<g class="legend-symbol support"><path d="M 226.05,-94.55 L 244.05,-94.55" fill="none" stroke="#b0b0b0" stroke-width="1.0" stroke-dasharray="5,2" /><polygon points="250.05,-94.55 244.05,-96.64999999999999 244.05,-92.45" fill="#b0b0b0" stroke="#b0b0b0" stroke-width="1.0" /></g><text xml:space="preserve" text-anchor="start" x="273.75" y="-91.97" font-family="Helvetica,sans-Serif" font-size="7.00" fill="#666666">Support / bridge</text>
+<g class="legend-symbol rule"><ellipse cx="392.36" cy="-94.55" rx="12" ry="6" fill="#f4f0fa" stroke="#444444" stroke-width="1.0" /></g><text xml:space="preserve" text-anchor="start" x="427.88" y="-91.97" font-family="Helvetica,sans-Serif" font-size="7.00" fill="#666666">Legal-relevance rule</text>
+<g class="legend-symbol defeated-rule"><ellipse cx="69.68" cy="-76.55" rx="12" ry="6" fill="#fdecea" stroke="#c0392b" stroke-width="1.8" /></g><text xml:space="preserve" text-anchor="start" x="112.5" y="-73.97" font-family="Helvetica,sans-Serif" font-size="7.00" fill="#666666">Defeated rule</text>
+<g class="legend-symbol facts"><ellipse cx="233.92000000000002" cy="-76.55" rx="12" ry="6" fill="#ffffff" stroke="#999999" stroke-width="1.0" stroke-dasharray="5,2" /></g><text xml:space="preserve" text-anchor="start" x="265.5" y="-73.97" font-family="Helvetica,sans-Serif" font-size="7.00" fill="#666666">Attack-free CIF layer</text>
+<g class="legend-symbol inert-rule"><ellipse cx="393.3" cy="-76.55" rx="12" ry="6" fill="#f4f0fa" stroke="#444444" stroke-width="1.0" /><text x="393.3" y="-75.05" text-anchor="middle" font-family="Helvetica" font-size="4.5" fill="#222222">(inert)</text></g><text xml:space="preserve" text-anchor="start" x="429.75" y="-73.97" font-family="Helvetica,sans-Serif" font-size="7.00" fill="#666666">Uninstantiated rule</text>
+<g class="legend-symbol voices"><ellipse cx="58.42" cy="-58.55" rx="12" ry="6" fill="#f4f0fa" stroke="#444444" stroke-width="1.0" /><text x="58.42" y="-57.05" text-anchor="middle" font-family="Helvetica" font-size="4.5" fill="#222222">(N)</text></g><text xml:space="preserve" text-anchor="start" x="90" y="-55.98" font-family="Helvetica,sans-Serif" font-size="7.00" fill="#666666">N independent perspectives</text>
+<text xml:space="preserve" text-anchor="start" x="28.75" y="-34.85" font-family="Helvetica,sans-Serif" font-size="7.00" fill="#666666">ASPIC+: undercut. Bar: rule applicability challenged. Dotted: potential attack; no argument instantiated. </text>
+<text xml:space="preserve" text-anchor="start" x="92.5" y="-26.6" font-family="Helvetica,sans-Serif" font-size="7.00" fill="#666666">all case attacks are shown; individual arguments are not drawn</text>
+<polygon fill="none" stroke="#bbbbbb" points="23.75,-20 23.75,-277.75 530.25,-277.75 530.25,-20 23.75,-20" />
+</g>
+
+</g>
+</svg>

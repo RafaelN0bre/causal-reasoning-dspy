@@ -21,7 +21,7 @@ As primeiras linhas de cada log são sempre:
 
 Todos os logs também aparecem no terminal em tempo real. O nível padrão é `INFO`; use `LOG_LEVEL=DEBUG` no `.env` para saída detalhada (trace por caso, chamadas ao solver, etc.).
 
-A pasta `logs/` está no `.gitignore` e não é commitada.
+A pasta `logs/` é versionada: os logs das execuções que a monografia reporta ficam no repositório junto dos resultados em `outputs/`.
 
 ---
 

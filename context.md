@@ -61,7 +61,9 @@
 - `data/BoardgameQA/<VARIANT>/{train,valid,test}.json` — dataset (cada item: `story`, `label`, `proof`).
 - `outputs/` — resultados dos benchmarks (ver seção 7).
 - `outputs-observability/` — resultados das amostras de observabilidade (baseline/, zero-shot/, few-shot/, mipro/).
-- `logs/` — um arquivo de log por execução, com timestamp e comando (gitignored).
+- `logs/` — um arquivo de log por execução, com timestamp e comando (versionado).
+- `data/legal/{train,test}.json` — conjunto pré-rotulado de casos causais (versionado).
+- `data/caso-real/` — formalização do RE 608.880/MT (Tema 362 do STF), acórdão e figuras; executado por `scripts/run_real_case.py`, resultado em `outputs/caso-real/`.
 - `docs/` — architecture.md, usage.md, optimization.md, dataset.md, observability.md, development.md, TODO.md.
 - `docker-compose.yml` — Langfuse v2 + Postgres, UI em http://localhost:3010.
 
@@ -157,6 +159,6 @@
 
 - Executar tudo via `uv run`; **não** rodar múltiplos `uv run` em paralelo (conflito/lentidão do cache DSPy).
 - `.env` obrigatório com `GEMINI_API_KEY`; opcionais: `GEMINI_MODEL`, `LOG_LEVEL`, `DSPY_CACHEDIR`, `LANGFUSE_*`.
-- `logs/`, `.cache/`, `.env` e `data/` são gitignored (o dataset BoardgameQA deve ser baixado à parte); `outputs/`, `outputs-observability/` e `compiled/{few-shot,mipro}/` são versionados como evidência dos experimentos.
+- `.cache/`, `.env` e `data/BoardgameQA/` são gitignored (o dataset BoardgameQA deve ser baixado à parte); `outputs/`, `outputs-observability/`, `logs/`, `data/legal/`, `data/caso-real/` e `compiled/{few-shot,mipro}/` são versionados como evidência dos experimentos.
 - Para adicionar uma variante nova: colocar os JSONs em `data/BoardgameQA/<VARIANT>/`, adicionar o nome a `BOARDGAME_VARIANTS` em `src/dataset.py`, compilar e avaliar.
 - Documentação detalhada em `docs/` (architecture, usage, optimization, dataset, observability, development).
