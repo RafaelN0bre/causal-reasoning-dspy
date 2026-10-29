@@ -4,15 +4,15 @@ Execução do solver ASPIC+ desta monografia (`src/solver.py`, sem modificação
 formalização de um acórdão real do Supremo Tribunal Federal: responsabilidade civil do Estado
 por crime praticado por detento foragido.
 
-A monografia delimita, na introdução, que o sistema não é executado contra objetos jurídicos
-reais. Esta pasta registra a execução que fecha exatamente essa lacuna, usando uma formalização
-produzida fora deste trabalho.
+A monografia delimita, na introdução, que a avaliação sistemática não é conduzida sobre objetos
+jurídicos reais. Esta pasta registra a exceção a essa delimitação, usando uma formalização
+produzida fora do escopo deste trabalho.
 
 ## Procedência
 
-A formalização vem do projeto **jurix26** (artigo *State Omission and Supervening Cause: An
-Executable Causal Model of Brazilian State Liability*, Nobre, Frota Melo, Bissolotti, Leite e
-Braz). Nele, o acórdão foi anotado por juristas em cinco perspectivas argumentativas (recorrente,
+A formalização resulta de um estudo paralelo conduzido pelo autor com a equipe de anotação
+jurídica formada por Izabela Frota Melo, Andressa Bissolotti e Vítor Leite, e com o orientador,
+Fabricio Braz. Nele, o acórdão foi anotado em cinco perspectivas argumentativas (recorrente,
 recorrido, relator, voto convergente e voto divergente), consolidado em uma teoria do caso e
 transcrito à mão para ASPIC+. Nenhum literal, nenhuma regra e nenhum veredito da corte foi
 alterado aqui: os registros entram como entrada.
@@ -33,15 +33,15 @@ alterado aqui: os registros entram como entrada.
 | `case-003-final-adjudication.{pdf,svg}` | Quem ataca quem entre partes e julgadores, com o desfecho de cada ataque na extensão *grounded* |
 | `case-003-final-confrontation.{pdf,svg}` | Confronto entre as perspectivas dos votos |
 
-As figuras foram geradas pelo projeto de origem (`scripts/generate_graphs.py` do jurix26) e são
-copiadas sem alteração. A de adjudicação está em inglês, como no artigo.
+As figuras foram geradas pela ferramenta de visualização do estudo de origem e são copiadas sem
+alteração. A de adjudicação tem rótulos em inglês, como no original.
 
 **Proveniência.** O campo `source_sha256` dos dois registros aponta para uma versão anterior de
 `formalizacao-caso003.md` (`5e3e5f02…`); o arquivo copiado aqui é a versão atual (`4888a975…`).
 O projeto de origem regenerou o registro a partir dela sem mudar regra, literal ou veredito: só
 título, hash e notas de modelagem diferem, e `validation.json` é byte a byte igual a
-`referencia-case-003-final-cif.json`. As bases de anotação dos juristas (`jurix.db`, dossiês por
-anotador) ficam no projeto de origem e não são publicadas aqui.
+`referencia-case-003-final-cif.json`. A base de anotação e os dossiês por
+anotador ficam no projeto de origem e não são publicadas aqui.
 
 ## Arquitetura executada
 
@@ -78,7 +78,7 @@ executada pode ser lida de volta na formalização original.
 
 ## Resultados
 
-Os dois registros produzem resultado idêntico, o que confirma a conclusão do artigo de origem:
+Os dois registros produzem resultado idêntico, o que confirma o resultado do estudo de origem:
 as duas ordens de execução recuperam a mesma decisão da corte.
 
 ### Camada de causa de fato

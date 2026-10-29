@@ -4,7 +4,7 @@
     "titulo": "Caso 003 — Responsabilidade do Estado por crime de foragido (formalização final, por votos; a ordem do ICAIL 2026: CIF → LRC)",
     "ordem_das_camadas": "cif_first",
     "pergunta_central": "A omissão do Estado na custódia do preso é causa juridicamente relevante dos danos sofridos pela família da vítima?",
-    "origem": "jurix26 / data/translated (formalização manual do RE 608.880/MT)",
+    "origem": "formalização manual do RE 608.880/MT, anotada por juristas",
     "source_sha256": "5e3e5f027a98021ecbdcac897c1eedbfc72a0d781e36aca6d8d6d890d0250a6d"
   },
   "solver": "src/solver.py (esta monografia), sem modificação",

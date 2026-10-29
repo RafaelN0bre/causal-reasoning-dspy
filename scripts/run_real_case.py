@@ -3,8 +3,8 @@ de um processo judicial real.
 
 O caso é o RE 608.880/MT (Tema 362 do STF), responsabilidade civil do Estado
 por crime praticado por detento foragido. A formalização não foi produzida por
-este trabalho: ela vem do projeto jurix26, onde o acórdão foi anotado por
-juristas em cinco perspectivas argumentativas e transcrito à mão para ASPIC+.
+este trabalho: ela resulta de um estudo paralelo, em que o acórdão foi anotado
+por juristas em cinco perspectivas argumentativas e transcrito à mão para ASPIC+.
 Os registros de origem estão em `data/caso-real/fonte/`. Aqui eles entram
 apenas como entrada: nenhum literal, nenhuma regra e nenhum veredito da corte
 é alterado.
@@ -432,7 +432,7 @@ def executar(case_id: str) -> Dict[str, Any]:
             "titulo": caso["case"]["title"],
             "ordem_das_camadas": caso.get("layer_order", "cif_first"),
             "pergunta_central": caso.get("central_question", ""),
-            "origem": "jurix26 / data/translated (formalização manual do RE 608.880/MT)",
+            "origem": "formalização manual do RE 608.880/MT, anotada por juristas",
             "source_sha256": caso["case"].get("source_sha256", ""),
         },
         "solver": "src/solver.py (esta monografia), sem modificação",
