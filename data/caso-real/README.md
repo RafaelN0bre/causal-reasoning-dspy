@@ -10,9 +10,8 @@ produzida fora do escopo deste trabalho.
 
 ## Procedência
 
-A formalização resulta de um estudo paralelo conduzido pelo autor com a equipe de anotação
-jurídica formada por Izabela Frota Melo, Andressa Bissolotti e Vítor Leite, e com o orientador,
-Fabricio Braz. Nele, o acórdão foi anotado em cinco perspectivas argumentativas (recorrente,
+A formalização resulta de um estudo paralelo conduzido pelo autor com três anotadores da área
+do Direito e com o orientador. Nele, o acórdão foi anotado em cinco perspectivas argumentativas (recorrente,
 recorrido, relator, voto convergente e voto divergente), consolidado em uma teoria do caso e
 transcrito à mão para ASPIC+. Nenhum literal, nenhuma regra e nenhum veredito da corte foi
 alterado aqui: os registros entram como entrada.
